@@ -13,7 +13,15 @@ export default defineConfig({
     },
     host_permissions: [
       "*://twitch.tv/*",
-      "*://google.com/*"
     ]
+  },
+  vite: (env) => {
+    return {
+      resolve: {
+        // Condition for zbar-wasm to pack the WASM file in as a base64 asset. Makes asset loading
+        // within the extension context much easier.
+        conditions: ["zbar-inlined"]
+      }
+    };
   }
 });
