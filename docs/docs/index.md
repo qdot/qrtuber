@@ -80,13 +80,19 @@ QRTuber was created based on various ideas I've run into over the years. They're
 ![Safe Sex Plus](./suck-4.jpg)
 </div>
 
+Video-to-hardware synchronization has existed for adult hardware since the mid-late 1990's. One of the first devices available was the SafeSexPlus Robosuck, a stroking device that varied its speed based on video control. Instead of using serial or early USB connections, the device came with a photodiode encased in a suction cup. This suction cup would be attached to a CRT monitor in a specific position on the screen. When a video made for the device was played back, the designated portion of the screen would move from black to white. This variance in light levels would be picked up by the photodiode and translated to movement within the device.
+
+QRTuber is a very similar idea to this. Instead of requiring outside hardware, we can now just pull frames from video feeds and use classical CV methods for reading out data from the QR Code, allowing us to provide a pure software solution. Sometimes the technological advances of the past 25 years end up being helpful.
+
 ### VRChat Furality Clubs and Video Texture Synchronization
 
 <div class="text--center">
 <iframe width="400" height="225" src="https://www.youtube.com/embed/sY5MyqvgmhE?si=9pRsvXxgP6YYssc2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
-- https://github.com/AcChosen/VR-Stage-Lighting
+A common tactic in lighting systems for clubs in virtual worlds such as VRChat is to use specially encoded, subdivided textures. These textures are transmitted in world, then divided into sections for lighting manipulation and display. Systems like this are even available open source, such as the [VR Stage Lighting project on Github](https://github.com/AcChosen/VR-Stage-Lighting).
+
+QRTuber uses a similar idea for encoding controls into video. However, as QRTuber may be used by anyone (and therefore the code may always be in a different place on the screen), we don't have the luxury of knowing exactly what portions of video to extract in order to find data. This is why we use a fiducial marker that also contains the data, so that we can do arbitrary lookup quickly.
 
 ### TXQR
 
@@ -94,13 +100,16 @@ QRTuber was created based on various ideas I've run into over the years. They're
 ![TXQR File Transfer](./txqr_send.gif)
 </div>
 
-- https://divan.dev/posts/animatedqr/
-- https://github.com/divan/txqr
+[TXQR](https://github.com/divan/txqr) is a project using [animated QRCodes](https://divan.dev/posts/animatedqr/) and [LT/fountain codes](https://divan.dev/posts/fountaincodes/) as a peer-to-peer file transfer mechanism between devices with cameras. It provides a standardized way to move files in a local, privacy preserving way.
 
-### Intiface Central and RUMP
+The TXQR blog posts and project were massively helpful in understanding requirements around QRCode data transfer for QRTuber.
+
+### Rumbling Universal Mayhem Plugin (RUMP)
 
 <div class="text--center">
 <iframe width="400" height="225" src="https://www.youtube.com/embed/mtUdh7U_bQM?si=Jf7gM_PQYq_YIXQ4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
-- https://renpona.itch.io/rumbling-universal-mayhem-plugin
+[Rumbling Universal Mayhem Plugin (RUMP)](https://renpona.itch.io/rumbling-universal-mayhem-plugin) uses [Intiface Central](https://intiface.com/central) and the various game mods available for Intiface to relay game events to Vtuber avatars. This allows streamers a way to automate their Vtuber reaction systems while playing games.
+
+QRTuber is a direct result of the release of RUMP, as that project using Intiface outside of its normal context made me think about how to flip the data transfer relationship and use game events in streaming to also transfer data to users.
