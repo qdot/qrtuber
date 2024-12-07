@@ -76,15 +76,31 @@ QRTuber was created based on various ideas I've run into over the years. They're
 
 ### Safesex Plus and Early Adult Novelty Hardware Video Sync
 
+<div class="text--center" id="ssp-img">
 ![Safe Sex Plus](./suck-4.jpg)
+</div>
 
 ### VRChat Furality Clubs and Video Texture Synchronization
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sY5MyqvgmhE?si=9pRsvXxgP6YYssc2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<div class="text--center">
+<iframe width="400" height="225" src="https://www.youtube.com/embed/sY5MyqvgmhE?si=9pRsvXxgP6YYssc2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
 
-https://github.com/AcChosen/VR-Stage-Lighting
-
-### Intiface Central and RUMP
+- https://github.com/AcChosen/VR-Stage-Lighting
 
 ### TXQR
 
+<div class="text--center">
+![TXQR File Transfer](./txqr_send.gif)
+</div>
+
+- https://divan.dev/posts/animatedqr/
+- https://github.com/divan/txqr
+
+### Intiface Central and RUMP
+
+<div class="text--center">
+<iframe width="400" height="225" src="https://www.youtube.com/embed/mtUdh7U_bQM?si=Jf7gM_PQYq_YIXQ4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+- https://renpona.itch.io/rumbling-universal-mayhem-plugin
