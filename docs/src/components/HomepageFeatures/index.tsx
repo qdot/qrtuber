@@ -4,14 +4,14 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  png: any;
   description: JSX.Element;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    png: require('@site/static/img/undraw_docusaurus_mountain.png').default,
     description: (
       <>
         For streamers, a simple OBS Browser Component does what you need. Web 
@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: '100% Web Tech',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    png: require('@site/static/img/undraw_docusaurus_tree.png').default,
     description: (
       <>
         Built on 100% web technologies, using WASM, WebRTC, Video, Canvas,
@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Extensible Communication',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    png: require('@site/static/img/undraw_docusaurus_react.png').default,
     description: (
       <>
         Send any type of data, as long as it's supposed by our extension format
@@ -43,11 +43,13 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({title, png, description}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <div className={styles.featureSvg}>
+          <img role="img" src={png} />
+        </div>
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>

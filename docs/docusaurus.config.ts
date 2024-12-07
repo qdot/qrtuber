@@ -63,7 +63,7 @@ const config: Config = {
       title: 'QRTuber',
       logo: {
         alt: 'QRTuber',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
