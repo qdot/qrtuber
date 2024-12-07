@@ -5,9 +5,5 @@ export default defineContentScript({
   matches: ['*://*/*'],
   main(ctx) {
     let contentHandler = new ContentVideoHandler();
-    browser.runtime.onMessage.addListener((obj) => {
-      console.log("Got popup message!");
-      contentHandler.startTrackingVideo();
-    });
   },
 });

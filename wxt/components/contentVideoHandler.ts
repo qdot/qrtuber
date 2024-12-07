@@ -19,6 +19,22 @@ export class ContentVideoHandler {
   private trackingInterval = 100;
 
   constructor() {
+    browser.runtime.onMessage.addListener((obj) => {
+      if (obj["content_command"] === undefined) {
+        return false;
+      }
+      switch (obj.content_command) {
+        case "start": {
+          this.startTrackingVideo();
+          break;
+        }
+        case "stop": {
+          this.stopTrackingVideo();
+          break;
+        }
+      }
+      return true;
+    });
   }
 
   public get isTrackingVideo() { return this.videoElem !== null; }
@@ -32,6 +48,7 @@ export class ContentVideoHandler {
 
   public stopTrackingVideo() {
     this.videoElem = null;
+    this.trackingBoundingBox = [[0, 0], [0, 0]];
   }
 
   private setupVideoCanvas() {

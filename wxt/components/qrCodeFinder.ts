@@ -1,24 +1,30 @@
-import { scanImageData } from '@undecaf/zbar-wasm';
+// I would very much like to pull this dependency from node_modules. However, setting the
+// conditional resolution in vite causes buttplug to pull in the node ws library and then websocket
+// loading fails. So here we are, copying the inline cjs version out of @undecaf/zbar-wasm, like
+// some sort of fucking barbarian.
+import EventEmitter from 'eventemitter3';
+import { scanImageData } from './main.cjs';
 
 export class QRCodeFinderResult {
-  constructor(public Message: string | null, public BoundingBox: number[][] | null) { }
+  constructor(public Message: object | null, public BoundingBox: number[][] | null) { }
 }
 
-export class QRCodeFinder {
+export class QRCodeFinder extends EventEmitter {
+  public static readonly DETECTION_EVENT = "detection";
   private _canvas = new OffscreenCanvas(0, 0);
   private _context = this._canvas.getContext("2d")!;
   private _currentBlob: Blob | null = null;
 
   constructor() {
+    super();
     browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request["blob_url"] !== undefined) {
-        this.getBlobFromURL(request["blob_url"]).then(async () => {
-          let result = await this.findQRCode();
-          sendResponse(result);
+        this.getBlobFromURL(request["blob_url"]).then(() => {
+          this.findQRCode().then((result) => sendResponse(result));
         });
         return true;
       }
-      return true;
+      return false;
     });
   }
 
@@ -52,21 +58,16 @@ export class QRCodeFinder {
       }
     });
     let result = symbols[0].decode();
-    //console.log(`Result: ${result}`);
-    let lastMessage = result;
+    // TODO We shouldn't parse here, we should just pass whatever is in the QRCode out
     let speedVal = parseInt(result.substring(2));
-    /*
-    if (lastSpeedVal != speedVal) {
-      for (var device of client.devices) {
-        device.vibrate(speedVal / 99);
-      }
-      lastSpeedVal = speedVal;
-    }
-      */
-    //console.log(`Speedval: ${speedVal}`);
-    //console.log(`${[[minX, minY], [maxX, maxY]]}`);
-    return new QRCodeFinderResult( lastMessage, [[minX!, minY!], [maxX!, maxY!]]);
-    //symbols.forEach(s => s.rawData = s.decode());
-    //setTimeout(findQRCode, 100);
+    let message = {
+      intiface_command: "speed",
+      speed: speedVal / 99
+    };
+    let ret = new QRCodeFinderResult( message, [[minX!, minY!], [maxX!, maxY!]]);
+    // Emit so that anything in this service worker will receive an update
+    this.emit(QRCodeFinder.DETECTION_EVENT, message);
+    // Return so the content script will receive an update
+    return ret;
   }
 }

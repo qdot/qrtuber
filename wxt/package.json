@@ -1,8 +1,8 @@
 {
-  "name": "wxt-starter",
-  "description": "manifest.json description",
+  "name": "qrtuber",
+  "description": "QRTuber Browser Extension for Chrome/Firefox",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -17,10 +17,11 @@
   "devDependencies": {
     "@types/chrome": "^0.0.280",
     "typescript": "^5.6.3",
-    "wxt": "https://pkg.pr.new/wxt@1253"
+    "wxt": "^0.19.19"
   },
   "dependencies": {
     "@undecaf/zbar-wasm": "^0.11.0",
-    "buttplug": "^3.2.2"
+    "buttplug": "^3.2.2",
+    "eventemitter3": "^5.0.1"
   }
 }
