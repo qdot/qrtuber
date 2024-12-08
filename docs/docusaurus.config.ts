@@ -38,17 +38,6 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -73,14 +62,12 @@ const config: Config = {
           label: 'Documentation',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          href: '/demo/',
           position: 'left',
           label: 'Demo',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          href: '/extension/',
           position: 'left',
           label: 'Browser Extension',
         },
