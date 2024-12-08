@@ -22,6 +22,7 @@
   "dependencies": {
     "@undecaf/zbar-wasm": "^0.11.0",
     "buttplug": "^3.2.2",
-    "eventemitter3": "^5.0.1"
+    "eventemitter3": "^5.0.1",
+    "qrtuber": "file:../core"
   }
 }

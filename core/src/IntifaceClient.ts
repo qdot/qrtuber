@@ -22,6 +22,7 @@ export class QRTuberIntifaceClient {
   }
 
   public detectionEventHandler(args: any) {
+    console.log(args);
     if (args["intiface_command"] === "speed" && args["speed"] !== undefined) {
       this.vibrateDevices(args["speed"]);
     }

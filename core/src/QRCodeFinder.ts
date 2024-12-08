@@ -2,7 +2,8 @@
 // conditional resolution in vite causes buttplug to pull in the node ws library and then websocket
 // loading fails. So here we are, copying the inline cjs version out of @undecaf/zbar-wasm, like
 // some sort of fucking barbarian.
-import { scanImageData } from './zbar-wasm-inlined.cjs.js';
+// @ts-ignore
+import { scanImageData } from './zbar-wasm-inlined.cjs';
 import EventEmitter from 'eventemitter3';
 
 export class QRCodeFinderResult {
