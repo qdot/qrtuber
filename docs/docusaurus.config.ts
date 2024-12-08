@@ -67,7 +67,7 @@ const config: Config = {
           label: 'Demo',
         },
         {
-          href: '/extension/',
+          href: '/demo/',
           position: 'left',
           label: 'Browser Extension',
         },
