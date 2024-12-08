@@ -1,5 +1,5 @@
 {
-  "name": "qrtuber",
+  "name": "qrtuber-extension",
   "description": "QRTuber Browser Extension for Chrome/Firefox",
   "private": true,
   "version": "0.0.1",
