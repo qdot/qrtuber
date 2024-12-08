@@ -1,0 +1,20 @@
+{
+  "name": "qrtuber",
+  "description": "QRTuber Core Library for Web Apps",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "exports": "./dist/index.js",
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@undecaf/zbar-wasm": "^0.11.0",
+    "buttplug": "^3.2.2",
+    "eventemitter3": "^5.0.1"
+  }
+}
