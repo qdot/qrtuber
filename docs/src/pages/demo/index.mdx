@@ -1,6 +1,7 @@
 import ReactPlayer from 'react-player'
 import demoVideo from '@site/src/pages/demo/demovideo.mp4';
-import QRTuberDemoComponent from "./DemoReactComponent";
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import QRTuberDemoComponent from '@site/src/components/DemoPage/DemoReactComponent';
 
 # QRTuber In-Page Video Demo
 
@@ -20,4 +21,8 @@ Your toy should start vibrating as the QR Code starts changing on the video.
   <ReactPlayer playing controls url={demoVideo} loop={true} />
 </div>
 
-<QRTuberDemoComponent />
+<BrowserOnly fallback={<div>Loading...</div>}>
+{() => {
+  return <QRTuberDemoComponent />;
+}}
+</BrowserOnly>
