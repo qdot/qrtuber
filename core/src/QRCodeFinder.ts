@@ -3,7 +3,7 @@
 // loading fails. So here we are, copying the inline cjs version out of @undecaf/zbar-wasm, like
 // some sort of fucking barbarian.
 // @ts-ignore
-import { scanImageData } from './zbar-wasm-inlined.cjs';
+import { scanImageData } from '@undecaf/zbar-wasm';
 import EventEmitter from 'eventemitter3';
 
 export class QRCodeFinderResult {
