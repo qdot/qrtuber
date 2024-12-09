@@ -44,6 +44,7 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  plugins: [require.resolve("./docusaurusResolvePlugin.js")],
 
   themeConfig: {
     // Replace with your project's social card
