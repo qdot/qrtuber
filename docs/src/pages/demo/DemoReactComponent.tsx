@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
 import { QRTuberIntifaceClient, QRCodeFinder, ContentVideoHandler } from 'qrtuber';
 
-
 export default class QRTuberDemoComponent extends Component {
   private _client = new QRTuberIntifaceClient();
   private _tracker = new QRCodeFinder();
@@ -51,18 +50,18 @@ export default class QRTuberDemoComponent extends Component {
 
   public render() {
     return <>
-      <ul>
-        <li>Tracking: <b>{this.state.tracking ? "On" : "Off"}</b></li>
-        <li>Tracked Value: <b>{this.state.trackedValue}</b></li>
-        <li>Intiface State: <b>{this.state.intifaceState ? "Connected" : "Disconnected"}</b></li>
-      </ul>
+        <ul>
+          <li>Tracking: <b>{this.state.tracking ? "On" : "Off"}</b></li>
+          <li>Tracked Value: <b>{this.state.trackedValue}</b></li>
+          <li>Intiface State: <b>{this.state.intifaceState ? "Connected" : "Disconnected"}</b></li>
+        </ul>
 
-      <div>
-        <button onClick={() => this.toggleTracking(true)}>Start Tracking</button><br />
-        <button onClick={() => this.toggleTracking(false)}>Stop Tracking</button><br />
-        <button onClick={() => this.toggleIntifaceConnection(true)}>Connect Intiface</button><br />
-        <button onClick={() => this.toggleIntifaceConnection(false)}>Disconnect Intiface</button><br />
-      </div>
-    </>;
+        <div>
+          <button onClick={() => this.toggleTracking(true)}>Start Tracking</button><br />
+          <button onClick={() => this.toggleTracking(false)}>Stop Tracking</button><br />
+          <button onClick={() => this.toggleIntifaceConnection(true)}>Connect Intiface</button><br />
+          <button onClick={() => this.toggleIntifaceConnection(false)}>Disconnect Intiface</button><br />
+        </div>
+      </>;
   }
 }
