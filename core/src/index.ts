@@ -1,4 +1,4 @@
-export * from "./ContentVideoHandler";
-export * from "./HttpForwarder";
-export * from "./IntifaceClient";
-export { QRCodeFinder } from "./QRCodeFinder";
+export * from "./ContentVideoHandler.js";
+export * from "./HttpForwarder.js";
+export * from "./IntifaceClient.js";
+export { QRCodeFinder } from "./QRCodeFinder.js";
