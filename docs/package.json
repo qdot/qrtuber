@@ -22,7 +22,8 @@
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-player": "^2.16.0"
+    "react-player": "^2.16.0",
+    "qrtuber": "file:../core"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.6.3",

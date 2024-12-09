@@ -1,13 +1,23 @@
 import ReactPlayer from 'react-player'
 import demoVideo from '@site/src/pages/demo/demovideo.mp4';
+import QRTuberDemoComponent from "./DemoReactComponent";
 
-# QRTuber Video Demo
+# QRTuber In-Page Video Demo
 
 This video can be used for testing VRTuber Setups.
 
+To test:
+
+- Start Intiface Central server, scan for device in devices tab
+  - At the moment, device needs to be capable of vibration
+- Once device is found, hit "Connect to Intiface" below
+- Hit "Start Tracking"
+- Start video playing
+
+Your toy should start vibrating as the QR Code starts changing on the video.
+
 <div style={{textAlign: "center"}}>
-  <ReactPlayer playing controls url={demoVideo} />
+  <ReactPlayer playing controls url={demoVideo} loop={true} />
 </div>
 
-# QRTuber WebRTC Capture Demo
-
+<QRTuberDemoComponent />
