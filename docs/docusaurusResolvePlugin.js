@@ -13,6 +13,7 @@ module.exports = function (context, options) {
             fs: false,
             ws: false,
             bufferutil: false,
+            "utf-8-validate": false,
           },
         },
       };
