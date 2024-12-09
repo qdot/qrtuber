@@ -7,11 +7,11 @@ export class QRTuberIntifaceClient {
     this._client = new ButtplugClient("QRTuber Browser Extension");
   }
 
-  public connect() {
+  public async connect() {
     this._client.connect(new ButtplugBrowserWebsocketClientConnector("http://127.0.0.1:12345")).then(() => console.log("Client connected"));
   }
 
-  public disconnect() {
+  public async disconnect() {
     this._client.disconnect();
   }
 
@@ -22,19 +22,18 @@ export class QRTuberIntifaceClient {
   }
 
   public detectionEventHandler(args: any) {
-    console.log(args);
     if (args["intiface_command"] === "speed" && args["speed"] !== undefined) {
       this.vibrateDevices(args["speed"]);
     }
   }
 
-  public vibrateDevices(speed: number) {
+  public async vibrateDevices(speed: number) {
     if (!this._client.connected) {
       return;
     }
     for (var device of this._client.devices) {
       if (device.vibrateAttributes.length > 0) {
-        device.vibrate(speed);
+        await device.vibrate(speed);
       }
     }
   }
