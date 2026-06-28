@@ -261,33 +261,58 @@ Events can be added later with TTLs, repeat windows, or stateful representation,
 
 ## Proposed V1 Text Frame
 
-For early validation, use a compact text format that is still debuggable:
+For early validation, use a compact text format that stays within QR Code alphanumeric mode. QR alphanumeric mode supports:
 
 ```text
-QT1|s=<session>|q=<seq>|h=<hex-vector>
+0-9 A-Z SPACE $ % * + - . / :
 ```
 
-Example:
+The v1 frame should therefore avoid lowercase letters, `|`, and `=`. Use uppercase fields, uppercase hex, and `:` separators.
+
+Recommended v1 syntax:
 
 ```text
-QT1|s=A7F2|q=18422|h=00ff4080a010203040
+QT1:<SESSION>:<SEQ>:<TYPE>:<PAYLOAD>
+```
+
+Example haptics frame:
+
+```text
+QT1:A7F2:18422:H:00FF4080A010203040
 ```
 
 Fields:
 
 - `QT1`: QRTuber protocol version 1
-- `s`: short session ID, not security-sensitive
-- `q`: sequence number
-- `h`: haptics channel vector encoded as hex bytes
+- `A7F2`: short session ID, not security-sensitive
+- `18422`: sequence number
+- `H`: frame type, `H` for haptics
+- `00FF4080A010203040`: haptics channel vector encoded as uppercase hex bytes
 
-Optional future fields:
+The example frame is 35 alphanumeric characters. As a QR Code, that should fit approximately:
 
-- `t`: stream/session timeline tick or timestamp
-- `ttl`: validity duration
-- `c`: channel/type, if multiple top-level channel types share one frame grammar
-- `x`: checksum, if false positives or corruption appear in practice
+| Error correction | Minimum QR version | Modules | With quiet zone |
+| --- | ---: | ---: | ---: |
+| L | 2 | 25x25 | 33x33 |
+| M | 2 | 25x25 | 33x33 |
+| Q | 3 | 29x29 | 37x37 |
+| H | 3 | 29x29 | 37x37 |
 
-This text format is not necessarily the final representation. It is a good v1 validation format because it is compact enough and human-inspectable.
+The previous key/value form `QT1|s=A7F2|q=18422|h=00ff4080a010203040` was 39 bytes and forced QR byte mode because of lowercase letters, `|`, and `=`. The alphanumeric form is both shorter and denser in QR encoding.
+
+Optional future fields can be appended as uppercase key/value pairs while remaining alphanumeric-compatible:
+
+```text
+QT1:<SESSION>:<SEQ>:<TYPE>:<PAYLOAD>:T:<TICK>:X:<CHECK>
+```
+
+Potential future fields:
+
+- `T`: stream/session timeline tick or timestamp
+- `L`: validity length/TTL
+- `X`: checksum, if false positives or corruption appear in practice
+
+This text format is not necessarily the final representation. It is a good v1 validation format because it is compact, QR-friendly, and human-inspectable.
 
 ## Haptics V1
 
@@ -306,22 +331,22 @@ A 9-channel vector is only 9 bytes of raw data:
 9 channels * 8 bits = 72 bits = 9 bytes
 ```
 
-Hex encoding produces 18 characters, which is acceptable for v1 QR experiments.
+Uppercase hex encoding produces 18 QR-alphanumeric characters, which is acceptable for v1 QR experiments.
 
-Example:
+Example haptics payload:
 
 ```text
-h=00ff4080a010203040
+00FF4080A010203040
 ```
 
 Decoded:
 
 ```text
 channel 0 = 0x00 = 0
-channel 1 = 0xff = 255
+channel 1 = 0xFF = 255
 channel 2 = 0x40 = 64
 channel 3 = 0x80 = 128
-channel 4 = 0xa0 = 160
+channel 4 = 0xA0 = 160
 channel 5 = 0x10 = 16
 channel 6 = 0x20 = 32
 channel 7 = 0x30 = 48
@@ -370,9 +395,9 @@ Benefits:
 
 ### Binary or denser encoding later
 
-If payload size becomes critical, the vector can move from hex to a denser encoding such as Base64URL or a binary frame carried by a visual codec that supports byte payloads.
+If payload size becomes critical, the vector can move from uppercase hex to a denser encoding or a binary frame carried by a visual codec that supports byte payloads. For QR Code specifically, any replacement encoding should be checked against QR mode support; Base64URL is not automatically better if it forces byte mode.
 
-For v1, hex is preferred for debuggability.
+For v1, uppercase hex is preferred for debuggability and QR alphanumeric compatibility.
 
 ## Safety Model
 
@@ -420,7 +445,7 @@ visual decode -> raw payload -> QRTuber protocol parse -> typed state -> adapter
 Recommended split:
 
 - `VisualCodeFinder` / `QRCodeFinder`: returns raw decoded text/bytes and bounding box
-- `QRTuberFrameParser`: parses `QT1|...` frames
+- `QRTuberFrameParser`: parses `QT1:...` frames
 - `HapticsState`: represents a 9-byte abstract channel vector
 - `IntifaceAdapter`: maps `HapticsState` to local devices
 
@@ -477,7 +502,7 @@ Potential additions:
 
 Implement and test:
 
-- parse `QT1|s=A7F2|q=18422|h=00ff4080a010203040`
+- parse `QT1:A7F2:18422:H:00FF4080A010203040`
 - validate malformed frames
 - represent 9-channel haptic vectors
 - encode frames for generator tests
@@ -514,7 +539,7 @@ Only after the QR baseline is measured, compare Data Matrix, Aztec, or a custom 
 
 - What minimum decode success rate is acceptable for haptics at 3 Hz, 5 Hz, and 10 Hz?
 - Should sequence numbers count visual frames, state changes, or protocol frames?
-- Should `t` be milliseconds since session start, stream frame count, beat tick, or omitted for v1?
+- Should `T` be milliseconds since session start, stream frame count, beat tick, or omitted for v1?
 - Should haptic channels default to zero on missing/invalid frames, or should the client hold last state for a timeout?
 - What local timeout should force haptics to zero if no valid frames are decoded?
 - How should abstract haptic channels map to Buttplug devices by default?
@@ -524,10 +549,10 @@ Only after the QR baseline is measured, compare Data Matrix, Aztec, or a custom 
 
 Proceed with QR as the first visual codec, but implement the core protocol as visual-code-agnostic.
 
-For v1, use compact state frames with a fixed 9-byte haptics vector:
+For v1, use QR-alphanumeric-compatible compact state frames with a fixed 9-byte haptics vector:
 
 ```text
-QT1|s=A7F2|q=18422|h=00ff4080a010203040
+QT1:A7F2:18422:H:00FF4080A010203040
 ```
 
 This design is small enough for QR validation, robust to missed frames, easy to debug, and extensible beyond the initial haptics use case.

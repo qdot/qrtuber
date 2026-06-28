@@ -175,6 +175,61 @@
       "created_at": "2026-06-27T17:14:20.968625-07:00",
       "updated_at": "2026-06-27T17:14:20.968625-07:00",
       "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
+    },
+    {
+      "id": 17,
+      "change_id": "8a31a853-b576-4497-adc8-9bf3c77892b1",
+      "node_type": "outcome",
+      "title": "Cleanup commit created",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T17:20:08.500732-07:00",
+      "updated_at": "2026-06-27T17:20:08.500732-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"commit\":\"9315922\",\"confidence\":95}"
+    },
+    {
+      "id": 18,
+      "change_id": "8d1c50ca-0678-4a5e-bcbf-0ca8d127d745",
+      "node_type": "observation",
+      "title": "Current QT1 text frame needs byte-mode QR version 3+",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T18:51:42.690822-07:00",
+      "updated_at": "2026-06-27T18:51:42.690822-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95}"
+    },
+    {
+      "id": 19,
+      "change_id": "4b1086b9-a7b3-4f39-9844-12420f2f300f",
+      "node_type": "decision",
+      "title": "Revise v1 packet syntax for QR alphanumeric mode",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T18:57:25.335794-07:00",
+      "updated_at": "2026-06-27T18:57:25.335794-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95}"
+    },
+    {
+      "id": 20,
+      "change_id": "60bfc0c6-e912-4560-93f0-73c1fd7bd6fe",
+      "node_type": "action",
+      "title": "Update design doc for alphanumeric packet format",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T18:57:25.370907-07:00",
+      "updated_at": "2026-06-27T18:57:25.370907-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
+    },
+    {
+      "id": 21,
+      "change_id": "68e561c9-b3ec-4c17-a16d-142bf1c2767b",
+      "node_type": "outcome",
+      "title": "Design doc updated for QR alphanumeric packet syntax",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T19:02:23.677439-07:00",
+      "updated_at": "2026-06-27T19:02:23.677439-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
     }
   ],
   "edges": [
@@ -331,6 +386,61 @@
       "weight": 1.0,
       "rationale": "Implements cleanup commit",
       "created_at": "2026-06-27T17:14:20.976126-07:00"
+    },
+    {
+      "id": 15,
+      "from_node_id": 16,
+      "to_node_id": 17,
+      "from_change_id": "ad8485a7-3bf0-4e9f-badf-4b10ba8ec486",
+      "to_change_id": "8a31a853-b576-4497-adc8-9bf3c77892b1",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Cleanup commit completed",
+      "created_at": "2026-06-27T17:20:08.513965-07:00"
+    },
+    {
+      "id": 16,
+      "from_node_id": 10,
+      "to_node_id": 18,
+      "from_change_id": "bdfe6646-b2fa-467b-8141-c54046b02f13",
+      "to_change_id": "8d1c50ca-0678-4a5e-bcbf-0ca8d127d745",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Refines packet format sizing",
+      "created_at": "2026-06-27T18:51:42.702891-07:00"
+    },
+    {
+      "id": 17,
+      "from_node_id": 18,
+      "to_node_id": 19,
+      "from_change_id": "8d1c50ca-0678-4a5e-bcbf-0ca8d127d745",
+      "to_change_id": "4b1086b9-a7b3-4f39-9844-12420f2f300f",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Responds to QR sizing finding",
+      "created_at": "2026-06-27T18:57:25.349731-07:00"
+    },
+    {
+      "id": 18,
+      "from_node_id": 19,
+      "to_node_id": 20,
+      "from_change_id": "4b1086b9-a7b3-4f39-9844-12420f2f300f",
+      "to_change_id": "60bfc0c6-e912-4560-93f0-73c1fd7bd6fe",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Documents revised packet syntax",
+      "created_at": "2026-06-27T18:57:25.379854-07:00"
+    },
+    {
+      "id": 19,
+      "from_node_id": 20,
+      "to_node_id": 21,
+      "from_change_id": "60bfc0c6-e912-4560-93f0-73c1fd7bd6fe",
+      "to_change_id": "68e561c9-b3ec-4c17-a16d-142bf1c2767b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Alphanumeric packet format documented",
+      "created_at": "2026-06-27T19:02:23.688436-07:00"
     }
   ]
 }

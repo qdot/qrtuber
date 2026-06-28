@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "hash": "9315922faa9b5f2d5e3660731145104f1fb68a5d",
+    "short_hash": "9315922",
+    "author": "Kyle Machulis",
+    "date": "2026-06-27T17:19:03-07:00",
+    "message": "chore: add decision graph setup and QR sidechannel plan",
+    "files_changed": 45
+  }
+]
