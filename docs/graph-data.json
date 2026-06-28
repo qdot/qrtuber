@@ -1,0 +1,336 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "change_id": "1c654605-34b8-46ed-830c-860289e6eea3",
+      "node_type": "goal",
+      "title": "Analyze project health and recommend updates",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:03:34.050560-07:00",
+      "updated_at": "2026-06-27T16:03:34.050560-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"prompt\":\"Analyze the current projects, and recommend any updates or changes that seem like a good idea.\"}"
+    },
+    {
+      "id": 2,
+      "change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "node_type": "goal",
+      "title": "Evaluate QR code sidechannel viability",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:11:55.001650-07:00",
+      "updated_at": "2026-06-27T16:11:55.001650-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"prompt\":\"Ok, let's back out a bit. How does the _general idea_ of using QR Codes as a data sidechannel sound? Any issues with that specifically? Once we can verify the project idea is good, then we can get into specifics of fixing.\"}"
+    },
+    {
+      "id": 3,
+      "change_id": "e2cfa74d-bac2-4e57-be6a-99481a9ef158",
+      "node_type": "observation",
+      "title": "QR sidechannel is in-band timeline metadata",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:19:53.703115-07:00",
+      "updated_at": "2026-06-27T16:19:53.703115-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95}"
+    },
+    {
+      "id": 4,
+      "change_id": "1ad58ed9-51cc-41e1-9d1d-c3d06504d231",
+      "node_type": "observation",
+      "title": "Spoofing is out of scope for small public effects",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:19:53.731014-07:00",
+      "updated_at": "2026-06-27T16:19:53.731014-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 5,
+      "change_id": "ed0ea5db-b6ad-4deb-9a3e-89fab7746ddc",
+      "node_type": "observation",
+      "title": "Real streaming encode/VOD readability is the key validation risk",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:27:52.115179-07:00",
+      "updated_at": "2026-06-27T16:27:52.115179-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95}"
+    },
+    {
+      "id": 6,
+      "change_id": "2538cd12-9bc1-4258-bb20-22a35223a10d",
+      "node_type": "observation",
+      "title": "Initial target update rate is 3-10 Hz",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:27:52.143398-07:00",
+      "updated_at": "2026-06-27T16:27:52.143398-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 7,
+      "change_id": "3eafd55e-ebf1-439e-b63a-e63ded18c558",
+      "node_type": "observation",
+      "title": "ROI-localized decoding appears feasible",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:27:52.168382-07:00",
+      "updated_at": "2026-06-27T16:27:52.168382-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 8,
+      "change_id": "4330f31f-d7ae-4e42-8e57-24db260700ae",
+      "node_type": "option",
+      "title": "Use compact versioned state-frame protocol",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:27:52.193705-07:00",
+      "updated_at": "2026-06-27T16:27:52.193705-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":85}"
+    },
+    {
+      "id": 9,
+      "change_id": "0fc85136-8f05-48ee-9a8a-31b2c7fe7574",
+      "node_type": "observation",
+      "title": "Haptics protocol needs up to 9 8-bit channels",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:38:12.296110-07:00",
+      "updated_at": "2026-06-27T16:38:12.296110-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95}"
+    },
+    {
+      "id": 10,
+      "change_id": "bdfe6646-b2fa-467b-8141-c54046b02f13",
+      "node_type": "decision",
+      "title": "Adopt compact extensible state-frame protocol for design",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:43:18.326633-07:00",
+      "updated_at": "2026-06-27T16:43:18.326633-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 11,
+      "change_id": "a8c59f40-ba7a-4214-9557-52822fb7703d",
+      "node_type": "action",
+      "title": "Write QR sidechannel design document",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:43:18.353064-07:00",
+      "updated_at": "2026-06-27T16:43:18.353064-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
+    },
+    {
+      "id": 12,
+      "change_id": "35de38c7-1344-421a-b8e6-d5ccd3d0e44a",
+      "node_type": "outcome",
+      "title": "QR sidechannel design document drafted",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T16:48:13.932408-07:00",
+      "updated_at": "2026-06-27T16:48:13.932408-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":95,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
+    },
+    {
+      "id": 13,
+      "change_id": "0e2e9062-9f29-4d99-ad29-3e043b21188d",
+      "node_type": "goal",
+      "title": "Check in Deciduous setup and sidechannel plan",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T17:14:20.901539-07:00",
+      "updated_at": "2026-06-27T17:14:20.901539-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"prompt\":\"Ok, so, first off, let's clean up the repo. Due to adding deciduous, things are a bit of a mess right now. Let's get all of that plus our plan document checked in.\"}"
+    },
+    {
+      "id": 14,
+      "change_id": "852dd5e6-483c-4b83-b4a7-1c7e20899e3d",
+      "node_type": "option",
+      "title": "Commit explicit Deciduous/OpenCode setup files and plan document",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T17:14:20.924451-07:00",
+      "updated_at": "2026-06-27T17:14:20.924451-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 15,
+      "change_id": "340a4c3f-a480-4a50-9258-bcc7bfdf145f",
+      "node_type": "decision",
+      "title": "Stage explicit cleanup commit contents",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T17:14:20.946533-07:00",
+      "updated_at": "2026-06-27T17:14:20.946533-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90}"
+    },
+    {
+      "id": 16,
+      "change_id": "ad8485a7-3bf0-4e9f-badf-4b10ba8ec486",
+      "node_type": "action",
+      "title": "Prepare cleanup commit",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-06-27T17:14:20.968625-07:00",
+      "updated_at": "2026-06-27T17:14:20.968625-07:00",
+      "metadata_json": "{\"branch\":\"master\",\"confidence\":90,\"files\":[\"plans/qr-sidechannel-design.md\"]}"
+    }
+  ],
+  "edges": [
+    {
+      "id": 1,
+      "from_node_id": 2,
+      "to_node_id": 3,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "e2cfa74d-bac2-4e57-be6a-99481a9ef158",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Refines viability assumptions",
+      "created_at": "2026-06-27T16:19:53.715697-07:00"
+    },
+    {
+      "id": 2,
+      "from_node_id": 2,
+      "to_node_id": 4,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "1ad58ed9-51cc-41e1-9d1d-c3d06504d231",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Clarifies threat model",
+      "created_at": "2026-06-27T16:20:18.101157-07:00"
+    },
+    {
+      "id": 3,
+      "from_node_id": 2,
+      "to_node_id": 5,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "ed0ea5db-b6ad-4deb-9a3e-89fab7746ddc",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Defines validation risk",
+      "created_at": "2026-06-27T16:27:52.127362-07:00"
+    },
+    {
+      "id": 4,
+      "from_node_id": 2,
+      "to_node_id": 6,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "2538cd12-9bc1-4258-bb20-22a35223a10d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Defines protocol timing target",
+      "created_at": "2026-06-27T16:27:52.152651-07:00"
+    },
+    {
+      "id": 5,
+      "from_node_id": 2,
+      "to_node_id": 7,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "3eafd55e-ebf1-439e-b63a-e63ded18c558",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Defines decoder architecture assumption",
+      "created_at": "2026-06-27T16:27:52.177866-07:00"
+    },
+    {
+      "id": 6,
+      "from_node_id": 2,
+      "to_node_id": 8,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "4330f31f-d7ae-4e42-8e57-24db260700ae",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Candidate protocol approach",
+      "created_at": "2026-06-27T16:27:52.202512-07:00"
+    },
+    {
+      "id": 7,
+      "from_node_id": 8,
+      "to_node_id": 9,
+      "from_change_id": "4330f31f-d7ae-4e42-8e57-24db260700ae",
+      "to_change_id": "0fc85136-8f05-48ee-9a8a-31b2c7fe7574",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Refines protocol payload requirements",
+      "created_at": "2026-06-27T16:38:12.306848-07:00"
+    },
+    {
+      "id": 8,
+      "from_node_id": 2,
+      "to_node_id": 9,
+      "from_change_id": "58669615-0d60-4715-99f6-10cbeeab4849",
+      "to_change_id": "0fc85136-8f05-48ee-9a8a-31b2c7fe7574",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Adds haptics channel requirement",
+      "created_at": "2026-06-27T16:38:12.312682-07:00"
+    },
+    {
+      "id": 9,
+      "from_node_id": 8,
+      "to_node_id": 10,
+      "from_change_id": "4330f31f-d7ae-4e42-8e57-24db260700ae",
+      "to_change_id": "bdfe6646-b2fa-467b-8141-c54046b02f13",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chooses protocol approach for design document",
+      "created_at": "2026-06-27T16:43:18.338354-07:00"
+    },
+    {
+      "id": 10,
+      "from_node_id": 10,
+      "to_node_id": 11,
+      "from_change_id": "bdfe6646-b2fa-467b-8141-c54046b02f13",
+      "to_change_id": "a8c59f40-ba7a-4214-9557-52822fb7703d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Documents chosen design direction",
+      "created_at": "2026-06-27T16:43:18.361837-07:00"
+    },
+    {
+      "id": 11,
+      "from_node_id": 11,
+      "to_node_id": 12,
+      "from_change_id": "a8c59f40-ba7a-4214-9557-52822fb7703d",
+      "to_change_id": "35de38c7-1344-421a-b8e6-d5ccd3d0e44a",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Design document completed",
+      "created_at": "2026-06-27T16:48:13.943043-07:00"
+    },
+    {
+      "id": 12,
+      "from_node_id": 13,
+      "to_node_id": 14,
+      "from_change_id": "0e2e9062-9f29-4d99-ad29-3e043b21188d",
+      "to_change_id": "852dd5e6-483c-4b83-b4a7-1c7e20899e3d",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Concrete cleanup approach",
+      "created_at": "2026-06-27T17:14:20.931983-07:00"
+    },
+    {
+      "id": 13,
+      "from_node_id": 14,
+      "to_node_id": 15,
+      "from_change_id": "852dd5e6-483c-4b83-b4a7-1c7e20899e3d",
+      "to_change_id": "340a4c3f-a480-4a50-9258-bcc7bfdf145f",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chosen cleanup path",
+      "created_at": "2026-06-27T17:14:20.955064-07:00"
+    },
+    {
+      "id": 14,
+      "from_node_id": 15,
+      "to_node_id": 16,
+      "from_change_id": "340a4c3f-a480-4a50-9258-bcc7bfdf145f",
+      "to_change_id": "ad8485a7-3bf0-4e9f-badf-4b10ba8ec486",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implements cleanup commit",
+      "created_at": "2026-06-27T17:14:20.976126-07:00"
+    }
+  ]
+}

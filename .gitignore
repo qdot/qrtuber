@@ -1,2 +1,8 @@
 **/node_modules
 **/dist
+
+# Deciduous database (local)
+.deciduous/
+
+# Polytoken local permissions
+.polytoken/
