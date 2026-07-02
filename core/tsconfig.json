@@ -8,18 +8,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "paths": {
-      "@": [".."],
-      "@/*": ["../*"],
-      "~": [".."],
-      "~/*": ["../*"],
-      "@@": [".."],
-      "@@/*": ["../*"],
-      "~~": [".."],
-      "~~/*": ["../*"]
-    }
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
