@@ -74,7 +74,6 @@ export class ContentVideoHandler extends EventEmitter {
 
   private findVideoElement(videoElem: HTMLVideoElement | null) {
     if (videoElem === null) {
-      console.log('Cannot find video content on page.');
       return;
     }
 

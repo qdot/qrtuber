@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { isFirefox } from "../shared/browser.js";
-import { HapticsState, smokeTest } from "../shared/coreBridge.js";
+import { HapticsState } from "../shared/coreBridge.js";
 import "../shared/styles.css";
 import { CapturePreview } from "./CapturePreview.js";
 import { ChannelMeters } from "./ChannelMeters.js";
@@ -14,8 +14,6 @@ import { StatusBar } from "./StatusBar.js";
 import { useDecodeLoop } from "./useDecodeLoop.js";
 import { useDisplayCapture } from "./useDisplayCapture.js";
 import { useIntiface } from "./useIntiface.js";
-
-console.log("QRTuber core smoke test", smokeTest());
 
 const HAPTICS_TIMEOUT_MS = 2000;
 const ZERO_CHANNELS = Array<number>(9).fill(0);
