@@ -1,27 +1,32 @@
 import { defineConfig } from 'wxt';
 
-// See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: 'chrome',
-  manifest: {
-    name: "QRTuber",
-    version: "0.0.1",
-    short_name: "QRTuber",
-    description: "Pick up QRCodes in video streams for data relay and device control.",
-    content_security_policy: {
-      extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
-    },
-    host_permissions: [
-      "*://twitch.tv/*",
-    ]
-  },
-/*
-  vite: (env) => ({
-    resolve: {
-      // Condition for zbar-wasm to pack the WASM file in as a base64 asset. Makes asset loading
-      // within the extension context much easier.
-      conditions: ["zbar-inlined"]
-    }
-  })
-    */
+  modules: ['@wxt-dev/module-react'],
+  manifest: ({ browser }) => {
+    const isChrome = browser === 'chrome';
+
+    return {
+      name: 'QRTuber',
+      version: '0.0.1',
+      short_name: 'QRTuber',
+      description: 'Pick up QRCodes in video streams for data relay and device control.',
+      permissions: isChrome
+        ? ['storage', 'activeTab', 'scripting', 'offscreen']
+        : ['storage', 'activeTab', 'scripting'],
+      minimum_chrome_version: isChrome ? '109' : undefined,
+      browser_specific_settings: isChrome
+        ? undefined
+        : {
+            gecko: {
+              id: 'qrtuber@nonpolynomial.com',
+              strict_min_version: '115.0'
+            }
+          },
+      content_security_policy: isChrome
+        ? {
+            extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+          }
+        : "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    };
+  }
 });

@@ -1,7 +1,13 @@
 import { ContentVideoHandler, type VisualDecodeResult } from "qrtuber";
 
 export default defineContentScript({
-  matches: ['*://*/*'],
+  matches: [
+    '*://twitch.tv/*',
+    '*://*.twitch.tv/*',
+    '*://*.youtube.com/*',
+    '*://localhost/*',
+    '*://127.0.0.1/*',
+  ],
   main(ctx) {
     let contentHandler = new ContentVideoHandler();
     contentHandler.addListener("videoblob", (blobObj) => {
