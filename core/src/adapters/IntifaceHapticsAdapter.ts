@@ -27,11 +27,15 @@ export interface IntifaceHapticsAdapterOptions {
 }
 
 export interface ButtplugFeatureLike {
+  readonly descriptor?: string;
+  readonly featureDescriptor?: string;
   readonly outputs: ReadonlyMap<OutputType, unknown>;
   runOutput(command: DeviceOutputCommand): Promise<void>;
 }
 
 export interface ButtplugDeviceLike {
+  readonly name?: string;
+  readonly displayName?: string;
   readonly features: ReadonlyMap<number, ButtplugFeatureLike>;
   stop?: () => Promise<void>;
 }
@@ -49,6 +53,17 @@ interface ResolvedOptions {
   readonly clientName: string;
   readonly channelMap?: ChannelMap;
   readonly frameTimeoutMs: number;
+}
+
+export interface IntifaceActuatorInfo {
+  readonly index: number;
+  readonly type: "vibrate";
+  readonly name?: string;
+}
+
+export interface IntifaceDeviceInfo {
+  readonly name: string;
+  readonly actuators: readonly IntifaceActuatorInfo[];
 }
 
 export class IntifaceHapticsAdapter {
@@ -157,6 +172,37 @@ export class IntifaceHapticsAdapter {
     } catch {
       return;
     }
+  }
+
+  getDevices(): IntifaceDeviceInfo[] {
+    return Array.from(this.#client.devices.entries())
+      .sort(([left], [right]) => left - right)
+      .map(([deviceIndex, device]) => {
+        let actuators: IntifaceActuatorInfo[];
+        try {
+          actuators = Array.from(device.features.entries())
+            .sort(([left], [right]) => left - right)
+            .filter(([, feature]) => {
+              try {
+                return feature.outputs.has(OutputType.Vibrate);
+              } catch {
+                return false;
+              }
+            })
+            .map(([featureIndex, feature]) => ({
+              index: featureIndex,
+              type: "vibrate" as const,
+              name: feature.featureDescriptor ?? feature.descriptor,
+            }));
+        } catch {
+          actuators = [];
+        }
+
+        return {
+          name: device.displayName ?? device.name ?? `Device ${deviceIndex}`,
+          actuators,
+        };
+      });
   }
 
   #devices(): ButtplugDeviceLike[] {

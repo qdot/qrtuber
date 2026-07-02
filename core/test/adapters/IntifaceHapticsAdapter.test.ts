@@ -15,12 +15,15 @@ import {
 import { HapticsState } from "../../src/protocol/HapticsState.js";
 
 class FakeFeature implements ButtplugFeatureLike {
+  readonly descriptor?: string;
+  readonly featureDescriptor?: string;
   readonly outputs: ReadonlyMap<OutputType, unknown>;
   readonly commands: DeviceOutputCommand[] = [];
   rejectOutput = false;
 
-  constructor(outputTypes: OutputType[] = [OutputType.Vibrate]) {
+  constructor(outputTypes: OutputType[] = [OutputType.Vibrate], name?: string) {
     this.outputs = new Map(outputTypes.map((type) => [type, {}]));
+    this.featureDescriptor = name;
   }
 
   async runOutput(command: DeviceOutputCommand): Promise<void> {
@@ -36,9 +39,11 @@ class FakeFeature implements ButtplugFeatureLike {
 }
 
 class FakeDevice implements ButtplugDeviceLike {
+  readonly name?: string;
   readonly features: ReadonlyMap<number, ButtplugFeatureLike>;
 
-  constructor(features: ButtplugFeatureLike[]) {
+  constructor(features: ButtplugFeatureLike[], name?: string) {
+    this.name = name;
     this.features = new Map(features.map((feature, index) => [index, feature]));
   }
 }
@@ -165,6 +170,36 @@ describe("IntifaceHapticsAdapter", () => {
 
     expect(rotateOnly.commands).toHaveLength(0);
     expect(vibrate.percents()[0]).toBeCloseTo(128 / 255);
+  });
+
+  it("returns a stable vibrate device snapshot for mapping UIs", () => {
+    const rotateOnly = new FakeFeature([OutputType.Rotate], "Rotate");
+    const firstVibrate = new FakeFeature([OutputType.Vibrate], "Left");
+    const secondVibrate = new FakeFeature([OutputType.Vibrate], "Right");
+    const client = new FakeClient();
+    client.devices = new Map([
+      [2, new FakeDevice([rotateOnly], "No Vibes")],
+      [1, new FakeDevice([firstVibrate, secondVibrate], "Test Toy")],
+      [3, new RejectingFeaturesDevice()],
+    ]);
+
+    expect(new IntifaceHapticsAdapter({}, client).getDevices()).toEqual([
+      {
+        name: "Test Toy",
+        actuators: [
+          { index: 0, type: "vibrate", name: "Left" },
+          { index: 1, type: "vibrate", name: "Right" },
+        ],
+      },
+      {
+        name: "No Vibes",
+        actuators: [],
+      },
+      {
+        name: "Device 3",
+        actuators: [],
+      },
+    ]);
   });
 
   it("deduplicates identical consecutive states", async () => {
