@@ -1,38 +1,46 @@
-import { ContentVideoHandler, type VisualDecodeResult } from "qrtuber";
+import { TrackingController } from "../lib/content/TrackingController.js";
+import { isContentCommand } from "../utils/messages.js";
 
 export default defineContentScript({
   matches: [
-    '*://twitch.tv/*',
-    '*://*.twitch.tv/*',
-    '*://*.youtube.com/*',
-    '*://localhost/*',
-    '*://127.0.0.1/*',
+    "*://twitch.tv/*",
+    "*://*.twitch.tv/*",
+    "*://*.youtube.com/*",
+    "*://localhost/*",
+    "*://127.0.0.1/*",
   ],
   main(ctx) {
-    let contentHandler = new ContentVideoHandler();
-    contentHandler.addListener("videoblob", (blobObj) => {
-      void browser.runtime.sendMessage(blobObj)
-        .then((result: VisualDecodeResult | null) => contentHandler.handleQRCodeFinderReturn(result))
-        .catch((error) => {
-          console.error("QRTuber background message failed", error);
-          contentHandler.stopTrackingVideo();
-        });
-    });
-    browser.runtime.onMessage.addListener((obj) => {
-      if (obj["content_command"] === undefined) {
-        return false;
+    const tracking = new TrackingController((callback, delayMs) =>
+      ctx.setTimeout!(callback, delayMs)
+    );
+
+    browser.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (!isContentCommand(message)) {
+        return undefined;
       }
-      switch (obj.content_command) {
-        case "start": {
-          contentHandler.startTrackingVideo();
-          break;
+
+      void (async () => {
+        switch (message.type) {
+          case "content/ping":
+            sendResponse({ ok: true });
+            return;
+          case "content/start":
+            sendResponse(await tracking.start());
+            return;
+          case "content/stop":
+            sendResponse(await tracking.stop("user"));
+            return;
         }
-        case "stop": {
-          contentHandler.stopTrackingVideo();
-          break;
-        }
-      }
+      })().catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        sendResponse({ ok: false, error: message });
+      });
+
       return true;
+    });
+
+    ctx.onInvalidated(() => {
+      void tracking.stop("navigation");
     });
   },
 });
