@@ -1,17 +1,25 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { isFirefox } from "../shared/browser.js";
-import { smokeTest } from "../shared/coreBridge.js";
+import { HapticsState, smokeTest } from "../shared/coreBridge.js";
 import "../shared/styles.css";
 import { CapturePreview } from "./CapturePreview.js";
+import { ChannelMeters } from "./ChannelMeters.js";
+import { EmergencyStop } from "./EmergencyStop.js";
+import { IntifacePanel } from "./IntifacePanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { useDecodeLoop } from "./useDecodeLoop.js";
 import { useDisplayCapture } from "./useDisplayCapture.js";
+import { useIntiface } from "./useIntiface.js";
 
 console.log("QRTuber core smoke test", smokeTest());
+
+const HAPTICS_TIMEOUT_MS = 2000;
+const ZERO_CHANNELS = Array<number>(9).fill(0);
+const ZERO_STATE = new HapticsState(ZERO_CHANNELS);
 
 function ViewerApp() {
   const {
@@ -23,15 +31,89 @@ function ViewerApp() {
     stream
   } = useDisplayCapture();
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
+  const [isEmergencyStopped, setIsEmergencyStopped] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const decodeState = useDecodeLoop(videoElement, stream);
-  const channelValues = useMemo(
-    () => decodeState.hapticsState?.toArray() ?? Array<number>(9).fill(0),
-    [decodeState.hapticsState]
-  );
+  const {
+    address,
+    applyState,
+    clearError,
+    connect,
+    connectionState,
+    deviceCount,
+    disconnect,
+    error: intifaceError,
+    refreshDevices,
+    resetAddress,
+    setAddress,
+    stopAll
+  } = useIntiface();
+  const isHapticsStale =
+    decodeState.stats.lastDecodeAt === null ||
+    now - decodeState.stats.lastDecodeAt > HAPTICS_TIMEOUT_MS;
+  const channelValues = useMemo(() => {
+    if (isEmergencyStopped || isHapticsStale) {
+      return ZERO_CHANNELS;
+    }
+
+    return decodeState.hapticsState?.toArray() ?? ZERO_CHANNELS;
+  }, [decodeState.hapticsState, isEmergencyStopped, isHapticsStale]);
 
   const handleVideoElement = useCallback((element: HTMLVideoElement | null) => {
     setVideoElement(element);
   }, []);
+
+  const handleStopCapture = useCallback(() => {
+    stopCapture();
+    void stopAll();
+  }, [stopAll, stopCapture]);
+
+  const handleEmergencyStop = useCallback(() => {
+    setIsEmergencyStopped(true);
+    void stopAll();
+  }, [stopAll]);
+
+  const handleResume = useCallback(() => {
+    setIsEmergencyStopped(false);
+  }, []);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNow(Date.now());
+    }, 100);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (!isCapturing) {
+      void stopAll();
+    }
+  }, [isCapturing, stopAll]);
+
+  useEffect(() => {
+    if (isEmergencyStopped || isHapticsStale) {
+      void applyState(ZERO_STATE);
+    }
+  }, [applyState, isEmergencyStopped, isHapticsStale]);
+
+  useEffect(() => {
+    if (
+      decodeState.hapticsState === null ||
+      isEmergencyStopped ||
+      isHapticsStale
+    ) {
+      return;
+    }
+
+    void applyState(decodeState.hapticsState);
+  }, [
+    applyState,
+    decodeState.hapticsState,
+    decodeState.stats.acceptedFrames,
+    isEmergencyStopped,
+    isHapticsStale
+  ]);
 
   return (
     <main className="app-shell viewer-shell">
@@ -56,11 +138,32 @@ function ViewerApp() {
         <button
           className="secondary-button"
           disabled={!isCapturing}
-          onClick={stopCapture}
+          onClick={handleStopCapture}
           type="button"
         >
           Stop capture
         </button>
+      </section>
+
+      <section className="viewer-output-controls" aria-label="Viewer output controls">
+        <IntifacePanel
+          address={address}
+          connectionState={connectionState}
+          deviceCount={deviceCount}
+          error={intifaceError}
+          onAddressChange={setAddress}
+          onClearError={clearError}
+          onConnect={() => void connect()}
+          onDisconnect={() => void disconnect()}
+          onRefreshDevices={refreshDevices}
+          onResetAddress={resetAddress}
+          onStopAll={() => void stopAll()}
+        />
+        <EmergencyStop
+          isStopped={isEmergencyStopped}
+          onResume={handleResume}
+          onStop={handleEmergencyStop}
+        />
       </section>
 
       {isFirefox ? (
@@ -114,15 +217,11 @@ function ViewerApp() {
           </div>
         </div>
 
-        <div className="channel-meter-grid" aria-label="Decoded haptics channels">
-          {channelValues.map((value, index) => (
-            <div className="channel-meter" key={index}>
-              <span className="channel-meter-label">CH{index + 1}</span>
-              <meter min={0} max={255} value={value} />
-              <span className="channel-meter-value">{value}</span>
-            </div>
-          ))}
-        </div>
+        <ChannelMeters
+          isStale={isHapticsStale}
+          isStopped={isEmergencyStopped}
+          values={channelValues}
+        />
       </section>
     </main>
   );
