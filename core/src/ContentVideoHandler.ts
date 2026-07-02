@@ -1,23 +1,15 @@
 import EventEmitter from "eventemitter3";
-import { QRCodeFinderResult } from "./QRCodeFinder";
 
-const debug = false;
-
-function debugLog(logstr: String) {
-  if (debug) {
-    console.log(debugLog);
-  }
-}
+import type { BoundingBox, VisualDecodeResult } from "./visual/types.js";
 
 export class ContentVideoHandler extends EventEmitter {
   private videoElem: HTMLVideoElement | null = null;
   private canvas: OffscreenCanvas = new OffscreenCanvas(0, 0);
   private context: OffscreenCanvasRenderingContext2D = this.canvas.getContext("2d")!;
   private lastBlobURL: string | null = null;
-  private hasFoundQRCode = false;
-  private trackingBoundingBox: number[][] = [[0, 0], [0, 0]];
+  private trackingBoundingBox: BoundingBox | null = null;
   private trackingBoundingBoxBorderSize: number = 10;
-  private trackingInterval = 100;
+  private videoListenerAbortController: AbortController | null = null;
 
   constructor() {
     super();
@@ -25,101 +17,149 @@ export class ContentVideoHandler extends EventEmitter {
 
   public get isTrackingVideo() { return this.videoElem !== null; }
 
-  public startTrackingVideo() {
-    this.findVideoElement();
-    if (this.videoElem !== null) {
-      this.updateImageData();
+  public get currentRegion(): BoundingBox | null {
+    if (this.videoElem === null || this.videoElem.videoWidth <= 0 || this.videoElem.videoHeight <= 0) {
+      return null;
+    }
+
+    if (this.trackingBoundingBox === null) {
+      return {
+        minX: 0,
+        minY: 0,
+        maxX: this.videoElem.videoWidth,
+        maxY: this.videoElem.videoHeight,
+      };
+    }
+
+    return {
+      minX: Math.max(0, this.trackingBoundingBox.minX - this.trackingBoundingBoxBorderSize),
+      minY: Math.max(0, this.trackingBoundingBox.minY - this.trackingBoundingBoxBorderSize),
+      maxX: Math.min(this.videoElem.videoWidth, this.trackingBoundingBox.maxX + this.trackingBoundingBoxBorderSize),
+      maxY: Math.min(this.videoElem.videoHeight, this.trackingBoundingBox.maxY + this.trackingBoundingBoxBorderSize),
+    };
+  }
+
+  public startTrackingVideo(video?: HTMLVideoElement) {
+    this.stopTrackingVideo();
+    this.findVideoElement(video ?? document.querySelector("video"));
+    if (this.videoElem !== null && this.videoElem.videoWidth > 0 && this.videoElem.videoHeight > 0) {
+      this.setupVideoCanvas();
+      void this.updateImageData();
     }
   }
 
   public stopTrackingVideo() {
+    this.videoListenerAbortController?.abort();
+    this.videoListenerAbortController = null;
     this.videoElem = null;
-    this.trackingBoundingBox = [[0, 0], [0, 0]];
+    this.trackingBoundingBox = null;
+    this.canvas.width = 0;
+    this.canvas.height = 0;
+
+    if (this.lastBlobURL !== null) {
+      URL.revokeObjectURL(this.lastBlobURL);
+      this.lastBlobURL = null;
+    }
   }
 
   private setupVideoCanvas() {
-    if (this.hasFoundQRCode) {
-      // If we have a QRCode, set up our canvas
-      this.canvas.width = this.trackingBoundingBox[1][0] - this.trackingBoundingBox[0][0] + (this.trackingBoundingBoxBorderSize * 2);
-      this.canvas.height = this.trackingBoundingBox[1][1] - this.trackingBoundingBox[0][1] + (this.trackingBoundingBoxBorderSize * 2);
-      console.log(`Updating canvas to bounding box size ${this.canvas.width} ${this.canvas.height}`);
-    } else if (this.videoElem !== null) {
-      this.canvas.width = this.videoElem.videoWidth;
-      this.canvas.height = this.videoElem.videoHeight;
-      this.trackingBoundingBox = [[0, 0], [this.videoElem.videoWidth, this.videoElem.videoHeight]];
-      console.log(`Updating canvas to video width size ${this.videoElem.videoWidth} ${this.videoElem.videoHeight}`);
+    const region = this.currentRegion;
+    if (region === null) {
+      return;
     }
+
+    this.canvas.width = Math.max(1, region.maxX - region.minX);
+    this.canvas.height = Math.max(1, region.maxY - region.minY);
   }
 
-  private findVideoElement() {
-    let videoElem = document.querySelector("video");
-    if (videoElem !== null) {
-      // If the video resizes, restart tracking
-      videoElem.addEventListener('resize', (e) => {
-        this.hasFoundQRCode = false;
-        this.setupVideoCanvas();
-      });
-      this.videoElem = videoElem;
-      if (videoElem["videoWidth"] !== undefined && videoElem.videoWidth > 0) {
-        this.setupVideoCanvas();
-      } else {
-        console.log("Waiting for metadata");
-        videoElem!.addEventListener("loadedmetadata", () => {
-          this.setupVideoCanvas();
-        });
-      }
-    } else {
+  private findVideoElement(videoElem: HTMLVideoElement | null) {
+    if (videoElem === null) {
       console.log('Cannot find video content on page.');
+      return;
     }
+
+    this.videoElem = videoElem;
+    this.videoListenerAbortController = new AbortController();
+    const { signal } = this.videoListenerAbortController;
+
+    videoElem.addEventListener('resize', () => {
+      this.trackingBoundingBox = null;
+      this.setupVideoCanvas();
+    }, { signal });
+
+    if (videoElem.videoWidth > 0 && videoElem.videoHeight > 0) {
+      this.setupVideoCanvas();
+      return;
+    }
+
+    videoElem.addEventListener("loadedmetadata", () => {
+      this.setupVideoCanvas();
+      void this.updateImageData();
+    }, { once: true, signal });
   }
 
-  public handleQRCodeFinderReturn(result: QRCodeFinderResult) {
-    if (this.lastBlobURL !== null) URL.revokeObjectURL(this.lastBlobURL);
-    if (result !== undefined && result.Message !== null && result.BoundingBox !== null) {
-      if (!this.hasFoundQRCode) {
-        this.trackingBoundingBox = result.BoundingBox;
-        this.hasFoundQRCode = true;
-        // Reset canvas to only be size of tracked position
-        this.setupVideoCanvas();
-      }
-      this.updateImageData();
-    } else {
-      console.log("No QRCode found, resetting bounding box to full video size");
-      this.hasFoundQRCode = false;
-      this.setupVideoCanvas();
-      this.updateImageData();
+  public handleQRCodeFinderReturn(result: VisualDecodeResult | null) {
+    if (this.lastBlobURL !== null) {
+      URL.revokeObjectURL(this.lastBlobURL);
+      this.lastBlobURL = null;
     }
+
+    if (this.videoElem === null) {
+      return;
+    }
+
+    if (result !== null) {
+      const region = this.currentRegion;
+      if (region === null) {
+        return;
+      }
+
+      this.trackingBoundingBox = {
+        minX: region.minX + result.boundingBox.minX,
+        minY: region.minY + result.boundingBox.minY,
+        maxX: region.minX + result.boundingBox.maxX,
+        maxY: region.minY + result.boundingBox.maxY,
+      };
+      this.setupVideoCanvas();
+      void this.updateImageData();
+      return;
+    }
+
+    this.trackingBoundingBox = null;
+    this.setupVideoCanvas();
+    void this.updateImageData();
   }
 
   private updateImageData = async () => {
     if (this.context == null || this.canvas == null || this.videoElem == null) {
-      console.log("Canvas or context is invalid, cannot update image data");
       return;
     }
-    let startTime = Date.now();
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    if (this.hasFoundQRCode) {
-      this.context.drawImage(
-        this.videoElem,
-        this.trackingBoundingBox[0][0] - this.trackingBoundingBoxBorderSize,
-        this.trackingBoundingBox[0][1] - this.trackingBoundingBoxBorderSize,
-        this.trackingBoundingBox[1][0] - this.trackingBoundingBox[0][0] + (this.trackingBoundingBoxBorderSize * 2),
-        this.trackingBoundingBox[1][1] - this.trackingBoundingBox[0][1] + (this.trackingBoundingBoxBorderSize * 2),
-        0,
-        0,
-        this.trackingBoundingBox[1][0] - this.trackingBoundingBox[0][0] + (this.trackingBoundingBoxBorderSize * 2),
-        this.trackingBoundingBox[1][1] - this.trackingBoundingBox[0][1] + (this.trackingBoundingBoxBorderSize * 2));
-    } else {
-      this.context.drawImage(this.videoElem!, 0, 0, this.canvas.width, this.canvas.height);
+
+    const region = this.currentRegion;
+    if (region === null) {
+      return;
     }
+
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.drawImage(
+      this.videoElem,
+      region.minX,
+      region.minY,
+      region.maxX - region.minX,
+      region.maxY - region.minY,
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    );
+
     let data = await this.canvas.convertToBlob();
+    if (this.videoElem === null) {
+      return;
+    }
+
     let dataurl = URL.createObjectURL(data);
-    // Send out to background
     this.lastBlobURL = dataurl;
     this.emit("videoblob", { blob_url: dataurl });
-    //let result = await browser.runtime.sendMessage({ blob_url: dataurl });
-
-    //console.log(`Processing Time ${Date.now() - startTime}`);
-    //this.handleQRCodeFinderReturn(result);
   }
 }

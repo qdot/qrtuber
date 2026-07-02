@@ -1,12 +1,16 @@
-import { ContentVideoHandler } from "@/../core/src/ContentVideoHandler";
+import { ContentVideoHandler, type VisualDecodeResult } from "qrtuber";
 
 export default defineContentScript({
-  //matches: ['*://twitch.tv/*', '*://google.com/*', '*://youtube.com/*'],
   matches: ['*://*/*'],
   main(ctx) {
     let contentHandler = new ContentVideoHandler();
     contentHandler.addListener("videoblob", (blobObj) => {
-      browser.runtime.sendMessage(blobObj).then((result) => contentHandler.handleQRCodeFinderReturn(result))
+      void browser.runtime.sendMessage(blobObj)
+        .then((result: VisualDecodeResult | null) => contentHandler.handleQRCodeFinderReturn(result))
+        .catch((error) => {
+          console.error("QRTuber background message failed", error);
+          contentHandler.stopTrackingVideo();
+        });
     });
     browser.runtime.onMessage.addListener((obj) => {
       if (obj["content_command"] === undefined) {
@@ -24,6 +28,5 @@ export default defineContentScript({
       }
       return true;
     });
-    //console.log(`Processing Time ${Date.now() - startTime}`);
   },
 });

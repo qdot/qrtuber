@@ -6,9 +6,7 @@
 import { scanImageData } from '@undecaf/zbar-wasm';
 import EventEmitter from 'eventemitter3';
 
-export class QRCodeFinderResult {
-  constructor(public Message: object | null, public BoundingBox: number[][] | null) { }
-}
+import { boundingBoxFromPoints, type Point, type VisualDecodeResult } from "./visual/types.js";
 
 export class QRCodeFinder extends EventEmitter {
   public static readonly DETECTION_EVENT = "detection";
@@ -24,42 +22,49 @@ export class QRCodeFinder extends EventEmitter {
     this._currentBlob = await fetch(url).then(r => r.blob());
   }
 
-  public async findQRCode() {
-    let bitmap = await createImageBitmap(this._currentBlob!);
-    this._canvas.width = bitmap.width;
-    this._canvas.height = bitmap.height;
-    this._context.drawImage(bitmap, 0, 0);
-
-    let symbols = await scanImageData(this._context.getImageData(0, 0, this._canvas.width, this._canvas.height));
-    if (symbols.length == 0) {
-      return new QRCodeFinderResult(null, null);
+  public async findQRCode(source?: Blob | ImageData): Promise<VisualDecodeResult | null> {
+    const imageData = await this.imageDataFromSource(source ?? this._currentBlob);
+    if (imageData === null) {
+      return null;
     }
-    let minX: number, minY: number, maxX: number, maxY: number;
-    symbols[0].points.forEach((v: {x: number, y: number}) => {
-      if (minX === undefined || v.x < minX) {
-        minX = v.x
-      }
-      if (maxX === undefined || v.x > maxX) {
-        maxX = v.x;
-      }
-      if (minY === undefined || v.y < minY) {
-        minY = v.y;
-      }
-      if (maxY === undefined || v.y > maxY) {
-        maxY = v.y;
-      }
-    });
-    let result = symbols[0].decode();
-    // TODO We shouldn't parse here, we should just pass whatever is in the QRCode out
-    let speedVal = parseInt(result.substring(2));
-    let message = {
-      intiface_command: "speed",
-      speed: speedVal / 99
+
+    let symbols = await scanImageData(imageData);
+    if (symbols.length == 0) {
+      return null;
+    }
+
+    const boundingBox = boundingBoxFromPoints(symbols[0].points as readonly Point[]);
+    if (boundingBox === null) {
+      return null;
+    }
+
+    const result = {
+      payload: symbols[0].decode(),
+      boundingBox,
     };
-    let ret = new QRCodeFinderResult( message, [[minX!, minY!], [maxX!, maxY!]]);
     // Emit so that anything in this service worker will receive an update
-    this.emit(QRCodeFinder.DETECTION_EVENT, message);
+    this.emit(QRCodeFinder.DETECTION_EVENT, result);
     // Return so the content script will receive an update
-    return ret;
+    return result;
+  }
+
+  private async imageDataFromSource(source: Blob | ImageData | null): Promise<ImageData | null> {
+    if (source === null) {
+      return null;
+    }
+
+    if (typeof ImageData !== "undefined" && source instanceof ImageData) {
+      return source;
+    }
+
+    const bitmap = await createImageBitmap(source);
+    try {
+      this._canvas.width = bitmap.width;
+      this._canvas.height = bitmap.height;
+      this._context.drawImage(bitmap, 0, 0);
+      return this._context.getImageData(0, 0, this._canvas.width, this._canvas.height);
+    } finally {
+      bitmap.close();
+    }
   }
 }

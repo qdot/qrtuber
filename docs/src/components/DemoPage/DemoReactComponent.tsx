@@ -1,53 +1,57 @@
-import React, { Component, useState } from 'react';
-import { ContentVideoHandler, HapticsState, IntifaceHapticsAdapter, QRCodeFinder } from 'qrtuber';
+import React, { Component } from 'react';
+import {
+  ContentVideoHandler,
+  IntifaceHapticsAdapter,
+  parseFrame,
+  QRCodeFinder,
+  SequenceTracker,
+  type VisualDecodeResult,
+} from 'qrtuber';
 
-function legacySpeedMessageToState(args: unknown): HapticsState | null {
-  if (
-    typeof args !== 'object' ||
-    args === null ||
-    !('intiface_command' in args) ||
-    !('speed' in args) ||
-    args.intiface_command !== 'speed' ||
-    typeof args.speed !== 'number'
-  ) {
-    return null;
-  }
-
-  return new HapticsState(Array(9).fill(args.speed * 255));
+interface QRTuberDemoState {
+  tracking: boolean;
+  trackedValue: string;
+  intifaceState: boolean;
 }
 
-export default class QRTuberDemoComponent extends Component {
-  private _client = new IntifaceHapticsAdapter();
-  private _tracker = new QRCodeFinder();
+export default class QRTuberDemoComponent extends Component<Record<string, never>, QRTuberDemoState> {
+  private _adapter = new IntifaceHapticsAdapter();
+  private _finder = new QRCodeFinder();
+  private _seqTracker = new SequenceTracker();
   private _videoHandler = new ContentVideoHandler();
 
-  state = {
+  state: QRTuberDemoState = {
     tracking: false,
     trackedValue: "",
     intifaceState: false
   };
 
-  constructor(props) {
+  constructor(props: Record<string, never>) {
     super(props);
-    this._tracker.addListener(QRCodeFinder.DETECTION_EVENT, (args) => {
-      const state = legacySpeedMessageToState(args);
-      if (state !== null) {
-        void this._client.applyState(state);
-      }
+    this._finder.addListener(QRCodeFinder.DETECTION_EVENT, (result: VisualDecodeResult) => {
+      void this.applyPayload(result.payload);
     });
     this._videoHandler.addListener("videoblob", (blobObj) => {
       if (blobObj["blob_url"] !== undefined) {
-        this._tracker.getBlobFromURL(blobObj["blob_url"]).then(() => {
-          this._tracker.findQRCode().then((result: any) => {
-            if (result.Message !== null) {
-              this.setState({ trackedValue: `${result.Message.speed}` });
+        this._finder.getBlobFromURL(blobObj["blob_url"]).then(() => {
+          this._finder.findQRCode().then((result) => {
+            if (result !== null) {
+              this.setState({ trackedValue: result.payload });
             }
             this._videoHandler.handleQRCodeFinderReturn(result);
           });
         });
-        return true;
       }
     });
+  }
+
+  private async applyPayload(payload: string) {
+    const frame = parseFrame(payload);
+    if (frame === null || !this._seqTracker.accept(frame)) {
+      return;
+    }
+
+    await this._adapter.applyState(frame.state);
   }
 
   private toggleTracking(state: boolean) {
@@ -61,9 +65,10 @@ export default class QRTuberDemoComponent extends Component {
 
   private async toggleIntifaceConnection(state: boolean) {
     if (state) {
-      await this._client.connect();
+      await this._adapter.connect();
     } else {
-      await this._client.disconnect();
+      this._seqTracker.reset();
+      await this._adapter.disconnect();
     }
     await this.setState({ intifaceState: state });
   }

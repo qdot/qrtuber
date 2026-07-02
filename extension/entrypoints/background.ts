@@ -1,64 +1,57 @@
-import { HapticsState, IntifaceHapticsAdapter, QRCodeFinder } from 'qrtuber';
-
-function legacySpeedMessageToState(args: unknown): HapticsState | null {
-  if (
-    typeof args !== 'object' ||
-    args === null ||
-    !('intiface_command' in args) ||
-    !('speed' in args) ||
-    args.intiface_command !== 'speed' ||
-    typeof args.speed !== 'number'
-  ) {
-    return null;
-  }
-
-  return new HapticsState(Array(9).fill(args.speed * 255));
-}
+import {
+  IntifaceHapticsAdapter,
+  parseFrame,
+  QRCodeFinder,
+  SequenceTracker,
+  type VisualDecodeResult,
+} from 'qrtuber';
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
   let qrCodeFinder = new QRCodeFinder();
   let intifaceClient = new IntifaceHapticsAdapter();
+  let sequenceTracker = new SequenceTracker();
 
-  // Tie the finder and the intiface client together
-  qrCodeFinder.addListener(QRCodeFinder.DETECTION_EVENT, (args) => {
-    const state = legacySpeedMessageToState(args);
-    if (state !== null) {
-      void intifaceClient.applyState(state);
+  async function applyPayload(payload: string) {
+    const frame = parseFrame(payload);
+    if (frame === null || !sequenceTracker.accept(frame)) {
+      return;
     }
+
+    await intifaceClient.applyState(frame.state);
+  }
+
+  qrCodeFinder.addListener(QRCodeFinder.DETECTION_EVENT, (result: VisualDecodeResult) => {
+    void applyPayload(result.payload);
   });
 
-  // Wire up message listeners from the content script or popup
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
-    //QRCodeFinder message
     if (message["blob_url"] !== undefined) {
-      qrCodeFinder.getBlobFromURL(message["blob_url"]).then(() => {
-        qrCodeFinder.findQRCode().then((result) => sendResponse(result));
-      });
+      qrCodeFinder.getBlobFromURL(message["blob_url"])
+        .then(() => qrCodeFinder.findQRCode())
+        .then((result) => sendResponse(result))
+        .catch((error) => {
+          console.error("QR decode failed", error);
+          sendResponse(null);
+        });
       return true;
     }
 
-    //Intiface Client message
     if (message["intiface_command"] !== undefined) {
       switch (message.intiface_command) {
-        case "attach": {
-          break;
-        }
-        case "detach": {
-          break;
-        }
         case "connect": {
-          intifaceClient.connect();
+          void intifaceClient.connect();
           break;
         }
         case "disconnect": {
-          intifaceClient.disconnect();
+          sequenceTracker.reset();
+          void intifaceClient.disconnect();
           break;
         }
       }
       return true;
     }
+
     return false;
   });
   console.log("Background updated!");
