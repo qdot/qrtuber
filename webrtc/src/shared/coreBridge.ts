@@ -1,4 +1,5 @@
 export {
+  ContentVideoHandler,
   HapticsState,
   IntifaceHapticsAdapter,
   QRCodeFinder,
@@ -6,6 +7,7 @@ export {
   encodeFrame,
   parseFrame,
   parseFrameResult,
+  type BoundingBox,
   type QRTuberFrame,
   type VisualDecodeResult
 } from "qrtuber";
