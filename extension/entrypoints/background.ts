@@ -1,17 +1,32 @@
-/*
-import { QRTuberIntifaceClient } from '@/../core/src/IntifaceClient';
-import { QRCodeFinder } from '@/../core/src/QRCodeFinder';
-*/
+import { HapticsState, IntifaceHapticsAdapter, QRCodeFinder } from 'qrtuber';
 
-import { QRTuberIntifaceClient, QRCodeFinder } from 'qrtuber';
+function legacySpeedMessageToState(args: unknown): HapticsState | null {
+  if (
+    typeof args !== 'object' ||
+    args === null ||
+    !('intiface_command' in args) ||
+    !('speed' in args) ||
+    args.intiface_command !== 'speed' ||
+    typeof args.speed !== 'number'
+  ) {
+    return null;
+  }
+
+  return new HapticsState(Array(9).fill(args.speed * 255));
+}
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
   let qrCodeFinder = new QRCodeFinder();
-  let intifaceClient = new QRTuberIntifaceClient();
+  let intifaceClient = new IntifaceHapticsAdapter();
 
   // Tie the finder and the intiface client together
-  qrCodeFinder.addListener(QRCodeFinder.DETECTION_EVENT, (args) => intifaceClient.detectionEventHandler(args));
+  qrCodeFinder.addListener(QRCodeFinder.DETECTION_EVENT, (args) => {
+    const state = legacySpeedMessageToState(args);
+    if (state !== null) {
+      void intifaceClient.applyState(state);
+    }
+  });
 
   // Wire up message listeners from the content script or popup
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -28,11 +43,9 @@ export default defineBackground(() => {
     if (message["intiface_command"] !== undefined) {
       switch (message.intiface_command) {
         case "attach": {
-          intifaceClient.activateDeviceUpdates();
           break;
         }
         case "detach": {
-          intifaceClient.deactivateDeviceUpdates();
           break;
         }
         case "connect": {

@@ -1,8 +1,23 @@
 import React, { Component, useState } from 'react';
-import { QRTuberIntifaceClient, QRCodeFinder, ContentVideoHandler } from 'qrtuber';
+import { ContentVideoHandler, HapticsState, IntifaceHapticsAdapter, QRCodeFinder } from 'qrtuber';
+
+function legacySpeedMessageToState(args: unknown): HapticsState | null {
+  if (
+    typeof args !== 'object' ||
+    args === null ||
+    !('intiface_command' in args) ||
+    !('speed' in args) ||
+    args.intiface_command !== 'speed' ||
+    typeof args.speed !== 'number'
+  ) {
+    return null;
+  }
+
+  return new HapticsState(Array(9).fill(args.speed * 255));
+}
 
 export default class QRTuberDemoComponent extends Component {
-  private _client = new QRTuberIntifaceClient();
+  private _client = new IntifaceHapticsAdapter();
   private _tracker = new QRCodeFinder();
   private _videoHandler = new ContentVideoHandler();
 
@@ -14,7 +29,12 @@ export default class QRTuberDemoComponent extends Component {
 
   constructor(props) {
     super(props);
-    this._tracker.addListener(QRCodeFinder.DETECTION_EVENT, (args) => this._client.detectionEventHandler(args));
+    this._tracker.addListener(QRCodeFinder.DETECTION_EVENT, (args) => {
+      const state = legacySpeedMessageToState(args);
+      if (state !== null) {
+        void this._client.applyState(state);
+      }
+    });
     this._videoHandler.addListener("videoblob", (blobObj) => {
       if (blobObj["blob_url"] !== undefined) {
         this._tracker.getBlobFromURL(blobObj["blob_url"]).then(() => {
