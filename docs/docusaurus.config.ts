@@ -68,9 +68,14 @@ const config: Config = {
           label: 'Demo',
         },
         {
-          href: '/demo/',
+          href: '/docs/viewers/extension',
           position: 'left',
           label: 'Browser Extension',
+        },
+        {
+          href: 'https://qrtuber.com/app/',
+          position: 'left',
+          label: 'Web Viewer',
         },
         /*
         {to: '/blog', label: 'Blog', position: 'left'},

@@ -2,7 +2,7 @@ name: Deploy Decision Graph to Pages
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'docs/**'
   workflow_dispatch:
@@ -23,3 +23,4 @@ jobs:
           publish_dir: ./docs
           publish_branch: gh-pages
           force_orphan: true
+          exclude_assets: '.docusaurus,build,static/app,node_modules'

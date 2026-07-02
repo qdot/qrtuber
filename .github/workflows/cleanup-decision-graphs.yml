@@ -27,17 +27,21 @@ jobs:
             echo "No decision graph PNGs found"
             echo "found=false" >> $GITHUB_OUTPUT
           else
+            CLEANUP_FILES="$RUNNER_TEMP/decision-graph-cleanup-files.txt"
+            : > "$CLEANUP_FILES"
             echo "Found PNGs to clean up:"
             echo "$PNGS"
             echo "found=true" >> $GITHUB_OUTPUT
 
             # Remove the files
+            echo "$PNGS" >> "$CLEANUP_FILES"
             echo "$PNGS" | xargs rm -f
 
             # Also remove corresponding .dot files
             for png in $PNGS; do
               dot_file="${png%.png}.dot"
               if [ -f "$dot_file" ]; then
+                echo "$dot_file" >> "$CLEANUP_FILES"
                 rm -f "$dot_file"
                 echo "Also removed: $dot_file"
               fi
@@ -60,7 +64,11 @@ jobs:
           # Create branch and commit
           BRANCH="cleanup/decision-graphs-pr-${{ github.event.pull_request.number }}"
           git checkout -b "$BRANCH"
-          git add -A
+          while IFS= read -r cleanup_file; do
+            if [ -n "$cleanup_file" ]; then
+              git add -- "$cleanup_file"
+            fi
+          done < "$RUNNER_TEMP/decision-graph-cleanup-files.txt"
           git commit -m "chore: cleanup decision graph assets from PR #${{ github.event.pull_request.number }}"
           git push origin "$BRANCH"
 
@@ -71,7 +79,7 @@ jobs:
 
           These files served their purpose for PR review and are no longer needed." \
             --head "$BRANCH" \
-            --base main
+            --base master
 
           # Auto-merge (requires auto-merge enabled on repo)
           gh pr merge "$BRANCH" --auto --squash --delete-branch || echo "Auto-merge not enabled, PR created for manual merge"
