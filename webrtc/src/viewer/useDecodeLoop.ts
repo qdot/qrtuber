@@ -18,6 +18,7 @@ export interface DecodeStats {
   duplicateFrames: number;
   foundFrames: number;
   lastDecodeAt: number | null;
+  lastDecodeDurationMs: number | null;
   misses: number;
   parseErrors: number;
 }
@@ -29,6 +30,7 @@ const INITIAL_STATS: DecodeStats = {
   duplicateFrames: 0,
   foundFrames: 0,
   lastDecodeAt: null,
+  lastDecodeDurationMs: null,
   misses: 0,
   parseErrors: 0
 };
@@ -99,9 +101,12 @@ export function useDecodeLoop(videoElement: HTMLVideoElement | null, stream: Med
       isDecodingRef.current = true;
 
       try {
+        const decodeStartedAt = performance.now();
         const region = handler.currentRegion;
         await finder.getBlobFromURL(blobUrl);
         const result = await finder.findQRCode();
+        const decodeFinishedAt = performance.now();
+        const lastDecodeDurationMs = decodeFinishedAt - decodeStartedAt;
         const fullFrameBox =
           result !== null && region !== null
             ? translateBoundingBox(region, result.boundingBox)
@@ -113,13 +118,14 @@ export function useDecodeLoop(videoElement: HTMLVideoElement | null, stream: Med
           return;
         }
 
-        const now = performance.now();
+        const now = decodeFinishedAt;
         const decodesPerSec = getDecodesPerSec(acceptedSampleTimesRef.current, now);
         setStats((currentStats) => ({
           ...currentStats,
           decodeAttempts: currentStats.decodeAttempts + 1,
           decodesPerSec,
           foundFrames: currentStats.foundFrames + (result === null ? 0 : 1),
+          lastDecodeDurationMs,
           misses: currentStats.misses + (result === null ? 1 : 0)
         }));
         setBoundingBox(fullFrameBox);

@@ -25,6 +25,14 @@ function formatAge(lastDecodeAt: number | null): string {
   return `${(ageMs / 1000).toFixed(1)} s`;
 }
 
+function formatDecodeDuration(durationMs: number | null): string {
+  if (durationMs === null) {
+    return "-";
+  }
+
+  return `${durationMs.toFixed(1)} ms`;
+}
+
 export function StatusBar({
   captureError,
   decodeError,
@@ -58,8 +66,12 @@ export function StatusBar({
         <span className="status-value">{stats.decodesPerSec}</span>
       </div>
       <div className="status-item">
-        <span className="status-label">Last decode</span>
+        <span className="status-label">Frame age</span>
         <span className="status-value">{formatAge(stats.lastDecodeAt)}</span>
+      </div>
+      <div className="status-item">
+        <span className="status-label">Decode time</span>
+        <span className="status-value">{formatDecodeDuration(stats.lastDecodeDurationMs)}</span>
       </div>
       <div className="status-item wide">
         <span className="status-label">Haptics</span>
