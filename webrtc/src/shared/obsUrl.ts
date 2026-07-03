@@ -1,5 +1,10 @@
 import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
+import {
+  colorParamValue,
+  DEFAULT_QR_DARK_COLOR,
+  DEFAULT_QR_LIGHT_COLOR
+} from "./qrColors.js";
 import { clampQrSize } from "./urlConfig.js";
 
 interface GeneratorChannel {
@@ -9,16 +14,20 @@ interface GeneratorChannel {
 
 export interface GeneratorObsUrlConfig {
   readonly channels: readonly GeneratorChannel[];
+  readonly darkColor: string;
   readonly errorCorrectionLevel: QRCodeErrorCorrectionLevel;
+  readonly lightColor: string;
   readonly paused: boolean;
   readonly qrSize: number;
   readonly rateHz: number;
 }
 
 export interface DeviceObsUrlConfig {
+  readonly darkColor: string;
   readonly deviceAddress: string;
   readonly deviceIdentifier: string;
   readonly errorCorrectionLevel: QRCodeErrorCorrectionLevel;
+  readonly lightColor: string;
   readonly qrSize: number;
   readonly serverAddress: string;
 }
@@ -48,7 +57,9 @@ function setOptionalParam(params: URLSearchParams, name: string, value: string) 
 
 export function createGeneratorObsUrl({
   channels,
+  darkColor,
   errorCorrectionLevel,
+  lightColor,
   paused,
   qrSize,
   rateHz
@@ -56,6 +67,8 @@ export function createGeneratorObsUrl({
   const url = createOverlayUrl();
   url.searchParams.set("size", String(clampQrSize(qrSize)));
   url.searchParams.set("ecc", errorCorrectionLevel);
+  url.searchParams.set("dark", colorParamValue(darkColor, DEFAULT_QR_DARK_COLOR));
+  url.searchParams.set("light", colorParamValue(lightColor, DEFAULT_QR_LIGHT_COLOR));
   url.searchParams.set("rate", paused ? "paused" : String(rateHz));
 
   channels.forEach((channel, index) => {
@@ -71,9 +84,11 @@ export function createGeneratorObsUrl({
 }
 
 export function createDeviceObsUrl({
+  darkColor,
   deviceAddress,
   deviceIdentifier,
   errorCorrectionLevel,
+  lightColor,
   qrSize,
   serverAddress
 }: DeviceObsUrlConfig): string {
@@ -81,6 +96,8 @@ export function createDeviceObsUrl({
   url.searchParams.set("connect", "1");
   url.searchParams.set("size", String(clampQrSize(qrSize)));
   url.searchParams.set("ecc", errorCorrectionLevel);
+  url.searchParams.set("dark", colorParamValue(darkColor, DEFAULT_QR_DARK_COLOR));
+  url.searchParams.set("light", colorParamValue(lightColor, DEFAULT_QR_LIGHT_COLOR));
   setOptionalParam(url.searchParams, "server", serverAddress);
   setOptionalParam(url.searchParams, "device", deviceAddress);
   setOptionalParam(url.searchParams, "id", deviceIdentifier);

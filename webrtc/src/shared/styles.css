@@ -297,6 +297,42 @@ select:disabled {
   padding: 7px 9px;
 }
 
+.color-control {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.color-control input[type="color"] {
+  width: 44px;
+  height: 36px;
+  padding: 3px;
+}
+
+.color-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.qr-contrast-warning {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 4px;
+  border-left: 4px solid var(--color-warning-border);
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  padding: 10px 12px;
+}
+
+.qr-contrast-warning strong {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 .secondary-button {
   min-height: 34px;
   border: 1px solid var(--color-control-border);

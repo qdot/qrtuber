@@ -5,15 +5,19 @@ export const QR_SIZE_PRESETS = [200, 300, 400] as const;
 export const ERROR_CORRECTION_LEVELS: QRCodeErrorCorrectionLevel[] = ["L", "M", "Q", "H"];
 
 interface QRCanvasProps {
+  darkColor: string;
   encoded: string;
   errorCorrectionLevel: QRCodeErrorCorrectionLevel;
+  lightColor: string;
   size: number;
   videoMode: boolean;
 }
 
 export function QRCanvas({
+  darkColor,
   encoded,
   errorCorrectionLevel,
+  lightColor,
   size,
   videoMode
 }: QRCanvasProps) {
@@ -31,8 +35,8 @@ export function QRCanvas({
 
     QRCode.toCanvas(canvas, [{ mode: "alphanumeric", data: encoded }], {
       color: {
-        dark: "#000000ff",
-        light: "#ffffffff"
+        dark: darkColor,
+        light: lightColor
       },
       errorCorrectionLevel,
       margin: 4,
@@ -52,7 +56,7 @@ export function QRCanvas({
     return () => {
       cancelled = true;
     };
-  }, [encoded, errorCorrectionLevel, size]);
+  }, [darkColor, encoded, errorCorrectionLevel, lightColor, size]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

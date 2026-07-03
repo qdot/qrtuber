@@ -3,6 +3,7 @@ import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
 import { CopyObsUrlButton } from "../shared/CopyObsUrlButton.js";
 import { createGeneratorObsUrl } from "../shared/obsUrl.js";
+import { QrColorControls } from "../shared/QrColorControls.js";
 import { ThemeControl } from "../shared/ThemeControl.js";
 import {
   clampQrSize,
@@ -50,6 +51,8 @@ export function GeneratorApp() {
   const [channels, setChannels] = useState<ChannelConfig[]>(urlConfig.generator.channels);
   const [qrSize, setQrSize] = useState(urlConfig.qr.qrSize);
   const [customSize, setCustomSize] = useState(urlConfig.qr.qrSize);
+  const [darkColor, setDarkColor] = useState(urlConfig.qr.darkColor);
+  const [lightColor, setLightColor] = useState(urlConfig.qr.lightColor);
   const [errorCorrectionLevel, setErrorCorrectionLevel] =
     useState<QRCodeErrorCorrectionLevel>(urlConfig.qr.errorCorrectionLevel);
   const {
@@ -73,12 +76,14 @@ export function GeneratorApp() {
     () =>
       createGeneratorObsUrl({
         channels,
+        darkColor,
         errorCorrectionLevel,
+        lightColor,
         paused,
         qrSize,
         rateHz
       }),
-    [channels, errorCorrectionLevel, paused, qrSize, rateHz]
+    [channels, darkColor, errorCorrectionLevel, lightColor, paused, qrSize, rateHz]
   );
 
   function updateChannel(index: number, nextChannel: ChannelConfig) {
@@ -221,6 +226,12 @@ export function GeneratorApp() {
                     ))}
                   </select>
                 </label>
+                <QrColorControls
+                  darkColor={darkColor}
+                  lightColor={lightColor}
+                  onDarkColorChange={setDarkColor}
+                  onLightColorChange={setLightColor}
+                />
               </div>
             </section>
           </aside>
@@ -228,8 +239,10 @@ export function GeneratorApp() {
 
         <section className="qr-panel" aria-label="Generated frame">
           <QRCanvas
+            darkColor={darkColor}
             encoded={frame.encoded}
             errorCorrectionLevel={errorCorrectionLevel}
+            lightColor={lightColor}
             size={qrSize}
             videoMode={videoMode}
           />

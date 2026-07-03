@@ -1,5 +1,11 @@
 import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
+import {
+  DEFAULT_QR_DARK_COLOR,
+  DEFAULT_QR_LIGHT_COLOR,
+  normalizeHexColor
+} from "./qrColors.js";
+
 export const DEFAULT_QR_SIZE = 300;
 export const MAX_QR_SIZE = 800;
 export const MIN_QR_SIZE = 128;
@@ -7,7 +13,9 @@ export const MIN_QR_SIZE = 128;
 const ERROR_CORRECTION_LEVELS = ["L", "M", "Q", "H"] as const;
 
 export interface QrUrlConfig {
+  readonly darkColor: string;
   readonly errorCorrectionLevel: QRCodeErrorCorrectionLevel;
+  readonly lightColor: string;
   readonly overlayMode: boolean;
   readonly qrSize: number;
   readonly showDetails: boolean;
@@ -50,7 +58,17 @@ export function clampQrSize(value: number, fallback = DEFAULT_QR_SIZE): number {
 
 export function readQrUrlConfig(params: URLSearchParams): QrUrlConfig {
   return {
+    darkColor: readHexColorParam(
+      params,
+      ["dark", "foreground", "fg"],
+      DEFAULT_QR_DARK_COLOR
+    ),
     errorCorrectionLevel: readErrorCorrectionLevel(params),
+    lightColor: readHexColorParam(
+      params,
+      ["light", "background", "bg"],
+      DEFAULT_QR_LIGHT_COLOR
+    ),
     overlayMode: readQueryFlag(params, "overlay"),
     qrSize: readQrSize(params),
     showDetails: readQueryFlag(params, "details"),
@@ -77,6 +95,21 @@ function readErrorCorrectionLevel(params: URLSearchParams): QRCodeErrorCorrectio
   return ERROR_CORRECTION_LEVELS.includes(value as (typeof ERROR_CORRECTION_LEVELS)[number])
     ? (value as QRCodeErrorCorrectionLevel)
     : "M";
+}
+
+function readHexColorParam(
+  params: URLSearchParams,
+  names: readonly string[],
+  fallback: string
+): string {
+  for (const name of names) {
+    const value = params.get(name);
+    if (value !== null) {
+      return normalizeHexColor(value, fallback);
+    }
+  }
+
+  return fallback;
 }
 
 function readOptionalParam(params: URLSearchParams, name: string): string | undefined {
