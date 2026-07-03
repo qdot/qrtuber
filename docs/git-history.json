@@ -1,5 +1,21 @@
 [
   {
+    "hash": "7a3be8878d119f613683bbd05dd450501b4b8e2f",
+    "short_hash": "7a3be88",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T20:48:16-07:00",
+    "message": "feat: add OBS overlay URL helpers",
+    "files_changed": 10
+  },
+  {
+    "hash": "810e612f385146e6c47a62057b4ab83de19cc01a",
+    "short_hash": "810e612",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T20:32:20-07:00",
+    "message": "docs: sync decision graph",
+    "files_changed": 2
+  },
+  {
     "hash": "35183ace7c65b66afd6e9b4c00dadf1777677b76",
     "short_hash": "35183ac",
     "author": "Kyle Machulis",

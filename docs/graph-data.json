@@ -1946,6 +1946,138 @@
       "created_at": "2026-07-02T20:29:02.448800-07:00",
       "updated_at": "2026-07-02T20:29:02.448800-07:00",
       "metadata_json": "{\"branch\":\"update\",\"commit\":\"35183ac\",\"confidence\":95}"
+    },
+    {
+      "id": 178,
+      "change_id": "7fc6c709-f95e-418f-906c-414f3ab48bbd",
+      "node_type": "outcome",
+      "title": "Committed decision graph export",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:32:26.306281-07:00",
+      "updated_at": "2026-07-02T20:32:26.306281-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"commit\":\"810e612\",\"confidence\":95}"
+    },
+    {
+      "id": 179,
+      "change_id": "759ba940-c128-4a0b-add6-da0eedd871da",
+      "node_type": "goal",
+      "title": "Add URL parameter configuration for OBS overlays",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:37:19.410095-07:00",
+      "updated_at": "2026-07-02T20:37:19.410095-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"prompt\":\"Let's go ahead and create the URL-param config needed to do this.\"}"
+    },
+    {
+      "id": 180,
+      "change_id": "6dec4f11-ed93-40e9-9a97-c63d837ef372",
+      "node_type": "option",
+      "title": "Use self-contained OBS overlay URL parameters",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:38:19.678366-07:00",
+      "updated_at": "2026-07-02T20:38:19.678366-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 181,
+      "change_id": "42ee576d-be51-41a0-86ad-8f7fc2124f17",
+      "node_type": "decision",
+      "title": "Configure OBS overlays from URL parameters",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:38:23.405325-07:00",
+      "updated_at": "2026-07-02T20:38:23.405325-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 182,
+      "change_id": "40080d99-c90c-44a2-b8ea-5047540f2561",
+      "node_type": "action",
+      "title": "Implement URL-configured OBS overlays",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:38:28.188101-07:00",
+      "updated_at": "2026-07-02T20:38:28.188101-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88,\"files\":[\"webrtc/src/shared/urlConfig.ts\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/generator/useFrameClock.ts\",\"webrtc/src/device/DeviceApp.tsx\",\"webrtc/src/device/useLovenseWebsocketDevice.ts\",\"docs/docs/streamers/obs.md\",\"docs/docs/viewers/webrtc.md\",\"docs/docs/quickstart.md\"]}"
+    },
+    {
+      "id": 183,
+      "change_id": "66601b87-c580-4567-a9c8-b132919108d0",
+      "node_type": "outcome",
+      "title": "OBS overlay URL parameters implemented and verified",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:43:08.480006-07:00",
+      "updated_at": "2026-07-02T20:43:08.480006-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"files\":[\"webrtc/src/shared/urlConfig.ts\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/generator/useFrameClock.ts\",\"webrtc/src/device/DeviceApp.tsx\",\"webrtc/src/device/useLovenseWebsocketDevice.ts\",\"docs/docs/streamers/obs.md\",\"docs/docs/viewers/webrtc.md\",\"docs/docs/quickstart.md\"]}"
+    },
+    {
+      "id": 184,
+      "change_id": "a9f76fdc-c35a-49d7-9615-a511f16fcf87",
+      "node_type": "goal",
+      "title": "Add OBS overlay URL copy buttons",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:44:27.250229-07:00",
+      "updated_at": "2026-07-02T20:44:27.250229-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"prompt\":\"Can we add a button to copy the URL for OBS in the app?\"}"
+    },
+    {
+      "id": 185,
+      "change_id": "b66a0798-2456-4f49-8762-d8d7e141609a",
+      "node_type": "option",
+      "title": "Build OBS overlay URLs from current app controls",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:44:41.309045-07:00",
+      "updated_at": "2026-07-02T20:44:41.309045-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 186,
+      "change_id": "ca8eb3c4-103c-404c-af31-17e6276f629b",
+      "node_type": "decision",
+      "title": "Add shared copy button for current OBS overlay URL",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:44:41.334597-07:00",
+      "updated_at": "2026-07-02T20:44:41.334597-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 187,
+      "change_id": "70c7961d-264c-45ce-a22e-ef574f7dff29",
+      "node_type": "action",
+      "title": "Implement OBS overlay URL copy buttons",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:44:41.359192-07:00",
+      "updated_at": "2026-07-02T20:44:41.359192-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88,\"files\":[\"webrtc/src/shared/CopyObsUrlButton.tsx\",\"webrtc/src/shared/obsUrl.ts\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/device/DeviceApp.tsx\",\"webrtc/src/shared/styles.css\",\"docs/docs/streamers/obs.md\"]}"
+    },
+    {
+      "id": 188,
+      "change_id": "5e7d3c61-5aa9-4b6d-a70f-4474844582a3",
+      "node_type": "outcome",
+      "title": "OBS URL copy buttons implemented and verified",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:47:42.549383-07:00",
+      "updated_at": "2026-07-02T20:47:42.549383-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"files\":[\"webrtc/src/shared/CopyObsUrlButton.tsx\",\"webrtc/src/shared/obsUrl.ts\",\"webrtc/src/shared/urlConfig.ts\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/device/DeviceApp.tsx\",\"docs/docs/streamers/obs.md\",\"docs/docs/quickstart.md\",\"docs/docs/viewers/webrtc.md\"]}"
+    },
+    {
+      "id": 189,
+      "change_id": "b8a6d336-e51d-4073-889c-55965c576ede",
+      "node_type": "outcome",
+      "title": "Committed OBS overlay URL helpers",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:48:21.775768-07:00",
+      "updated_at": "2026-07-02T20:48:21.775768-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"commit\":\"7a3be88\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -3785,6 +3917,127 @@
       "weight": 1.0,
       "rationale": "Commit records verified WebRTC theme mode implementation",
       "created_at": "2026-07-02T20:29:07.272787-07:00"
+    },
+    {
+      "id": 169,
+      "from_node_id": 177,
+      "to_node_id": 178,
+      "from_change_id": "3afc204d-e667-41c4-938e-28d47f29edbc",
+      "to_change_id": "7fc6c709-f95e-418f-906c-414f3ab48bbd",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Decision graph export captured committed feature work",
+      "created_at": "2026-07-02T20:32:36.070556-07:00"
+    },
+    {
+      "id": 170,
+      "from_node_id": 179,
+      "to_node_id": 180,
+      "from_change_id": "759ba940-c128-4a0b-add6-da0eedd871da",
+      "to_change_id": "6dec4f11-ed93-40e9-9a97-c63d837ef372",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Overlay configuration option for OBS browser sources",
+      "created_at": "2026-07-02T20:38:19.687282-07:00"
+    },
+    {
+      "id": 171,
+      "from_node_id": 180,
+      "to_node_id": 181,
+      "from_change_id": "6dec4f11-ed93-40e9-9a97-c63d837ef372",
+      "to_change_id": "42ee576d-be51-41a0-86ad-8f7fc2124f17",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chosen URL-driven overlay configuration approach",
+      "created_at": "2026-07-02T20:38:23.411268-07:00"
+    },
+    {
+      "id": 172,
+      "from_node_id": 181,
+      "to_node_id": 182,
+      "from_change_id": "42ee576d-be51-41a0-86ad-8f7fc2124f17",
+      "to_change_id": "40080d99-c90c-44a2-b8ea-5047540f2561",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implement chosen URL parameter overlay configuration",
+      "created_at": "2026-07-02T20:38:28.195855-07:00"
+    },
+    {
+      "id": 173,
+      "from_node_id": 182,
+      "to_node_id": 183,
+      "from_change_id": "40080d99-c90c-44a2-b8ea-5047540f2561",
+      "to_change_id": "66601b87-c580-4567-a9c8-b132919108d0",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "URL-configured overlays implemented, documented, and verified",
+      "created_at": "2026-07-02T20:43:08.488966-07:00"
+    },
+    {
+      "id": 174,
+      "from_node_id": 184,
+      "to_node_id": 185,
+      "from_change_id": "a9f76fdc-c35a-49d7-9615-a511f16fcf87",
+      "to_change_id": "b66a0798-2456-4f49-8762-d8d7e141609a",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Copy button approach for OBS browser source URLs",
+      "created_at": "2026-07-02T20:44:41.316839-07:00"
+    },
+    {
+      "id": 175,
+      "from_node_id": 185,
+      "to_node_id": 186,
+      "from_change_id": "b66a0798-2456-4f49-8762-d8d7e141609a",
+      "to_change_id": "ca8eb3c4-103c-404c-af31-17e6276f629b",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chosen app UI approach for copying OBS URLs",
+      "created_at": "2026-07-02T20:44:41.340787-07:00"
+    },
+    {
+      "id": 176,
+      "from_node_id": 186,
+      "to_node_id": 187,
+      "from_change_id": "ca8eb3c4-103c-404c-af31-17e6276f629b",
+      "to_change_id": "70c7961d-264c-45ce-a22e-ef574f7dff29",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implement selected copy URL button",
+      "created_at": "2026-07-02T20:44:41.365149-07:00"
+    },
+    {
+      "id": 177,
+      "from_node_id": 187,
+      "to_node_id": 188,
+      "from_change_id": "70c7961d-264c-45ce-a22e-ef574f7dff29",
+      "to_change_id": "5e7d3c61-5aa9-4b6d-a70f-4474844582a3",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Copy OBS URL buttons implemented, documented, and verified",
+      "created_at": "2026-07-02T20:47:42.556649-07:00"
+    },
+    {
+      "id": 178,
+      "from_node_id": 188,
+      "to_node_id": 189,
+      "from_change_id": "5e7d3c61-5aa9-4b6d-a70f-4474844582a3",
+      "to_change_id": "b8a6d336-e51d-4073-889c-55965c576ede",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Commit records OBS URL copy button implementation",
+      "created_at": "2026-07-02T20:48:21.783756-07:00"
+    },
+    {
+      "id": 179,
+      "from_node_id": 183,
+      "to_node_id": 189,
+      "from_change_id": "66601b87-c580-4567-a9c8-b132919108d0",
+      "to_change_id": "b8a6d336-e51d-4073-889c-55965c576ede",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Commit also records URL parameter overlay implementation",
+      "created_at": "2026-07-02T20:48:21.789366-07:00"
     }
   ]
 }
