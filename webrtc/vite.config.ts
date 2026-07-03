@@ -10,7 +10,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        generator: resolve(__dirname, "generator/index.html")
+        generator: resolve(__dirname, "generator/index.html"),
+        device: resolve(__dirname, "device/index.html")
       }
     }
   }

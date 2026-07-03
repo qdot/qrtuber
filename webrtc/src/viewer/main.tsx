@@ -123,6 +123,9 @@ function ViewerApp() {
           <a className="nav-link" href="/app/generator/">
             Generator
           </a>
+          <a className="nav-link" href="/app/device/">
+            Device
+          </a>
         </nav>
       </header>
 

@@ -2,12 +2,16 @@ export {
   ContentVideoHandler,
   HapticsState,
   IntifaceHapticsAdapter,
+  LOVENSE_WEBSOCKET_IDENTIFIER,
   QRCodeFinder,
   SequenceTracker,
+  createLovenseWebsocketHandshake,
   encodeFrame,
   parseFrame,
   parseFrameResult,
+  processLovenseWebsocketMessage,
   type BoundingBox,
+  type LovenseWebsocketAction,
   type QRTuberFrame,
   type VisualDecodeResult
 } from "qrtuber";

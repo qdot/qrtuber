@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Quickstart
 
-QRTuber sends lightweight state through a QR overlay in the stream video. Streamers add the generator overlay; viewers decode it with the web viewer or browser extension.
+QRTuber sends lightweight state through a QR overlay in the stream video. Streamers add a QR-producing source; viewers decode it with the web viewer or browser extension.
 
 ## For Streamers
 
@@ -14,6 +14,8 @@ QRTuber sends lightweight state through a QR overlay in the stream video. Stream
 4. Use the generator controls at https://qrtuber.com/app/generator/ when you need to test sessions, update rates, QR size, or channel patterns.
 
 See the [OBS setup guide](./streamers/obs.md) for the longer setup flow.
+
+To drive QR output from Intiface commands instead, use Device mode at https://qrtuber.com/app/device/. In Intiface Central, enable **Device Websocket Server**, add a **Websocket Device** with protocol `lovense` and device address/name `qrtuber-lovense`, start the engine, then connect the web app to `ws://127.0.0.1:54817`.
 
 ## For Viewers
 

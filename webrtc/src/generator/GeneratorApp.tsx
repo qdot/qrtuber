@@ -71,9 +71,14 @@ export function GeneratorApp() {
       {overlayMode ? null : (
         <header className="top-bar">
           <h1>QRTuber Generator</h1>
-          <a className="nav-link" href="/app/">
-            Viewer
-          </a>
+          <nav className="top-nav" aria-label="Generator navigation">
+            <a className="nav-link" href="/app/">
+              Viewer
+            </a>
+            <a className="nav-link" href="/app/device/">
+              Device
+            </a>
+          </nav>
         </header>
       )}
 

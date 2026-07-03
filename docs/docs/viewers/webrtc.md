@@ -2,9 +2,11 @@
 sidebar_position: 3
 ---
 
-# Web Viewer
+# Web Viewer and Device Mode
 
 The web viewer runs in your browser at https://qrtuber.com/app/. It captures the stream video, decodes the QRTuber QR overlay, and sends haptic state to Intiface Central on your machine.
+
+The same app also has Device mode at https://qrtuber.com/app/device/. It acts as a Lovense-compatible Intiface Central websocket device and turns Intiface commands into QT1 QR codes that can be used as a stream source.
 
 Use this when you want to try QRTuber without installing the browser extension.
 
@@ -14,7 +16,7 @@ Use this when you want to try QRTuber without installing the browser extension.
 - A browser that supports screen or tab capture.
 - A stream that includes a QRTuber generator overlay, such as https://qrtuber.com/app/generator/.
 
-The default Intiface address is `ws://127.0.0.1:12345`.
+The default viewer Intiface address is `ws://127.0.0.1:12345`.
 
 ## Setup
 
@@ -48,3 +50,17 @@ Stopping capture also zeros connected devices.
 The **STOP** button is local and authoritative. It immediately zeros devices and latches the viewer into a stopped state. While stopped, newly decoded frames are ignored for haptic output.
 
 Use **Resume** to allow haptic output again. Resume does not reconnect devices or restart capture by itself; it only clears the local stop latch.
+
+## Device Mode
+
+Device mode is for streamers who want another Intiface-compatible app to drive the QR overlay. It connects to Intiface Central's Device Websocket Server as a virtual Lovense-style device, then renders incoming vibration commands as QT1 frames. The QR sequence advances when a vibration command arrives, or when you manually start a new session or zero the output.
+
+Setup:
+
+1. In Intiface Central, enable **Device Websocket Server**.
+2. Add a **Websocket Device** using protocol `lovense` and device address/name `qrtuber-lovense`.
+3. Start the engine.
+4. Open https://qrtuber.com/app/device/.
+5. Connect to `ws://127.0.0.1:54817`.
+
+Use https://qrtuber.com/app/device/?overlay=1&connect=1 as the OBS browser source after the connection is working.
