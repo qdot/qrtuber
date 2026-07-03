@@ -1,5 +1,6 @@
 import demoVideo from '@site/src/pages/demo/demovideo.mp4';
 import demoSizeSweepVideo from '@site/src/pages/demo/demovideo-size-sweep.mp4';
+import demoRateSweepVideo from '@site/src/pages/demo/demovideo-rate-sweep.mp4';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import QRTuberDemoComponent from '@site/src/components/DemoPage/DemoReactComponent';
 
@@ -18,12 +19,14 @@ To test:
 
 Your toy should start vibrating as the QR Code starts changing on the video.
 The QR size sweep adds an `S:<pixels>` extension to the tracked payload so you can see which rendered size was last decoded.
+The update-rate sweep adds an `R:<hz>` extension and steps through 5, 8, 10, 12, 15, and 20Hz updates in a 30fps video.
 
 <BrowserOnly fallback={<div>Loading...</div>}>
 {() => {
   return <QRTuberDemoComponent videos={[
     { label: "Standard QT1 loop", url: demoVideo },
     { label: "QR size sweep", url: demoSizeSweepVideo },
+    { label: "Update rate sweep", url: demoRateSweepVideo },
   ]} />;
 }}
 </BrowserOnly>

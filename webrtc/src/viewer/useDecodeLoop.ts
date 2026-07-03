@@ -9,7 +9,7 @@ import {
 } from "../shared/coreBridge.js";
 import { parseFrameResult } from "../shared/coreBridge.js";
 
-const DECODE_INTERVAL_MS = 100;
+export const DEFAULT_DECODE_RATE_HZ = 10;
 
 export interface DecodeStats {
   acceptedFrames: number;
@@ -56,7 +56,11 @@ function getDecodesPerSec(samples: number[], now: number): number {
   return samples.length;
 }
 
-export function useDecodeLoop(videoElement: HTMLVideoElement | null, stream: MediaStream | null) {
+export function useDecodeLoop(
+  videoElement: HTMLVideoElement | null,
+  stream: MediaStream | null,
+  decodeRateHz: number
+) {
   const [lastFrame, setLastFrame] = useState<QRTuberFrame | null>(null);
   const [boundingBox, setBoundingBox] = useState<BoundingBox | null>(null);
   const [stats, setStats] = useState<DecodeStats>(INITIAL_STATS);
@@ -184,7 +188,7 @@ export function useDecodeLoop(videoElement: HTMLVideoElement | null, stream: Med
 
     handler.on("videoblob", handleVideoBlob);
     handler.startTrackingVideo(videoElement);
-    worker.postMessage({ type: "start", intervalMs: DECODE_INTERVAL_MS });
+    worker.postMessage({ type: "start", intervalMs: 1000 / decodeRateHz });
 
     return () => {
       isActive = false;
@@ -194,7 +198,7 @@ export function useDecodeLoop(videoElement: HTMLVideoElement | null, stream: Med
       handler.stopTrackingVideo();
       sequenceTracker.reset();
     };
-  }, [stream, videoElement]);
+  }, [decodeRateHz, stream, videoElement]);
 
   return useMemo(
     () => ({

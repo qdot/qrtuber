@@ -11,11 +11,12 @@ import { ChannelMeters } from "./ChannelMeters.js";
 import { EmergencyStop } from "./EmergencyStop.js";
 import { IntifacePanel } from "./IntifacePanel.js";
 import { StatusBar } from "./StatusBar.js";
-import { useDecodeLoop } from "./useDecodeLoop.js";
+import { DEFAULT_DECODE_RATE_HZ, useDecodeLoop } from "./useDecodeLoop.js";
 import { useDisplayCapture } from "./useDisplayCapture.js";
 import { useIntiface } from "./useIntiface.js";
 
 const HAPTICS_TIMEOUT_MS = 2000;
+const DECODE_RATE_OPTIONS_HZ = [5, 10, 15, 20, 30] as const;
 const ZERO_CHANNELS = Array<number>(9).fill(0);
 const ZERO_STATE = new HapticsState(ZERO_CHANNELS);
 
@@ -29,9 +30,10 @@ function ViewerApp() {
     stream
   } = useDisplayCapture();
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
+  const [decodeRateHz, setDecodeRateHz] = useState(DEFAULT_DECODE_RATE_HZ);
   const [isEmergencyStopped, setIsEmergencyStopped] = useState(false);
   const [now, setNow] = useState(() => Date.now());
-  const decodeState = useDecodeLoop(videoElement, stream);
+  const decodeState = useDecodeLoop(videoElement, stream, decodeRateHz);
   const {
     address,
     applyState,
@@ -141,6 +143,19 @@ function ViewerApp() {
         >
           Stop capture
         </button>
+        <label className="viewer-toolbar-field">
+          <span>Check rate</span>
+          <select
+            onChange={(event) => setDecodeRateHz(Number(event.currentTarget.value))}
+            value={decodeRateHz}
+          >
+            {DECODE_RATE_OPTIONS_HZ.map((rateHz) => (
+              <option key={rateHz} value={rateHz}>
+                {rateHz} Hz
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       <section className="viewer-output-controls" aria-label="Viewer output controls">

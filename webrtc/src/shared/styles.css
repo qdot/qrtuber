@@ -276,6 +276,25 @@ select {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: end;
+}
+
+.viewer-toolbar-field {
+  display: grid;
+  gap: 5px;
+  min-width: 128px;
+  color: #45535a;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.viewer-toolbar-field select {
+  min-height: 36px;
+  border: 1px solid #b8c3c9;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #192024;
+  padding: 7px 9px;
 }
 
 .viewer-output-controls {
