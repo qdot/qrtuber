@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
+import { ThemeControl } from "../shared/ThemeControl.js";
 import {
   ChannelMeters
 } from "../viewer/ChannelMeters.js";
@@ -99,6 +100,7 @@ export function DeviceApp() {
             <a className="nav-link" href="/app/generator/">
               Generator
             </a>
+            <ThemeControl />
           </nav>
         </header>
       )}

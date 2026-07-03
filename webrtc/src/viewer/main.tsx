@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { isFirefox } from "../shared/browser.js";
 import { HapticsState } from "../shared/coreBridge.js";
 import "../shared/styles.css";
+import { ThemeControl } from "../shared/ThemeControl.js";
 import { CapturePreview } from "./CapturePreview.js";
 import { ChannelMeters } from "./ChannelMeters.js";
 import { EmergencyStop } from "./EmergencyStop.js";
@@ -126,6 +127,7 @@ function ViewerApp() {
           <a className="nav-link" href="/app/device/">
             Device
           </a>
+          <ThemeControl />
         </nav>
       </header>
 
