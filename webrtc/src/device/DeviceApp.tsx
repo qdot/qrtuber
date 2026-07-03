@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
+import { CopyObsUrlButton } from "../shared/CopyObsUrlButton.js";
+import { createDeviceObsUrl } from "../shared/obsUrl.js";
 import { ThemeControl } from "../shared/ThemeControl.js";
+import {
+  clampQrSize,
+  queryParams,
+  readDeviceUrlConfig,
+  readQrUrlConfig
+} from "../shared/urlConfig.js";
 import {
   ChannelMeters
 } from "../viewer/ChannelMeters.js";
@@ -15,16 +23,8 @@ import { useLovenseWebsocketDevice } from "./useLovenseWebsocketDevice.js";
 
 const FRAME_REGEX = /^QT1:[0-9A-F]{4}:\d+:H:[0-9A-F]{18}$/;
 
-function getQueryFlag(name: string): boolean {
-  return new URLSearchParams(window.location.search).get(name) === "1";
-}
-
 function clampCustomSize(value: number): number {
-  if (!Number.isFinite(value)) {
-    return 300;
-  }
-
-  return Math.min(800, Math.max(128, Math.round(value)));
+  return clampQrSize(value);
 }
 
 function formatElapsed(timestamp: number | null, now: number): string {
@@ -41,26 +41,55 @@ function formatElapsed(timestamp: number | null, now: number): string {
 }
 
 export function DeviceApp() {
-  const [qrSize, setQrSize] = useState(300);
-  const [customSize, setCustomSize] = useState(300);
+  const urlConfig = useMemo(() => {
+    const params = queryParams();
+    return {
+      device: readDeviceUrlConfig(params),
+      qr: readQrUrlConfig(params)
+    };
+  }, []);
+  const [qrSize, setQrSize] = useState(urlConfig.qr.qrSize);
+  const [customSize, setCustomSize] = useState(urlConfig.qr.qrSize);
   const [errorCorrectionLevel, setErrorCorrectionLevel] =
-    useState<QRCodeErrorCorrectionLevel>("M");
+    useState<QRCodeErrorCorrectionLevel>(urlConfig.qr.errorCorrectionLevel);
   const [now, setNow] = useState(() => Date.now());
   const autoConnectAttemptedRef = useRef(false);
-  const device = useLovenseWebsocketDevice();
+  const device = useLovenseWebsocketDevice({
+    initialAddress: urlConfig.device.serverAddress,
+    initialDeviceAddress: urlConfig.device.deviceAddress,
+    initialDeviceIdentifier: urlConfig.device.deviceIdentifier
+  });
   const {
     frame,
     newSession,
     session
   } = useDeviceFrameClock(device.hapticsState, device.frameUpdateId);
-  const overlayMode = useMemo(() => getQueryFlag("overlay"), []);
-  const autoConnectMode = useMemo(() => overlayMode || getQueryFlag("connect"), [overlayMode]);
-  const videoMode = useMemo(() => getQueryFlag("video"), []);
+  const overlayMode = urlConfig.qr.overlayMode;
+  const autoConnectMode = overlayMode || urlConfig.device.autoConnect;
+  const showFrameDetails = !overlayMode || urlConfig.qr.showDetails;
+  const videoMode = urlConfig.qr.videoMode;
   const isConnected = device.connectionState === "connected";
   const isBusy =
     device.connectionState === "connecting" ||
     device.connectionState === "disconnecting";
   const frameLooksValid = FRAME_REGEX.test(frame.encoded);
+  const obsUrl = useMemo(
+    () =>
+      createDeviceObsUrl({
+        deviceAddress: device.deviceAddress,
+        deviceIdentifier: device.deviceIdentifier,
+        errorCorrectionLevel,
+        qrSize,
+        serverAddress: device.address
+      }),
+    [
+      device.address,
+      device.deviceAddress,
+      device.deviceIdentifier,
+      errorCorrectionLevel,
+      qrSize
+    ]
+  );
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setNow(Date.now()), 250);
@@ -231,7 +260,10 @@ export function DeviceApp() {
             </section>
 
             <section className="generator-section" aria-labelledby="device-qr-settings-title">
-              <h2 id="device-qr-settings-title">QR</h2>
+              <div className="section-heading">
+                <h2 id="device-qr-settings-title">QR</h2>
+                <CopyObsUrlButton url={obsUrl} />
+              </div>
               <div className="control-grid">
                 <label>
                   <span>Size</span>
@@ -297,19 +329,21 @@ export function DeviceApp() {
               size={qrSize}
               videoMode={videoMode}
             />
-            <div className="frame-details">
-              <p className="monospace frame-string">{frame.encoded}</p>
-              <dl className="frame-meta">
-                <div>
-                  <dt>Frame</dt>
-                  <dd>{frame.seq}</dd>
-                </div>
-                <div>
-                  <dt>Format</dt>
-                  <dd>{frameLooksValid ? "QT1 H" : "invalid"}</dd>
-                </div>
-              </dl>
-            </div>
+            {showFrameDetails ? (
+              <div className="frame-details">
+                <p className="monospace frame-string">{frame.encoded}</p>
+                <dl className="frame-meta">
+                  <div>
+                    <dt>Frame</dt>
+                    <dd>{frame.seq}</dd>
+                  </div>
+                  <div>
+                    <dt>Format</dt>
+                    <dd>{frameLooksValid ? "QT1 H" : "invalid"}</dd>
+                  </div>
+                </dl>
+              </div>
+            ) : null}
           </div>
 
           {overlayMode ? null : (

@@ -1,7 +1,15 @@
 import { useMemo, useState } from "react";
 import type { QRCodeErrorCorrectionLevel } from "qrcode";
 
+import { CopyObsUrlButton } from "../shared/CopyObsUrlButton.js";
+import { createGeneratorObsUrl } from "../shared/obsUrl.js";
 import { ThemeControl } from "../shared/ThemeControl.js";
+import {
+  clampQrSize,
+  queryParams,
+  readQrUrlConfig,
+  readQueryFlag
+} from "../shared/urlConfig.js";
 import {
   ChannelControls
 } from "./ChannelControls.js";
@@ -11,31 +19,39 @@ import {
   QR_SIZE_PRESETS
 } from "./QRCanvas.js";
 import {
+  CHANNEL_COUNT,
   createDefaultChannels,
-  type ChannelConfig
+  PATTERN_NAMES,
+  type ChannelConfig,
+  type PatternName
 } from "./patterns.js";
 import { RATE_OPTIONS, type RateHz, useFrameClock } from "./useFrameClock.js";
 
 const FRAME_REGEX = /^QT1:[0-9A-F]{4}:\d+:H:[0-9A-F]{18}$/;
 
-function getQueryFlag(name: string): boolean {
-  return new URLSearchParams(window.location.search).get(name) === "1";
+interface GeneratorUrlConfig {
+  readonly channels: ChannelConfig[];
+  readonly paused: boolean;
+  readonly rateHz: RateHz;
 }
 
 function clampCustomSize(value: number): number {
-  if (!Number.isFinite(value)) {
-    return 300;
-  }
-
-  return Math.min(800, Math.max(128, Math.round(value)));
+  return clampQrSize(value);
 }
 
 export function GeneratorApp() {
-  const [channels, setChannels] = useState<ChannelConfig[]>(createDefaultChannels);
-  const [qrSize, setQrSize] = useState(300);
-  const [customSize, setCustomSize] = useState(300);
+  const urlConfig = useMemo(() => {
+    const params = queryParams();
+    return {
+      generator: readGeneratorUrlConfig(params),
+      qr: readQrUrlConfig(params)
+    };
+  }, []);
+  const [channels, setChannels] = useState<ChannelConfig[]>(urlConfig.generator.channels);
+  const [qrSize, setQrSize] = useState(urlConfig.qr.qrSize);
+  const [customSize, setCustomSize] = useState(urlConfig.qr.qrSize);
   const [errorCorrectionLevel, setErrorCorrectionLevel] =
-    useState<QRCodeErrorCorrectionLevel>("M");
+    useState<QRCodeErrorCorrectionLevel>(urlConfig.qr.errorCorrectionLevel);
   const {
     frame,
     newSession,
@@ -44,11 +60,26 @@ export function GeneratorApp() {
     session,
     setPaused,
     setRateHz
-  } = useFrameClock(channels);
+  } = useFrameClock(channels, {
+    initialPaused: urlConfig.generator.paused,
+    initialRateHz: urlConfig.generator.rateHz
+  });
 
-  const overlayMode = useMemo(() => getQueryFlag("overlay"), []);
-  const videoMode = useMemo(() => getQueryFlag("video"), []);
+  const overlayMode = urlConfig.qr.overlayMode;
+  const showFrameDetails = !overlayMode || urlConfig.qr.showDetails;
+  const videoMode = urlConfig.qr.videoMode;
   const frameLooksValid = FRAME_REGEX.test(frame.encoded);
+  const obsUrl = useMemo(
+    () =>
+      createGeneratorObsUrl({
+        channels,
+        errorCorrectionLevel,
+        paused,
+        qrSize,
+        rateHz
+      }),
+    [channels, errorCorrectionLevel, paused, qrSize, rateHz]
+  );
 
   function updateChannel(index: number, nextChannel: ChannelConfig) {
     setChannels((current) =>
@@ -134,7 +165,10 @@ export function GeneratorApp() {
             />
 
             <section className="generator-section" aria-labelledby="qr-settings-title">
-              <h2 id="qr-settings-title">QR</h2>
+              <div className="section-heading">
+                <h2 id="qr-settings-title">QR</h2>
+                <CopyObsUrlButton url={obsUrl} />
+              </div>
               <div className="control-grid">
                 <label>
                   <span>Size</span>
@@ -199,21 +233,79 @@ export function GeneratorApp() {
             size={qrSize}
             videoMode={videoMode}
           />
-          <div className="frame-details">
-            <p className="monospace frame-string">{frame.encoded}</p>
-            <dl className="frame-meta">
-              <div>
-                <dt>Frame</dt>
-                <dd>{frame.seq}</dd>
-              </div>
-              <div>
-                <dt>Format</dt>
-                <dd>{frameLooksValid ? "QT1 H" : "invalid"}</dd>
-              </div>
-            </dl>
-          </div>
+          {showFrameDetails ? (
+            <div className="frame-details">
+              <p className="monospace frame-string">{frame.encoded}</p>
+              <dl className="frame-meta">
+                <div>
+                  <dt>Frame</dt>
+                  <dd>{frame.seq}</dd>
+                </div>
+                <div>
+                  <dt>Format</dt>
+                  <dd>{frameLooksValid ? "QT1 H" : "invalid"}</dd>
+                </div>
+              </dl>
+            </div>
+          ) : null}
         </section>
       </div>
     </main>
   );
+}
+
+function readGeneratorUrlConfig(params: URLSearchParams): GeneratorUrlConfig {
+  return {
+    channels: readGeneratorChannels(params),
+    paused:
+      readQueryFlag(params, "paused") || params.get("rate")?.toLowerCase() === "paused",
+    rateHz: readGeneratorRate(params)
+  };
+}
+
+function readGeneratorRate(params: URLSearchParams): RateHz {
+  const rate = Number(params.get("rate"));
+  return RATE_OPTIONS.includes(rate as RateHz) ? (rate as RateHz) : 3;
+}
+
+function readGeneratorChannels(params: URLSearchParams): ChannelConfig[] {
+  const channels = createDefaultChannels();
+
+  for (let index = 0; index < CHANNEL_COUNT; index += 1) {
+    const channel = readGeneratorChannel(params, index);
+    if (channel !== null) {
+      channels[index] = channel;
+    }
+  }
+
+  return channels;
+}
+
+function readGeneratorChannel(
+  params: URLSearchParams,
+  index: number
+): ChannelConfig | null {
+  const value = params.get(`ch${index + 1}`) ?? params.get(`channel${index + 1}`);
+  if (value === null || value.trim().length === 0) {
+    return null;
+  }
+
+  const parts = value.split(":").map((part) => part.trim()).filter(Boolean);
+  const numericPart = parts.find((part) => Number.isFinite(Number(part)));
+  const patternPart = parts.map((part) => part.toLowerCase()).find(isPatternName);
+  const numericValue = Number(numericPart);
+  const byteValue = Number.isFinite(numericValue)
+    ? Math.min(255, Math.max(0, Math.round(numericValue)))
+    : patternPart === undefined || patternPart === "off"
+      ? 0
+      : 255;
+
+  return {
+    value: byteValue,
+    pattern: patternPart ?? (byteValue === 0 ? "off" : "constant")
+  };
+}
+
+function isPatternName(value: string): value is PatternName {
+  return PATTERN_NAMES.includes(value as PatternName);
 }

@@ -29,6 +29,12 @@ export interface DeviceProtocolStats {
   readonly unknownCommandCount: number;
 }
 
+export interface LovenseWebsocketDeviceOptions {
+  readonly initialAddress?: string;
+  readonly initialDeviceAddress?: string;
+  readonly initialDeviceIdentifier?: string;
+}
+
 const INITIAL_STATS: DeviceProtocolStats = {
   commandCount: 0,
   hapticsCommandCount: 0,
@@ -91,16 +97,21 @@ async function websocketDataToText(data: unknown): Promise<string> {
   return "";
 }
 
-export function useLovenseWebsocketDevice() {
+export function useLovenseWebsocketDevice(
+  options: LovenseWebsocketDeviceOptions = {}
+) {
   const websocketRef = useRef<WebSocket | null>(null);
   const operationIdRef = useRef(0);
   const hapticsStateRef = useRef(ZERO_STATE);
   const [address, setAddressState] = useState(() =>
-    readStoredValue(SERVER_ADDRESS_STORAGE_KEY, DEFAULT_ADDRESS)
+    options.initialAddress ?? readStoredValue(SERVER_ADDRESS_STORAGE_KEY, DEFAULT_ADDRESS)
   );
-  const [deviceAddress, setDeviceAddressState] = useState(readDeviceAddress);
+  const [deviceAddress, setDeviceAddressState] = useState(
+    () => options.initialDeviceAddress ?? readDeviceAddress()
+  );
   const [deviceIdentifier, setDeviceIdentifierState] = useState(() =>
-    readStoredValue(DEVICE_IDENTIFIER_STORAGE_KEY, LOVENSE_WEBSOCKET_IDENTIFIER)
+    options.initialDeviceIdentifier ??
+      readStoredValue(DEVICE_IDENTIFIER_STORAGE_KEY, LOVENSE_WEBSOCKET_IDENTIFIER)
   );
   const [connectionState, setConnectionState] =
     useState<DeviceConnectionState>("disconnected");

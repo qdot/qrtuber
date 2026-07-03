@@ -14,26 +14,42 @@ export interface GeneratedFrame {
   values: number[];
 }
 
+export interface FrameClockOptions {
+  readonly initialPaused?: boolean;
+  readonly initialRateHz?: RateHz;
+}
+
 function createSessionId(): string {
   const random = new Uint16Array(1);
   crypto.getRandomValues(random);
   return random[0].toString(16).toUpperCase().padStart(4, "0");
 }
 
-function initialFrame(session: string): GeneratedFrame {
-  const state = new HapticsState();
+function createFrame(
+  session: string,
+  seq: number,
+  channels: readonly ChannelConfig[],
+  tMs: number
+): GeneratedFrame {
+  const values = channels.map((channel, index) => samplePattern(tMs, channel, index));
+  const state = new HapticsState(values);
   return {
-    encoded: encodeFrame({ type: "H", session, seq: 0, state }),
-    seq: 0,
+    encoded: encodeFrame({ type: "H", session, seq, state }),
+    seq,
     values: state.toArray()
   };
 }
 
-export function useFrameClock(channels: ChannelConfig[]) {
+export function useFrameClock(
+  channels: ChannelConfig[],
+  options: FrameClockOptions = {}
+) {
   const [session, setSession] = useState(createSessionId);
-  const [rateHz, setRateHz] = useState<RateHz>(3);
-  const [paused, setPaused] = useState(false);
-  const [frame, setFrame] = useState<GeneratedFrame>(() => initialFrame(session));
+  const [rateHz, setRateHz] = useState<RateHz>(options.initialRateHz ?? 3);
+  const [paused, setPaused] = useState(options.initialPaused ?? false);
+  const [frame, setFrame] = useState<GeneratedFrame>(() =>
+    createFrame(session, 0, channels, 0)
+  );
 
   const channelsRef = useRef(channels);
   const sessionRef = useRef(session);
@@ -50,22 +66,8 @@ export function useFrameClock(channels: ChannelConfig[]) {
 
   const tick = useCallback(() => {
     const tMs = performance.now() - startedAtRef.current;
-    const values = channelsRef.current.map((channel, index) =>
-      samplePattern(tMs, channel, index)
-    );
     const seq = nextSeqRef.current;
-    const state = new HapticsState(values);
-
-    setFrame({
-      encoded: encodeFrame({
-        type: "H",
-        session: sessionRef.current,
-        seq,
-        state
-      }),
-      seq,
-      values: state.toArray()
-    });
+    setFrame(createFrame(sessionRef.current, seq, channelsRef.current, tMs));
 
     nextSeqRef.current = seq >= MAX_SEQ ? 0 : seq + 1;
   }, []);

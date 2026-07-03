@@ -8,14 +8,15 @@ QRTuber sends lightweight state through a QR overlay in the stream video. Stream
 
 ## For Streamers
 
-1. Open https://qrtuber.com/app/generator/?overlay=1.
-2. Add it to OBS as a browser source.
-3. Keep the QR code visible in the final program output.
-4. Use the generator controls at https://qrtuber.com/app/generator/ when you need to test sessions, update rates, QR size, or channel patterns.
+1. Open https://qrtuber.com/app/generator/.
+2. Set the QR size, error correction, update rate, and channel patterns you want.
+3. Select **Copy OBS URL** in the QR panel.
+4. Add a browser source in OBS and paste the copied URL.
+5. Keep the QR code visible in the final program output.
 
 See the [OBS setup guide](./streamers/obs.md) for the longer setup flow.
 
-To drive QR output from Intiface commands instead, use Device mode at https://qrtuber.com/app/device/. In Intiface Central, enable **Device Websocket Server**, add a **Websocket Device** with protocol `lovense` and device address/name `qrtuber-lovense`, start the engine, then connect the web app to `ws://127.0.0.1:54817`.
+To drive QR output from Intiface commands instead, use Device mode at https://qrtuber.com/app/device/. In Intiface Central, enable **Device Websocket Server**, add a **Websocket Device** with protocol `lovense` and device address/name `qrtuber-lovense`, start the engine, then use an OBS browser source like https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&device=qrtuber-lovense.
 
 ## For Viewers
 
