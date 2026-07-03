@@ -1,5 +1,221 @@
 [
   {
+    "hash": "35183ace7c65b66afd6e9b4c00dadf1777677b76",
+    "short_hash": "35183ac",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T20:28:59-07:00",
+    "message": "feat: add WebRTC app theme modes",
+    "files_changed": 5
+  },
+  {
+    "hash": "951ca1f38015b3f16292f976bc84f9b9eb55bb45",
+    "short_hash": "951ca1f",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T20:21:20-07:00",
+    "message": "feat: add websocket QR device mode",
+    "files_changed": 15
+  },
+  {
+    "hash": "9dac6bc9371751858edf60290024d54bd6f182f3",
+    "short_hash": "9dac6bc",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T19:23:36-07:00",
+    "message": "feat: add decode rate sweep and control",
+    "files_changed": 6
+  },
+  {
+    "hash": "d1b638a8eea9e8b729297a933ce898f915c14c84",
+    "short_hash": "d1b638a",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T17:20:07-07:00",
+    "message": "webrtc: clarify decode timing metrics",
+    "files_changed": 2
+  },
+  {
+    "hash": "8eae7184b04a0e803bca10200a6bb07d77600d60",
+    "short_hash": "8eae718",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T17:01:14-07:00",
+    "message": "docs: add demo decode metrics and size sweep",
+    "files_changed": 4
+  },
+  {
+    "hash": "cf3d7c10979f4e21d42ebd55b87dc547466f9446",
+    "short_hash": "cf3d7c1",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T16:37:52-07:00",
+    "message": "docs: regenerate QT1 demo video",
+    "files_changed": 4
+  },
+  {
+    "hash": "8bae7c97f32c855095f6dc4c4cdb3b7ff6a216c5",
+    "short_hash": "8bae7c9",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:37:02-07:00",
+    "message": "docs: rewrite viewer guides and add protocol docs",
+    "files_changed": 7
+  },
+  {
+    "hash": "9fdf684f1f0c999ad980a5454bd2adf71b5eadce",
+    "short_hash": "9fdf684",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:31:57-07:00",
+    "message": "chore: userscript viability spike scripts and findings",
+    "files_changed": 9
+  },
+  {
+    "hash": "02262a2393aedea51ec6ae451cf051b878028b3d",
+    "short_hash": "02262a2",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:28:30-07:00",
+    "message": "extension: add pure logic tests and dev docs",
+    "files_changed": 10
+  },
+  {
+    "hash": "dd9c62111e3b311f9f77534a4832c020c86bd060",
+    "short_hash": "dd9c621",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:24:56-07:00",
+    "message": "extension: add React popup controls and status",
+    "files_changed": 2
+  },
+  {
+    "hash": "2c23366aa42788b6a2550b471e6b232f16116f41",
+    "short_hash": "2c23366",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:23:02-07:00",
+    "message": "extension: add options page for Intiface mapping",
+    "files_changed": 3
+  },
+  {
+    "hash": "ca136fd67ad88c7b31f2be8b0c5993ee3f57a6cc",
+    "short_hash": "ca136fd",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:14:17-07:00",
+    "message": "extension: rework content frame loop with data-url shipping",
+    "files_changed": 2
+  },
+  {
+    "hash": "7e9ba4562e018e21fc4c492de504000e61e777c3",
+    "short_hash": "7e9ba45",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:12:50-07:00",
+    "message": "feat: add Intiface output controls to webrtc viewer",
+    "files_changed": 6
+  },
+  {
+    "hash": "6ef887f537aefb774bc4755d0a377b2cc09220fa",
+    "short_hash": "6ef887f",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:08:57-07:00",
+    "message": "build: serve webrtc viewer from docs site at /app",
+    "files_changed": 6
+  },
+  {
+    "hash": "1affd28b7e03899b20b8371f75f61d9159fa78a4",
+    "short_hash": "1affd28",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:05:21-07:00",
+    "message": "feat: webrtc viewer capture and QT1 decode loop",
+    "files_changed": 9
+  },
+  {
+    "hash": "981883e2462b24cda27a2d38830aa1c7a80c41ee",
+    "short_hash": "981883e",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T14:04:13-07:00",
+    "message": "extension: add engine context for decode and intiface",
+    "files_changed": 8
+  },
+  {
+    "hash": "867c07b11411d12631c72e47166c8a768ffa2dca",
+    "short_hash": "867c07b",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:52:24-07:00",
+    "message": "extension: add typed message protocol and settings storage",
+    "files_changed": 4
+  },
+  {
+    "hash": "c7a9f91b707e6c5948c02edcea489d35072e9022",
+    "short_hash": "c7a9f91",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:47:43-07:00",
+    "message": "extension: fix manifest permissions and add React module",
+    "files_changed": 4
+  },
+  {
+    "hash": "8142bfb452bb2f7581ce9ff022c26aac09d2da1d",
+    "short_hash": "8142bfb",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:46:01-07:00",
+    "message": "chore: record extension pixel-export preflight",
+    "files_changed": 1
+  },
+  {
+    "hash": "2f0cdea16f9f506a93e977005780d942131bd18a",
+    "short_hash": "2f0cdea",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:45:09-07:00",
+    "message": "feat: add QT1 generator test page to webrtc app",
+    "files_changed": 7
+  },
+  {
+    "hash": "36796d7448060ea241238f6b86b56ef1284f323f",
+    "short_hash": "36796d7",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:37:12-07:00",
+    "message": "build: replace webrtc stub with vite react scaffold",
+    "files_changed": 11
+  },
+  {
+    "hash": "2bc5c39d506fdfdfdf771b02bbb574e069fbcbd6",
+    "short_hash": "2bc5c39",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:34:58-07:00",
+    "message": "refactor(core)!: return raw payload from QRCodeFinder",
+    "files_changed": 10
+  },
+  {
+    "hash": "88375fd5df44b9cdef26487510751fa54dac97ca",
+    "short_hash": "88375fd",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:27:47-07:00",
+    "message": "feat(core): add multichannel IntifaceHapticsAdapter",
+    "files_changed": 9
+  },
+  {
+    "hash": "f78d81ea5a1993526d4819e6315617c0eb267804",
+    "short_hash": "f78d81e",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:19:03-07:00",
+    "message": "feat(core): add QT1 protocol layer",
+    "files_changed": 12
+  },
+  {
+    "hash": "08f9ca967a13dc91e94a757478011a412e604c6d",
+    "short_hash": "08f9ca9",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:12:56-07:00",
+    "message": "build: convert repo to npm workspaces and add vitest to core",
+    "files_changed": 14
+  },
+  {
+    "hash": "e858170e52ff940bf62d152a0744a217179c68a5",
+    "short_hash": "e858170",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T13:10:44-07:00",
+    "message": "docs: add fill-in-rest implementation plan",
+    "files_changed": 1
+  },
+  {
+    "hash": "b27b9185aefc3ea6161603aee308a75078edbcb8",
+    "short_hash": "b27b918",
+    "author": "Kyle Machulis",
+    "date": "2026-06-27T19:04:55-07:00",
+    "message": "docs: use QR alphanumeric packet format",
+    "files_changed": 3
+  },
+  {
     "hash": "9315922faa9b5f2d5e3660731145104f1fb68a5d",
     "short_hash": "9315922",
     "author": "Kyle Machulis",
