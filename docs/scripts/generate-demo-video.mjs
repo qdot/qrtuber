@@ -14,11 +14,45 @@ const OUTPUT_FPS = 30;
 const QR_RATE_HZ = 5;
 const DURATION_SECONDS = 16;
 const QR_SIZE = 320;
+const QR_CENTER_X = 960;
+const QR_CENTER_Y = 360;
 const SESSION = "DEMO";
-const FRAME_COUNT = DURATION_SECONDS * QR_RATE_HZ;
+const DEMO_FRAME_COUNT = DURATION_SECONDS * QR_RATE_HZ;
+const SIZE_SWEEP_PIXELS = [
+  360,
+  320,
+  280,
+  240,
+  220,
+  200,
+  180,
+  160,
+  140,
+  120,
+  110,
+  100,
+  90,
+  80,
+  70,
+  60,
+  56,
+  52,
+  50,
+  48,
+  46,
+  44,
+  42,
+  40,
+  38,
+  36,
+  34,
+  33
+];
+const SIZE_SWEEP_FRAME_COUNT = SIZE_SWEEP_PIXELS.length * QR_RATE_HZ;
 
 const docsRoot = fileURLToPath(new URL("..", import.meta.url));
-const outputPath = path.join(docsRoot, "src/pages/demo/demovideo.mp4");
+const demoVideoPath = path.join(docsRoot, "src/pages/demo/demovideo.mp4");
+const sizeSweepVideoPath = path.join(docsRoot, "src/pages/demo/demovideo-size-sweep.mp4");
 
 function clampByte(value) {
   return Math.min(255, Math.max(0, Math.round(value)));
@@ -42,8 +76,10 @@ function channelValues(frameIndex) {
   });
 }
 
-function encodePayload(frameIndex) {
-  return `QT1:${SESSION}:${frameIndex}:H:${toHex(channelValues(frameIndex))}`;
+function encodePayload(frameIndex, extensions = []) {
+  const extensionText = extensions.length === 0 ? "" : `:${extensions.join(":")}`;
+
+  return `QT1:${SESSION}:${frameIndex}:H:${toHex(channelValues(frameIndex))}${extensionText}`;
 }
 
 function fillRect(png, x, y, width, height, colour) {
@@ -101,8 +137,9 @@ function drawBars(png, values) {
   });
 }
 
-async function renderFrame(frameIndex, tempDir) {
-  const payload = encodePayload(frameIndex);
+async function renderFrame(frameIndex, tempDir, options = {}) {
+  const qrSize = options.qrSize ?? QR_SIZE;
+  const payload = encodePayload(frameIndex, options.extensions ?? []);
   const qrBuffer = await QRCode.toBuffer([{ mode: "alphanumeric", data: payload }], {
     color: {
       dark: "#000000ff",
@@ -111,7 +148,7 @@ async function renderFrame(frameIndex, tempDir) {
     errorCorrectionLevel: "M",
     margin: 4,
     type: "png",
-    width: QR_SIZE
+    width: qrSize
   });
 
   const qr = PNG.sync.read(qrBuffer);
@@ -120,23 +157,18 @@ async function renderFrame(frameIndex, tempDir) {
 
   fillRect(frame, 0, 0, WIDTH, HEIGHT, [7, 9, 11, 255]);
   drawBars(frame, values);
-  blit(qr, frame, 800, 200);
+  blit(qr, frame, QR_CENTER_X - Math.round(qr.width / 2), QR_CENTER_Y - Math.round(qr.height / 2));
 
   const fileName = `frame-${String(frameIndex).padStart(4, "0")}.png`;
   await writeFile(path.join(tempDir, fileName), PNG.sync.write(frame));
 }
 
-async function main() {
-  const ffmpegProbe = spawnSync("ffmpeg", ["-version"], { stdio: "ignore" });
-  if (ffmpegProbe.error || ffmpegProbe.status !== 0) {
-    throw new Error("ffmpeg is required to generate the demo video");
-  }
-
+async function generateVideo(outputPath, frameCount, getFrameOptions) {
   const tempDir = await mkdtemp(path.join(tmpdir(), "qrtuber-demo-video-"));
 
   try {
-    for (let index = 0; index < FRAME_COUNT; index += 1) {
-      await renderFrame(index, tempDir);
+    for (let index = 0; index < frameCount; index += 1) {
+      await renderFrame(index, tempDir, getFrameOptions(index));
     }
 
     const result = spawnSync(
@@ -176,6 +208,26 @@ async function main() {
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
+}
+
+function sizeSweepOptions(frameIndex) {
+  const seconds = Math.floor(frameIndex / QR_RATE_HZ);
+  const qrSize = SIZE_SWEEP_PIXELS[Math.min(seconds, SIZE_SWEEP_PIXELS.length - 1)];
+
+  return {
+    extensions: ["S", String(qrSize)],
+    qrSize
+  };
+}
+
+async function main() {
+  const ffmpegProbe = spawnSync("ffmpeg", ["-version"], { stdio: "ignore" });
+  if (ffmpegProbe.error || ffmpegProbe.status !== 0) {
+    throw new Error("ffmpeg is required to generate the demo video");
+  }
+
+  await generateVideo(demoVideoPath, DEMO_FRAME_COUNT, () => ({}));
+  await generateVideo(sizeSweepVideoPath, SIZE_SWEEP_FRAME_COUNT, sizeSweepOptions);
 }
 
 main().catch((error) => {

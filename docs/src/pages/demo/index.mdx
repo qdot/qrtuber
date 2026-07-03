@@ -1,5 +1,5 @@
-import ReactPlayer from 'react-player'
 import demoVideo from '@site/src/pages/demo/demovideo.mp4';
+import demoSizeSweepVideo from '@site/src/pages/demo/demovideo-size-sweep.mp4';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import QRTuberDemoComponent from '@site/src/components/DemoPage/DemoReactComponent';
 
@@ -12,17 +12,18 @@ To test:
 - Start Intiface Central server, scan for device in devices tab
   - At the moment, device needs to be capable of vibration
 - Once device is found, hit "Connect to Intiface" below
+- Choose a test video
 - Hit "Start Tracking"
 - Start video playing
 
 Your toy should start vibrating as the QR Code starts changing on the video.
-
-<div style={{textAlign: "center"}}>
-  <ReactPlayer playing controls url={demoVideo} loop={true} />
-</div>
+The QR size sweep adds an `S:<pixels>` extension to the tracked payload so you can see which rendered size was last decoded.
 
 <BrowserOnly fallback={<div>Loading...</div>}>
 {() => {
-  return <QRTuberDemoComponent />;
+  return <QRTuberDemoComponent videos={[
+    { label: "Standard QT1 loop", url: demoVideo },
+    { label: "QR size sweep", url: demoSizeSweepVideo },
+  ]} />;
 }}
 </BrowserOnly>
