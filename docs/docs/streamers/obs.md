@@ -48,7 +48,7 @@ Device mode can be used when another Intiface-compatible app should drive the ov
 https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&dark=000000&light=ffffff&device=qrtuber-lovense
 ```
 
-Device overlay parameters include `server=ws://127.0.0.1:54817`, `device=...`, and `id=...`.
+Device overlay parameters include `server=ws://127.0.0.1:54817`, `device=...` for the Lovense websocket device address, and `id=...` for the websocket handshake identifier/name.
 Device mode also has **Copy OBS URL** in its QR panel, using the current server, identifier, device address, QR size, error correction, and colour settings.
 
 ## Testing

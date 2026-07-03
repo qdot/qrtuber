@@ -78,8 +78,16 @@ function connectorAddress(connector: IButtplugClientConnector | undefined): stri
   return (connector as unknown as { _url?: string } | undefined)?._url;
 }
 
+function adapterForTest(
+  client: ButtplugClientLike,
+  options: ConstructorParameters<typeof IntifaceHapticsAdapter>[0] = {}
+): IntifaceHapticsAdapter {
+  return new IntifaceHapticsAdapter({ frameTimeoutMs: 0, ...options }, client);
+}
+
 describe("IntifaceHapticsAdapter", () => {
   afterEach(() => {
+    vi.clearAllTimers();
     vi.useRealTimers();
   });
 
@@ -107,7 +115,7 @@ describe("IntifaceHapticsAdapter", () => {
       [2, new FakeDevice([second, third])],
     ]);
 
-    await new IntifaceHapticsAdapter({}, client).applyState(haptics([10, 20, 30]));
+    await adapterForTest(client).applyState(haptics([10, 20, 30]));
 
     expect(first.percents()[0]).toBeCloseTo(10 / 255);
     expect(second.percents()[0]).toBeCloseTo(20 / 255);
@@ -119,7 +127,7 @@ describe("IntifaceHapticsAdapter", () => {
     const client = new FakeClient();
     client.devices = new Map([[1, new FakeDevice(features)]]);
 
-    await new IntifaceHapticsAdapter({}, client).applyState(
+    await adapterForTest(client).applyState(
       haptics([255, 10, 20, 30, 40, 50, 60, 70, 80])
     );
 
@@ -135,7 +143,7 @@ describe("IntifaceHapticsAdapter", () => {
     const client = new FakeClient();
     client.devices = new Map([[1, new FakeDevice([first, second, third])]]);
 
-    await new IntifaceHapticsAdapter({ channelMap: [-1, 12, 4] }, client).applyState(
+    await adapterForTest(client, { channelMap: [-1, 12, 4] }).applyState(
       haptics([51, 0, 0, 0, 204, 0, 0, 0, 255])
     );
 
@@ -151,7 +159,7 @@ describe("IntifaceHapticsAdapter", () => {
     client.connected = false;
     client.devices = new Map([[1, new FakeDevice([feature])]]);
 
-    await new IntifaceHapticsAdapter({ frameTimeoutMs: 50 }, client).applyState(haptics([255]));
+    await adapterForTest(client, { frameTimeoutMs: 50 }).applyState(haptics([255]));
     await vi.advanceTimersByTimeAsync(50);
 
     expect(feature.commands).toHaveLength(0);
@@ -166,7 +174,7 @@ describe("IntifaceHapticsAdapter", () => {
       [2, new FakeDevice([vibrate])],
     ]);
 
-    await new IntifaceHapticsAdapter({}, client).applyState(haptics([128]));
+    await adapterForTest(client).applyState(haptics([128]));
 
     expect(rotateOnly.commands).toHaveLength(0);
     expect(vibrate.percents()[0]).toBeCloseTo(128 / 255);
@@ -183,7 +191,7 @@ describe("IntifaceHapticsAdapter", () => {
       [3, new RejectingFeaturesDevice()],
     ]);
 
-    expect(new IntifaceHapticsAdapter({}, client).getDevices()).toEqual([
+    expect(adapterForTest(client).getDevices()).toEqual([
       {
         name: "Test Toy",
         actuators: [
@@ -206,7 +214,7 @@ describe("IntifaceHapticsAdapter", () => {
     const feature = new FakeFeature();
     const client = new FakeClient();
     client.devices = new Map([[1, new FakeDevice([feature])]]);
-    const adapter = new IntifaceHapticsAdapter({}, client);
+    const adapter = adapterForTest(client);
 
     await adapter.applyState(haptics([255]));
     await adapter.applyState(haptics([255]));
@@ -219,7 +227,7 @@ describe("IntifaceHapticsAdapter", () => {
     const second = new FakeFeature();
     const client = new FakeClient();
     client.devices = new Map([[1, new FakeDevice([first])]]);
-    const adapter = new IntifaceHapticsAdapter({}, client);
+    const adapter = adapterForTest(client);
 
     await adapter.applyState(haptics([255, 128]));
     client.devices = new Map([
@@ -258,7 +266,7 @@ describe("IntifaceHapticsAdapter", () => {
     const client = new FakeClient();
     client.devices = new Map([[1, new FakeDevice([feature])]]);
 
-    await new IntifaceHapticsAdapter({ frameTimeoutMs: 0 }, client).applyState(haptics([255]));
+    await adapterForTest(client).applyState(haptics([255]));
     await vi.advanceTimersByTimeAsync(10_000);
 
     expect(feature.percents()).toEqual([1]);
@@ -274,10 +282,24 @@ describe("IntifaceHapticsAdapter", () => {
       [2, new FakeDevice([rejectingFeature, succeedingFeature])],
     ]);
 
-    await new IntifaceHapticsAdapter({}, client).applyState(haptics([255, 128]));
+    await adapterForTest(client).applyState(haptics([255, 128]));
 
     expect(rejectingFeature.percents()).toEqual([1]);
     expect(succeedingFeature.percents()[0]).toBeCloseTo(128 / 255);
+  });
+
+  it("retries an identical state after an actuator rejects", async () => {
+    const rejectingFeature = new FakeFeature();
+    rejectingFeature.rejectOutput = true;
+    const client = new FakeClient();
+    client.devices = new Map([[1, new FakeDevice([rejectingFeature])]]);
+    const adapter = adapterForTest(client);
+
+    await adapter.applyState(haptics([255]));
+    rejectingFeature.rejectOutput = false;
+    await adapter.applyState(haptics([255]));
+
+    expect(rejectingFeature.percents()).toEqual([1, 1]);
   });
 
   it("clears the watchdog on disconnect", async () => {

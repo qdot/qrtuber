@@ -4,12 +4,6 @@ import type { DeviceInfo } from "../../utils/messages.js";
 import type { ChannelMap, MappingMode } from "../../utils/settings.js";
 import { CHANNEL_COUNT } from "../../utils/settings.js";
 
-export interface ResolvedOutput {
-  readonly deviceName: string;
-  readonly actuatorIndex: number;
-  readonly value: number;
-}
-
 interface IndexedActuator {
   readonly ordinal: number;
   readonly deviceName: string;
@@ -42,50 +36,6 @@ function actuatorOrdinals(devices: readonly DeviceInfo[]): IndexedActuator[] {
   }
 
   return actuators;
-}
-
-export function resolveOutputs(
-  state: HapticsState,
-  map: ChannelMap,
-  devices: readonly DeviceInfo[],
-  mode: MappingMode
-): ResolvedOutput[] {
-  const actuators = actuatorOrdinals(devices);
-
-  if (mode === "simple") {
-    const value = state.get(0);
-    return actuators.map((actuator) => ({
-      deviceName: actuator.deviceName,
-      actuatorIndex: actuator.actuatorIndex,
-      value,
-    }));
-  }
-
-  const outputs: ResolvedOutput[] = [];
-  for (let channelIndex = 0; channelIndex < CHANNEL_COUNT; channelIndex += 1) {
-    const target = map[channelIndex];
-    if (target === null) {
-      continue;
-    }
-
-    if (
-      !actuators.some(
-        (actuator) =>
-          actuator.deviceName === target.deviceName &&
-          actuator.actuatorIndex === target.actuatorIndex
-      )
-    ) {
-      continue;
-    }
-
-    outputs.push({
-      deviceName: target.deviceName,
-      actuatorIndex: target.actuatorIndex,
-      value: clampByte(state.get(channelIndex) * target.scale),
-    });
-  }
-
-  return outputs;
 }
 
 export function resolveStateForAdapter(

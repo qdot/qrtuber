@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { HapticsState, encodeFrame } from "../shared/coreBridge.js";
 
 const MAX_SEQ = 4_294_967_295;
+const DEVICE_KEEPALIVE_RATE_HZ = 3;
 
 export interface DeviceFrame {
   readonly encoded: string;
@@ -29,7 +30,11 @@ function encodeDeviceFrame(session: string, seq: number, state: HapticsState): D
   };
 }
 
-export function useDeviceFrameClock(state: HapticsState, updateId: number) {
+export function useDeviceFrameClock(
+  state: HapticsState,
+  updateId: number,
+  shouldKeepAlive: boolean
+) {
   const [session, setSession] = useState(createSessionId);
   const [frame, setFrame] = useState<DeviceFrame>(() => encodeDeviceFrame(session, 0, state));
   const nextSeqRef = useRef(1);
@@ -67,6 +72,16 @@ export function useDeviceFrameClock(state: HapticsState, updateId: number) {
     lastUpdateIdRef.current = updateId;
     tick();
   }, [tick, updateId]);
+
+  useEffect(() => {
+    if (!shouldKeepAlive) {
+      return undefined;
+    }
+
+    tick();
+    const intervalId = window.setInterval(tick, 1000 / DEVICE_KEEPALIVE_RATE_HZ);
+    return () => window.clearInterval(intervalId);
+  }, [shouldKeepAlive, tick]);
 
   return {
     frame,

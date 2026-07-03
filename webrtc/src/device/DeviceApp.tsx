@@ -62,11 +62,6 @@ export function DeviceApp() {
     initialDeviceAddress: urlConfig.device.deviceAddress,
     initialDeviceIdentifier: urlConfig.device.deviceIdentifier
   });
-  const {
-    frame,
-    newSession,
-    session
-  } = useDeviceFrameClock(device.hapticsState, device.frameUpdateId);
   const overlayMode = urlConfig.qr.overlayMode;
   const autoConnectMode = overlayMode || urlConfig.device.autoConnect;
   const showFrameDetails = !overlayMode || urlConfig.qr.showDetails;
@@ -75,6 +70,12 @@ export function DeviceApp() {
   const isBusy =
     device.connectionState === "connecting" ||
     device.connectionState === "disconnecting";
+  const shouldEmitKeepalive = isConnected && !device.hapticsState.isAllZero();
+  const {
+    frame,
+    newSession,
+    session
+  } = useDeviceFrameClock(device.hapticsState, device.frameUpdateId, shouldEmitKeepalive);
   const frameLooksValid = FRAME_REGEX.test(frame.encoded);
   const obsUrl = useMemo(
     () =>
@@ -114,8 +115,16 @@ export function DeviceApp() {
       return;
     }
 
-    autoConnectAttemptedRef.current = true;
-    device.connect();
+    const timeoutId = window.setTimeout(() => {
+      if (autoConnectAttemptedRef.current) {
+        return;
+      }
+
+      autoConnectAttemptedRef.current = true;
+      device.connect();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [
     autoConnectMode,
     device.connectionState,

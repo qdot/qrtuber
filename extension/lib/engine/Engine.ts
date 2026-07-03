@@ -17,8 +17,10 @@ import {
   broadcastSafe,
 } from "../../utils/engine-client.js";
 import {
+  autoConnect,
   channelMap,
   decodeStaleTimeoutMs,
+  hapticsEnabled as hapticsEnabledSetting,
   intifaceAddress,
   mappingMode,
   type ChannelMap,
@@ -118,16 +120,28 @@ export class Engine {
       return this.#initialisePromise;
     }
 
-    this.#initialisePromise = this.#initialise();
+    this.#initialisePromise = this.#initialise().catch((error: unknown) => {
+      this.#initialisePromise = null;
+      throw error;
+    });
     return this.#initialisePromise;
   }
 
   async #initialise(): Promise<void> {
-    const [address, staleTimeout, map, mode] = await Promise.all([
+    const [
+      address,
+      staleTimeout,
+      map,
+      mode,
+      connectOnStart,
+      outputEnabled,
+    ] = await Promise.all([
       intifaceAddress.getValue(),
       decodeStaleTimeoutMs.getValue(),
       channelMap.getValue(),
       mappingMode.getValue(),
+      autoConnect.getValue(),
+      hapticsEnabledSetting.getValue(),
     ]);
 
     this.#staleTimeoutMs = staleTimeout;
@@ -139,6 +153,7 @@ export class Engine {
         ...this.#status.intiface,
         address,
       },
+      hapticsEnabled: outputEnabled,
     });
 
     intifaceAddress.watch((newAddress) => {
@@ -156,6 +171,10 @@ export class Engine {
     mappingMode.watch((newMode) => {
       this.#mappingMode = newMode;
     });
+
+    if (connectOnStart) {
+      await this.#connectOnStart();
+    }
   }
 
   async #handleRequest(request: EngineRequest, sender: RuntimeSender): Promise<unknown> {
@@ -222,7 +241,6 @@ export class Engine {
 
     const accepted = this.#decodeGate.accept(frame);
     if (accepted !== null) {
-      this.#refreshDevices();
       this.#setStatus({
         tracking: {
           ...this.#status.tracking,
@@ -345,6 +363,14 @@ export class Engine {
     }
   }
 
+  async #connectOnStart(): Promise<void> {
+    try {
+      await this.#connect();
+    } catch (error) {
+      this.#setError(errorMessage(error));
+    }
+  }
+
   async #disconnect(): Promise<void> {
     this.#setStatus({
       intiface: {
@@ -372,6 +398,7 @@ export class Engine {
       await this.#stopOutput();
     }
 
+    await hapticsEnabledSetting.setValue(enabled);
     this.#setStatus({
       hapticsEnabled: enabled,
       lastError: null,

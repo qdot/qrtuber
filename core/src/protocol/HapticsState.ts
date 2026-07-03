@@ -52,7 +52,11 @@ export class HapticsState {
     return Array.from(this.#bytes);
   }
 
-  equals(other: HapticsState): boolean {
+  equals(other: unknown): boolean {
+    if (!(other instanceof HapticsState)) {
+      return false;
+    }
+
     return this.toHex() === other.toHex();
   }
 

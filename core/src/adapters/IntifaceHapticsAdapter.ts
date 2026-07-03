@@ -117,9 +117,7 @@ export class IntifaceHapticsAdapter {
       return;
     }
 
-    this.#lastStateHex = stateHex;
-    this.#lastTopologySignature = topologySignature;
-
+    let hasOutputFailure = false;
     let actuatorOrdinal = 0;
     for (const device of this.#devices()) {
       let features: ButtplugFeatureLike[];
@@ -140,9 +138,15 @@ export class IntifaceHapticsAdapter {
         try {
           await feature.runOutput(DeviceOutput.Vibrate.percent(state.get(channelIndex) / 255));
         } catch {
+          hasOutputFailure = true;
           continue;
         }
       }
+    }
+
+    if (!hasOutputFailure) {
+      this.#lastStateHex = stateHex;
+      this.#lastTopologySignature = topologySignature;
     }
   }
 

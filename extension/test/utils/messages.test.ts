@@ -23,9 +23,30 @@ describe("message validators", () => {
         roiOrigin: box,
       })
     ).toBe(true);
-    expect(isEngineRequest({ type: "frame/decode", seq: -1, dataUrl: "x", mode: "roi" })).toBe(
-      false
-    );
+    expect(
+      isEngineRequest({
+        type: "frame/decode",
+        seq: -1,
+        dataUrl: "data:image/png;base64,AA==",
+        mode: "roi",
+      })
+    ).toBe(false);
+    expect(
+      isEngineRequest({
+        type: "frame/decode",
+        seq: 1,
+        dataUrl: "blob:https://example.test/frame",
+        mode: "roi",
+      })
+    ).toBe(false);
+    expect(
+      isEngineRequest({
+        type: "frame/decode",
+        seq: 1,
+        dataUrl: "https://example.test/frame.png",
+        mode: "roi",
+      })
+    ).toBe(false);
     expect(isEngineRequest({ type: "haptics/set-enabled", enabled: true })).toBe(true);
     expect(isEngineRequest({ type: "haptics/set-enabled", enabled: "yes" })).toBe(false);
     expect(isEngineRequest({ type: "status/get" })).toBe(true);

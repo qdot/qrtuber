@@ -36,6 +36,10 @@ export const autoConnect = storage.defineItem<boolean>("local:autoConnect", {
   fallback: true,
 });
 
+export const hapticsEnabled = storage.defineItem<boolean>("local:hapticsEnabled", {
+  fallback: true,
+});
+
 export const mappingMode = storage.defineItem<MappingMode>("local:mappingMode", {
   fallback: "simple",
 });

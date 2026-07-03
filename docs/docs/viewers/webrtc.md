@@ -58,20 +58,20 @@ Device mode is for streamers who want another Intiface-compatible app to drive t
 Setup:
 
 1. In Intiface Central, enable **Device Websocket Server**.
-2. Add a **Websocket Device** using protocol `lovense` and device address/name `qrtuber-lovense`.
+2. Add a **Websocket Device** using protocol `lovense`. Use `qrtuber-lovense` as the websocket identifier/name, then either keep the generated device address from the web app or copy your chosen address into the app.
 3. Start the engine.
 4. Open https://qrtuber.com/app/device/.
 5. Connect to `ws://127.0.0.1:54817`.
 
-Use a URL like https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&dark=000000&light=ffffff&device=qrtuber-lovense as the OBS browser source after the connection is working. Device mode overlay URLs support:
+Use a URL like https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&dark=000000&light=ffffff&id=qrtuber-lovense as the OBS browser source after the connection is working. Device mode overlay URLs support:
 
 - `size=360` for QR size, clamped to 128-800 pixels.
 - `ecc=M` for QR error correction, using `L`, `M`, `Q`, or `H`.
 - `dark=000000` for the QR mark colour.
 - `light=ffffff` for the QR background colour.
 - `server=ws://127.0.0.1:54817` to override the Device Websocket Server address.
-- `device=qrtuber-lovense` to override the Lovense websocket device address.
-- `id=qrtuber-lovense` to override the websocket device identifier.
+- `device=8A3D9FAC2A45` to override the Lovense websocket device address.
+- `id=qrtuber-lovense` to override the websocket handshake identifier/name.
 - `details=1` to show frame metadata under the QR code.
 
 The normal Device mode page includes **Copy OBS URL** in the QR panel. Use it after setting the server, identifier, device address, QR size, error correction, and colour controls. The page warns when the selected colours may not scan reliably.

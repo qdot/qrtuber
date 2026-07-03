@@ -16,7 +16,7 @@ QRTuber sends lightweight state through a QR overlay in the stream video. Stream
 
 See the [OBS setup guide](./streamers/obs.md) for the longer setup flow.
 
-To drive QR output from Intiface commands instead, use Device mode at https://qrtuber.com/app/device/. In Intiface Central, enable **Device Websocket Server**, add a **Websocket Device** with protocol `lovense` and device address/name `qrtuber-lovense`, start the engine, then use an OBS browser source like https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&dark=000000&light=ffffff&device=qrtuber-lovense.
+To drive QR output from Intiface commands instead, use Device mode at https://qrtuber.com/app/device/. In Intiface Central, enable **Device Websocket Server**, add a **Websocket Device** with protocol `lovense`. Use `qrtuber-lovense` as the websocket identifier/name and either keep the generated device address from the app or pass your chosen address with `device=` in the OBS URL. Start the engine, then use an OBS browser source like https://qrtuber.com/app/device/?overlay=1&connect=1&size=360&dark=000000&light=ffffff&id=qrtuber-lovense.
 
 ## For Viewers
 

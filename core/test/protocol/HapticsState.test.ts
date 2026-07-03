@@ -29,5 +29,6 @@ describe("HapticsState", () => {
     expect(nonzero.isAllZero()).toBe(false);
     expect(nonzero.equals(new HapticsState([1]))).toBe(true);
     expect(nonzero.equals(zero)).toBe(false);
+    expect(nonzero.equals({ toHex: () => nonzero.toHex() })).toBe(false);
   });
 });

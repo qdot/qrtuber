@@ -98,6 +98,7 @@ export class TrackingController {
   #scheduleTimeout: ScheduleTimeout;
   #handler: ContentVideoHandler | null = null;
   #pageAbortController: AbortController | null = null;
+  #video: HTMLVideoElement | null = null;
   #timer: TimeoutHandle | null = null;
   #active = false;
   #processingFrame = false;
@@ -141,10 +142,29 @@ export class TrackingController {
     this.#nextFrameUsesRoi = false;
 
     handler.on("videoblob", this.#handleVideoBlob);
+    this.#registerPageLifecycle(sessionId);
+    this.#trackVideo(video, sessionId);
+    return { ok: true };
+  }
+
+  async stop(reason: TrackingStoppedReason): Promise<CommandResponse> {
+    await this.#stopLocal();
+    await this.#reportStopped(reason);
+    return { ok: true };
+  }
+
+  #trackVideo(video: HTMLVideoElement, sessionId: number): void {
+    const handler = this.#handler;
+    const abortController = this.#pageAbortController;
+    if (handler === null || abortController === null) {
+      return;
+    }
+
+    this.#video = video;
     video.addEventListener(
       "error",
       () => {
-        if (this.#isCurrentSession(sessionId)) {
+        if (this.#isCurrentSession(sessionId) && this.#video === video) {
           void this.stop("no-video");
         }
       },
@@ -153,12 +173,40 @@ export class TrackingController {
     video.addEventListener(
       "emptied",
       () => {
-        if (this.#isCurrentSession(sessionId)) {
+        if (this.#isCurrentSession(sessionId) && this.#video === video) {
           void this.stop("no-video");
         }
       },
       { signal: abortController.signal }
     );
+    handler.startTrackingVideo(video);
+  }
+
+  #ensureTrackedVideo(sessionId: number): boolean {
+    if (!this.#isCurrentSession(sessionId)) {
+      return false;
+    }
+
+    if (this.#video !== null && isVisibleVideo(this.#video)) {
+      return true;
+    }
+
+    const video = findLargestVisibleVideo();
+    if (video === null) {
+      void this.stop("no-video");
+      return false;
+    }
+
+    this.#trackVideo(video, sessionId);
+    return true;
+  }
+
+  #registerPageLifecycle(sessionId: number): void {
+    const abortController = this.#pageAbortController;
+    if (abortController === null) {
+      return;
+    }
+
     window.addEventListener(
       "pagehide",
       () => {
@@ -168,15 +216,6 @@ export class TrackingController {
       },
       { signal: abortController.signal }
     );
-
-    handler.startTrackingVideo(video);
-    return { ok: true };
-  }
-
-  async stop(reason: TrackingStoppedReason): Promise<CommandResponse> {
-    await this.#stopLocal();
-    await this.#reportStopped(reason);
-    return { ok: true };
   }
 
   #handleVideoBlob = (event: unknown): void => {
@@ -195,7 +234,11 @@ export class TrackingController {
 
   async #processFrame(blobUrl: string, sessionId: number): Promise<void> {
     const handler = this.#handler;
-    if (!this.#isCurrentSession(sessionId) || handler === null) {
+    if (
+      !this.#isCurrentSession(sessionId) ||
+      handler === null ||
+      !this.#ensureTrackedVideo(sessionId)
+    ) {
       this.#processingFrame = false;
       return;
     }
@@ -287,7 +330,11 @@ export class TrackingController {
     this.#clearTimer();
     this.#timer = this.#scheduleTimeout(() => {
       this.#timer = null;
-      if (!this.#isCurrentSession(sessionId) || this.#handler === null) {
+      if (
+        !this.#isCurrentSession(sessionId) ||
+        this.#handler === null ||
+        !this.#ensureTrackedVideo(sessionId)
+      ) {
         return;
       }
 
@@ -304,6 +351,7 @@ export class TrackingController {
     this.#clearTimer();
     this.#pageAbortController?.abort();
     this.#pageAbortController = null;
+    this.#video = null;
 
     if (this.#handler !== null) {
       this.#handler.off("videoblob", this.#handleVideoBlob);

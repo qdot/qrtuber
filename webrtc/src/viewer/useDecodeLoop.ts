@@ -69,6 +69,7 @@ export function useDecodeLoop(
   const acceptedSampleTimesRef = useRef<number[]>([]);
   const latestBlobUrlRef = useRef<string | null>(null);
   const isDecodingRef = useRef(false);
+  const workerRef = useRef<Worker | null>(null);
 
   useEffect(() => {
     acceptedSampleTimesRef.current = [];
@@ -90,9 +91,22 @@ export function useDecodeLoop(
     const worker = new Worker(new URL("./tickWorker.ts", import.meta.url), {
       type: "module"
     });
+    workerRef.current = worker;
 
     const handleVideoBlob = (event: { blob_url: string }) => {
+      if (latestBlobUrlRef.current !== null) {
+        URL.revokeObjectURL(latestBlobUrlRef.current);
+      }
+
       latestBlobUrlRef.current = event.blob_url;
+    };
+
+    const handleFinderReturn = (result: Parameters<ContentVideoHandler["handleQRCodeFinderReturn"]>[0]) => {
+      const pendingBlobUrl = latestBlobUrlRef.current;
+      handler.handleQRCodeFinderReturn(result);
+      if (latestBlobUrlRef.current === pendingBlobUrl) {
+        latestBlobUrlRef.current = null;
+      }
     };
 
     async function decodeOnce() {
@@ -116,7 +130,7 @@ export function useDecodeLoop(
             ? translateBoundingBox(region, result.boundingBox)
             : null;
 
-        handler.handleQRCodeFinderReturn(result);
+        handleFinderReturn(result);
 
         if (!isActive) {
           return;
@@ -172,10 +186,11 @@ export function useDecodeLoop(
           return;
         }
 
-        handler.handleQRCodeFinderReturn(null);
+        handleFinderReturn(null);
         setBoundingBox(null);
         setDecodeError(errorMessage(error));
       } finally {
+        URL.revokeObjectURL(blobUrl);
         isDecodingRef.current = false;
       }
     }
@@ -194,11 +209,20 @@ export function useDecodeLoop(
       isActive = false;
       worker.postMessage({ type: "stop" });
       worker.terminate();
+      workerRef.current = null;
       handler.off("videoblob", handleVideoBlob);
       handler.stopTrackingVideo();
       sequenceTracker.reset();
+      if (latestBlobUrlRef.current !== null) {
+        URL.revokeObjectURL(latestBlobUrlRef.current);
+        latestBlobUrlRef.current = null;
+      }
     };
-  }, [decodeRateHz, stream, videoElement]);
+  }, [stream, videoElement]);
+
+  useEffect(() => {
+    workerRef.current?.postMessage({ type: "start", intervalMs: 1000 / decodeRateHz });
+  }, [decodeRateHz]);
 
   return useMemo(
     () => ({

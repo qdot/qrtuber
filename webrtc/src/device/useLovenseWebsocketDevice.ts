@@ -125,6 +125,11 @@ export function useLovenseWebsocketDevice(
     setHapticsState(nextState);
   }, []);
 
+  const applyZeroHapticsState = useCallback(() => {
+    applyHapticsState(ZERO_STATE);
+    setFrameUpdateId((current) => current + 1);
+  }, [applyHapticsState]);
+
   const disconnect = useCallback(() => {
     const websocket = websocketRef.current;
     operationIdRef.current += 1;
@@ -132,15 +137,15 @@ export function useLovenseWebsocketDevice(
 
     if (websocket === null) {
       setConnectionState("disconnected");
-      applyHapticsState(ZERO_STATE);
+      applyZeroHapticsState();
       return;
     }
 
     setConnectionState("disconnecting");
     websocket.close();
     setConnectionState("disconnected");
-    applyHapticsState(ZERO_STATE);
-  }, [applyHapticsState]);
+    applyZeroHapticsState();
+  }, [applyZeroHapticsState]);
 
   const connect = useCallback(() => {
     const operationId = (operationIdRef.current += 1);
@@ -218,12 +223,12 @@ export function useLovenseWebsocketDevice(
 
       websocketRef.current = null;
       setConnectionState("disconnected");
-      applyHapticsState(ZERO_STATE);
+      applyZeroHapticsState();
       if (!event.wasClean && event.code !== 1000) {
         setError(`Websocket closed with code ${event.code}`);
       }
     });
-  }, [address, applyHapticsState, deviceAddress, deviceIdentifier]);
+  }, [address, applyHapticsState, applyZeroHapticsState, deviceAddress, deviceIdentifier]);
 
   const setAddress = useCallback((nextAddress: string) => {
     setAddressState(nextAddress);
@@ -255,9 +260,8 @@ export function useLovenseWebsocketDevice(
   }, [setDeviceIdentifier]);
 
   const zero = useCallback(() => {
-    applyHapticsState(ZERO_STATE);
-    setFrameUpdateId((current) => current + 1);
-  }, [applyHapticsState]);
+    applyZeroHapticsState();
+  }, [applyZeroHapticsState]);
 
   useEffect(() => {
     return () => {

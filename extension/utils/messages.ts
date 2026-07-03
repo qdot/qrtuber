@@ -102,6 +102,18 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.length > 0;
 }
 
+function isDataUrl(value: unknown): value is string {
+  if (!isNonEmptyString(value)) {
+    return false;
+  }
+
+  try {
+    return new URL(value).protocol === "data:";
+  } catch {
+    return false;
+  }
+}
+
 function isSafeNonNegativeInteger(value: unknown): value is number {
   return Number.isSafeInteger(value) && typeof value === "number" && value >= 0;
 }
@@ -141,7 +153,7 @@ export function isFrameDecodeRequest(value: unknown): value is FrameDecodeReques
     isRecord(value) &&
     value.type === "frame/decode" &&
     isSafeNonNegativeInteger(value.seq) &&
-    isNonEmptyString(value.dataUrl) &&
+    isDataUrl(value.dataUrl) &&
     isFrameDecodeMode(value.mode) &&
     (value.roiOrigin === null || isBoundingBox(value.roiOrigin))
   );

@@ -96,6 +96,8 @@ Viewer clients should ignore:
 
 The sequence number is not a security boundary and does not need to be contiguous. Clients should not require every sequence number to arrive.
 
+Emitters should keep producing fresh sequence numbers while a non-zero state is intended to remain active. Duplicate frames are deliberately ignored by viewers and do not refresh stale-frame watchdogs, so a held haptic value still needs periodic keepalive frames.
+
 ## Safety Model
 
 QT1 frames are public, untrusted video data. Viewer-side safety remains local and authoritative.
