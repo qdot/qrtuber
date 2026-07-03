@@ -1,5 +1,29 @@
 [
   {
+    "hash": "2073e1e37223e2361bc4d809c38dd08614eb9f71",
+    "short_hash": "2073e1e",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T21:14:46-07:00",
+    "message": "docs: update Docusaurus markdown link config",
+    "files_changed": 1
+  },
+  {
+    "hash": "384216e740d58ada0a71b3e5b8ca2021fe64ef9b",
+    "short_hash": "384216e",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T21:13:32-07:00",
+    "message": "feat: add QR colour controls",
+    "files_changed": 11
+  },
+  {
+    "hash": "7e61d9abb5f7a52bbd255f51e15afb9659225593",
+    "short_hash": "7e61d9a",
+    "author": "Kyle Machulis",
+    "date": "2026-07-02T20:48:36-07:00",
+    "message": "docs: sync decision graph",
+    "files_changed": 2
+  },
+  {
     "hash": "7a3be8878d119f613683bbd05dd450501b4b8e2f",
     "short_hash": "7a3be88",
     "author": "Kyle Machulis",

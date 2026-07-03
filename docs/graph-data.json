@@ -2078,6 +2078,149 @@
       "created_at": "2026-07-02T20:48:21.775768-07:00",
       "updated_at": "2026-07-02T20:48:21.775768-07:00",
       "metadata_json": "{\"branch\":\"update\",\"commit\":\"7a3be88\",\"confidence\":95}"
+    },
+    {
+      "id": 190,
+      "change_id": "3e609d3e-23c1-432e-aec1-ae78f2c45b51",
+      "node_type": "outcome",
+      "title": "Committed decision graph export for OBS URL helpers",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:48:41.419349-07:00",
+      "updated_at": "2026-07-02T20:48:41.419349-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"commit\":\"7e61d9a\",\"confidence\":95}"
+    },
+    {
+      "id": 191,
+      "change_id": "0a547a6a-6f49-43d1-9afc-27346145b071",
+      "node_type": "goal",
+      "title": "Add configurable QR colours with scan contrast checks",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:50:11.731169-07:00",
+      "updated_at": "2026-07-02T20:50:11.731169-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"prompt\":\"Ok, last feature for the app. The ability to change the two colors of the QRCode in the device and generator modes. However, we'll also need a check on whether the two chosen colors don't have enough contrast to be picked up.\"}"
+    },
+    {
+      "id": 192,
+      "change_id": "594fdffa-1b5a-46b9-927e-99f007742104",
+      "node_type": "option",
+      "title": "Use shared QR colour config and contrast assessment",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:50:33.868546-07:00",
+      "updated_at": "2026-07-02T20:50:33.868546-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 193,
+      "change_id": "a269739b-e04b-4808-b909-364de1fa8a59",
+      "node_type": "decision",
+      "title": "Share QR colour parsing, rendering, and contrast warnings",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:50:42.690395-07:00",
+      "updated_at": "2026-07-02T20:50:42.690395-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88}"
+    },
+    {
+      "id": 194,
+      "change_id": "0c969ce9-d6fd-4a4b-a716-a0d9df593f3a",
+      "node_type": "action",
+      "title": "Implement QR colour controls and scan contrast checks",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:50:52.966890-07:00",
+      "updated_at": "2026-07-02T20:50:52.966890-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":88,\"files\":[\"webrtc/src/shared/qrColors.ts\",\"webrtc/src/shared/urlConfig.ts\",\"webrtc/src/shared/obsUrl.ts\",\"webrtc/src/generator/QRCanvas.tsx\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/device/DeviceApp.tsx\",\"webrtc/src/shared/styles.css\",\"docs/docs/streamers/obs.md\",\"docs/docs/viewers/webrtc.md\"]}"
+    },
+    {
+      "id": 195,
+      "change_id": "07adc907-ee36-42f8-8f45-1c06b46a92ae",
+      "node_type": "outcome",
+      "title": "Configurable QR colours with scan contrast checks implemented and verified",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T20:55:14.777294-07:00",
+      "updated_at": "2026-07-02T20:55:14.777294-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"files\":[\"webrtc/src/shared/qrColors.ts\",\"webrtc/src/shared/QrColorControls.tsx\",\"webrtc/src/shared/urlConfig.ts\",\"webrtc/src/shared/obsUrl.ts\",\"webrtc/src/generator/QRCanvas.tsx\",\"webrtc/src/generator/GeneratorApp.tsx\",\"webrtc/src/device/DeviceApp.tsx\",\"webrtc/src/shared/styles.css\",\"docs/docs/streamers/obs.md\",\"docs/docs/viewers/webrtc.md\",\"docs/docs/quickstart.md\"]}"
+    },
+    {
+      "id": 196,
+      "change_id": "f9c43b1d-2bcd-443a-8947-07d305ac1d87",
+      "node_type": "outcome",
+      "title": "Committed configurable QR colours",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:13:36.619753-07:00",
+      "updated_at": "2026-07-02T21:13:36.619753-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"commit\":\"384216e\",\"confidence\":95}"
+    },
+    {
+      "id": 197,
+      "change_id": "40ac8fc6-0537-4d23-bab1-1e987e6c36d0",
+      "node_type": "goal",
+      "title": "Fix Docusaurus broken markdown links deprecation warning",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:13:40.674100-07:00",
+      "updated_at": "2026-07-02T21:13:40.674100-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":90,\"prompt\":\"Commit changes, then fix brokenmarkdownlinks deprecation warning and also commit\"}"
+    },
+    {
+      "id": 198,
+      "change_id": "e7d9d4d2-20ae-4958-b211-6ab02bc157d7",
+      "node_type": "option",
+      "title": "Move broken markdown link policy to markdown hooks",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:14:09.392795-07:00",
+      "updated_at": "2026-07-02T21:14:09.392795-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":95}"
+    },
+    {
+      "id": 199,
+      "change_id": "03ef15bd-58e3-4e07-aea8-44f081be8aff",
+      "node_type": "decision",
+      "title": "Use Docusaurus markdown hooks for broken markdown links",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:14:09.418040-07:00",
+      "updated_at": "2026-07-02T21:14:09.418040-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":95}"
+    },
+    {
+      "id": 200,
+      "change_id": "f4c86f65-8600-4890-97d3-060fa5fb65ed",
+      "node_type": "action",
+      "title": "Update Docusaurus broken markdown links config",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:14:09.450419-07:00",
+      "updated_at": "2026-07-02T21:14:09.450419-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":95,\"files\":[\"docs/docusaurus.config.ts\"]}"
+    },
+    {
+      "id": 201,
+      "change_id": "e6f15abf-ca48-4df9-b8dd-05a2ed578770",
+      "node_type": "outcome",
+      "title": "Docusaurus broken markdown links warning fixed",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:14:37.310679-07:00",
+      "updated_at": "2026-07-02T21:14:37.310679-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"confidence\":95,\"files\":[\"docs/docusaurus.config.ts\"]}"
+    },
+    {
+      "id": 202,
+      "change_id": "a3e48a4e-ae6b-406d-b365-22d9ef5671cc",
+      "node_type": "outcome",
+      "title": "Committed Docusaurus broken markdown links config fix",
+      "description": null,
+      "status": "pending",
+      "created_at": "2026-07-02T21:14:50.248664-07:00",
+      "updated_at": "2026-07-02T21:14:50.248664-07:00",
+      "metadata_json": "{\"branch\":\"update\",\"commit\":\"2073e1e\",\"confidence\":95}"
     }
   ],
   "edges": [
@@ -4038,6 +4181,127 @@
       "weight": 1.0,
       "rationale": "Commit also records URL parameter overlay implementation",
       "created_at": "2026-07-02T20:48:21.789366-07:00"
+    },
+    {
+      "id": 180,
+      "from_node_id": 189,
+      "to_node_id": 190,
+      "from_change_id": "b8a6d336-e51d-4073-889c-55965c576ede",
+      "to_change_id": "3e609d3e-23c1-432e-aec1-ae78f2c45b51",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Decision graph export captured committed OBS URL helper work",
+      "created_at": "2026-07-02T20:48:41.427203-07:00"
+    },
+    {
+      "id": 181,
+      "from_node_id": 191,
+      "to_node_id": 192,
+      "from_change_id": "0a547a6a-6f49-43d1-9afc-27346145b071",
+      "to_change_id": "594fdffa-1b5a-46b9-927e-99f007742104",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "QR colour feature implementation option",
+      "created_at": "2026-07-02T20:50:38.670038-07:00"
+    },
+    {
+      "id": 182,
+      "from_node_id": 192,
+      "to_node_id": 193,
+      "from_change_id": "594fdffa-1b5a-46b9-927e-99f007742104",
+      "to_change_id": "a269739b-e04b-4808-b909-364de1fa8a59",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chosen approach for QR colour controls",
+      "created_at": "2026-07-02T20:50:48.004972-07:00"
+    },
+    {
+      "id": 183,
+      "from_node_id": 193,
+      "to_node_id": 194,
+      "from_change_id": "a269739b-e04b-4808-b909-364de1fa8a59",
+      "to_change_id": "0c969ce9-d6fd-4a4b-a716-a0d9df593f3a",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Implement chosen shared QR colour approach",
+      "created_at": "2026-07-02T20:50:56.424301-07:00"
+    },
+    {
+      "id": 184,
+      "from_node_id": 194,
+      "to_node_id": 195,
+      "from_change_id": "0c969ce9-d6fd-4a4b-a716-a0d9df593f3a",
+      "to_change_id": "07adc907-ee36-42f8-8f45-1c06b46a92ae",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "QR colour controls, URL params, and contrast checks implemented and verified",
+      "created_at": "2026-07-02T20:55:17.749849-07:00"
+    },
+    {
+      "id": 185,
+      "from_node_id": 195,
+      "to_node_id": 196,
+      "from_change_id": "07adc907-ee36-42f8-8f45-1c06b46a92ae",
+      "to_change_id": "f9c43b1d-2bcd-443a-8947-07d305ac1d87",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Commit records verified QR colour controls and contrast checks",
+      "created_at": "2026-07-02T21:13:36.627781-07:00"
+    },
+    {
+      "id": 186,
+      "from_node_id": 197,
+      "to_node_id": 198,
+      "from_change_id": "40ac8fc6-0537-4d23-bab1-1e987e6c36d0",
+      "to_change_id": "e7d9d4d2-20ae-4958-b211-6ab02bc157d7",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Docusaurus deprecation fix option",
+      "created_at": "2026-07-02T21:14:09.400975-07:00"
+    },
+    {
+      "id": 187,
+      "from_node_id": 198,
+      "to_node_id": 199,
+      "from_change_id": "e7d9d4d2-20ae-4958-b211-6ab02bc157d7",
+      "to_change_id": "03ef15bd-58e3-4e07-aea8-44f081be8aff",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Chosen deprecation fix",
+      "created_at": "2026-07-02T21:14:09.427223-07:00"
+    },
+    {
+      "id": 188,
+      "from_node_id": 199,
+      "to_node_id": 200,
+      "from_change_id": "03ef15bd-58e3-4e07-aea8-44f081be8aff",
+      "to_change_id": "f4c86f65-8600-4890-97d3-060fa5fb65ed",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Apply selected config migration",
+      "created_at": "2026-07-02T21:14:09.457016-07:00"
+    },
+    {
+      "id": 189,
+      "from_node_id": 200,
+      "to_node_id": 201,
+      "from_change_id": "f4c86f65-8600-4890-97d3-060fa5fb65ed",
+      "to_change_id": "e6f15abf-ca48-4df9-b8dd-05a2ed578770",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Docs build passes without deprecated broken markdown links warning",
+      "created_at": "2026-07-02T21:14:37.317996-07:00"
+    },
+    {
+      "id": 190,
+      "from_node_id": 201,
+      "to_node_id": 202,
+      "from_change_id": "e6f15abf-ca48-4df9-b8dd-05a2ed578770",
+      "to_change_id": "a3e48a4e-ae6b-406d-b365-22d9ef5671cc",
+      "edge_type": "leads_to",
+      "weight": 1.0,
+      "rationale": "Commit records Docusaurus deprecation warning fix",
+      "created_at": "2026-07-02T21:14:50.256697-07:00"
     }
   ]
 }
