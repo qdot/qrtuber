@@ -78,7 +78,7 @@ export default function Home(): ReactElement {
   return (
     <Layout
       title="QRTuber"
-      description="QRTuber syncs viewers' devices to live streams through a QR code overlay — streamer-to-viewer data transfer built entirely on web tech.">
+      description="QRTuber syncs viewers' devices to live streams through a QR code overlay. Haptics, lights, you name it. Streamer-to-Viewer data transfer built entirely on web tech.">
       <HomepageHero />
       <main>
         <HowItWorks />
