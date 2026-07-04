@@ -6,8 +6,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'QRTuber',
-  tagline: 'Transfering data through video, a few bytes at a time.',
-  favicon: 'img/favicon.ico',
+  tagline: 'Transferring data through video, a few bytes at a time.',
+  favicon: 'img/favicon.png',
 
   // Set the production url of your site here
   url: 'https://qrtuber.com',
@@ -51,13 +51,17 @@ const config: Config = {
   plugins: [require.resolve("./docusaurusResolvePlugin.js")],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/logo-social-card.png',
+    image: 'img/qtato-social-card.png',
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
       title: 'QRTuber',
       logo: {
         alt: 'QRTuber',
-        src: 'img/logo.png',
+        src: 'img/qtato-navbar.png',
       },
       items: [
         {
@@ -133,7 +137,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Nonpolynomial Labs, LLC. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Nonpolynomial Labs, LLC. Logo by <a href="https://about.me/jonasdrawsstuff" target="_blank" rel="noopener noreferrer">Jonas</a>. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
