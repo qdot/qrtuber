@@ -1,23 +1,172 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
+.hero {
+  padding: 5rem 0 4rem;
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: center;
+  gap: 3rem;
+}
+
+.heroEyebrow {
+  font-family: var(--qrt-font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+  margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: var(--qrt-font-display);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1rem + 3.2vw, 3.4rem);
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--ifm-color-emphasis-700);
+  max-width: 34rem;
+  margin-bottom: 2rem;
+}
+
+.heroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ctaButton {
+  font-family: var(--qrt-font-display);
+  font-weight: 400;
+}
+
+.heroArt {
+  position: relative;
+}
+
+.heroArt img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.scanline {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: url('/img/qtato-code-hero.png');
+  mask-image: url('/img/qtato-code-hero.png');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Sweep line: full-height element whose bottom edge is the visible beam,
+   so the sweep animates with compositor-only transforms. */
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(100% - 28px),
+    rgba(89, 217, 93, 0.25) calc(100% - 8px),
+    var(--qrt-scan-green) calc(100% - 8px)
+  );
+  transform: translateY(-100%);
+  animation: scan-sweep 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Decode flash: brief full-silhouette wash when the sweep completes. */
+.scanline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--qrt-scan-green);
+  opacity: 0;
+  animation: scan-flash 4.5s linear infinite;
+}
+
+@keyframes scan-sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@keyframes scan-flash {
+  0%,
+  54% {
+    opacity: 0;
+  }
+  58% {
+    opacity: 0.22;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanline::before,
+  .scanline::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.statusBand {
+  background: var(--ifm-background-surface-color);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding: 1.75rem 0;
+}
+
+.statusText {
+  font-size: 0.95rem;
+  max-width: 52rem;
+  margin: 0;
+}
+
+.statusText strong {
+  font-family: var(--qrt-font-display);
+  font-weight: 400;
+  color: var(--ifm-color-primary);
+}
+
+@media screen and (max-width: 996px) {
+  .hero {
+    padding: 3rem 0 2.5rem;
+  }
+
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .heroArt {
+    max-width: 26rem;
+  }
 }
