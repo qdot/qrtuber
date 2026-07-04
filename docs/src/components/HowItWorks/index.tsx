@@ -12,7 +12,7 @@ const Steps: Step[] = [
     title: 'Something happens',
     description:
       'A game event, a tip, a chat command, whatever your source program ' +
-      'wants viewers to feel.',
+      'wants viewers to experience.',
   },
   {
     title: 'Bytes become a QR code',
@@ -29,7 +29,7 @@ const Steps: Step[] = [
   {
     title: 'Viewers decode it off the video',
     description:
-      'A browser extension, userscript, or WebRTC screen capture reads the ' +
+      'A browser extension (coming soon), userscript (also coming soon), or WebRTC screen capture reads the ' +
       'code straight off the pixels, between 5-20 times a second (customizable).',
   },
   {
