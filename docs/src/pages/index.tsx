@@ -20,7 +20,7 @@ function HomepageHero(): ReactElement {
           <p className={styles.heroSubtitle}>
             QRTuber syncs your viewers&apos; devices to your stream with a
             constantly-updating QR code overlay. A few bytes at a time. No
-            servers, no SDKs, no guarantees.
+            servers, no SDKs, no cost, no guarantees.
           </p>
           <div className={styles.heroButtons}>
             <Link

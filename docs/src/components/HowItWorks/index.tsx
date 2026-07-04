@@ -11,14 +11,14 @@ const Steps: Step[] = [
   {
     title: 'Something happens',
     description:
-      'A game event, a tip, a chat command — whatever your source program ' +
+      'A game event, a tip, a chat command, whatever your source program ' +
       'wants viewers to feel.',
   },
   {
     title: 'Bytes become a QR code',
     description:
-      'The event is packed into a tiny payload — a 16-bit format identifier ' +
-      'plus a few bytes of data — and rendered as a QR code.',
+      'The event is packed into a tiny payload (an identifier ' +
+      'plus a few bytes of data) and rendered as a QR code.',
   },
   {
     title: 'The code rides your stream',
@@ -30,14 +30,20 @@ const Steps: Step[] = [
     title: 'Viewers decode it off the video',
     description:
       'A browser extension, userscript, or WebRTC screen capture reads the ' +
-      'code straight off the pixels, around 20 times a second.',
+      'code straight off the pixels, between 5-20 times a second (customizable).',
   },
   {
     title: 'Devices react',
     description:
-      'Decoded events relay to programs like Intiface Central — haptics ' +
+      'Decoded events relay to programs like Intiface Central. Haptics ' +
       'buzz, lights flash, gamepads rumble, in sync with the stream.',
   },
+  {
+    title: 'Stored with the video',
+    description:
+      'The QRCode is composited into the video stream at broadcast, meaning ' +
+      'viewers watching VODs still get all the effects.',
+  },  
 ];
 
 export default function HowItWorks(): ReactElement {
