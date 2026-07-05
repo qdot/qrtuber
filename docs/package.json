@@ -20,6 +20,7 @@
     "@docusaurus/preset-classic": "^3.10.1",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
+    "docusaurus-plugin-matomo": "^0.0.8",
     "path-browserify": "^1.0.1",
     "prism-react-renderer": "^2.3.0",
     "qrtuber": "file:../core",

@@ -48,10 +48,19 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  plugins: [require.resolve("./docusaurusResolvePlugin.js")],
+  plugins: [
+    require.resolve("./docusaurusResolvePlugin.js"),
+    "docusaurus-plugin-matomo",
+  ],
 
   themeConfig: {
     image: 'img/qtato-social-card.png',
+    matomo: {
+      matomoUrl: 'https://metrics.nonpolynomial.com/',
+      siteId: '13',
+      phpLoader: 'matomo.php',
+      jsLoader: 'matomo.js',
+    },
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: false,
