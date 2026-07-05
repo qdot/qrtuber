@@ -29,7 +29,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Streamers add a single OBS browser source. Viewers grab the browser
-        extension — or use WebRTC screen capture if they don&apos;t want to
+        extension, or use WebRTC screen capture if they don&apos;t want to
         install anything at all.
       </>
     ),
@@ -47,7 +47,7 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: 'Small payloads, proudly',
+    title: 'Small payloads, big experiences',
     icon: (
       <PixelIcon d="M6 6h4v4H6zM4 7h1v2H4zM2 6h1v4H2zM11 7h1v2h-1zM13 6h1v4h-1zM7 4h2v1H7zM7 11h2v1H7z" />
     ),

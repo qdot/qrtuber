@@ -15,7 +15,7 @@ const Steps: Step[] = [
   {
     title: 'Something happens',
     description:
-      'A game event, a tip, a chat command — anything a program on your ' +
+      'A game event, a tip, a chat command, anything a program on your ' +
       'computer can watch.',
     detail:
       'The event is packed into a tiny payload (an identifier plus a few ' +
@@ -27,15 +27,15 @@ const Steps: Step[] = [
       'A small QR code rides in the corner of your video, updating as ' +
       'events happen.',
     detail:
-      'A single OBS browser source overlays it — that is the entire ' +
+      'A single OBS browser source overlays it. That is the entire ' +
       'transport layer. The code is part of the video itself, so viewers ' +
       'watching VODs still get all the effects.',
   },
   {
     title: "Your viewers' stuff reacts",
     description:
-      'Haptics buzz, lights flash, gamepads rumble — in sync with your ' +
-      'stream, on their desks.',
+      'Haptics buzz, lights flash, gamepads rumble, in sync with your ' +
+      'stream, on their desks (or elsewhere, depending).',
     detail:
       'The browser extension or web viewer reads the code straight off the ' +
       'pixels, 5-20 times a second, and relays events to programs like ' +
