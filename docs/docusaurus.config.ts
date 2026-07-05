@@ -51,6 +51,28 @@ const config: Config = {
   plugins: [
     require.resolve("./docusaurusResolvePlugin.js"),
     "docusaurus-plugin-matomo",
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        docsDir: 'docs',
+        title: 'QRTuber',
+        description:
+          'Documentation for QRTuber, a system for synchronizing viewer ' +
+          'devices with video streams via QR code overlays',
+        excludeImports: true,
+        generateMarkdownFiles: true,
+        includeOrder: [
+          'index.md',
+          'quickstart.md',
+          'streamers/*',
+          'viewers/*',
+          'developers/*',
+        ],
+        includeUnmatchedLast: true,
+      },
+    ],
   ],
 
   themeConfig: {
