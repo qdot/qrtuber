@@ -54,8 +54,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Send any data the extension format supports, at 10–20 Hz. It&apos;s a
-        QR code on a potato, not a fibre line — and for syncing haptics to a
-        stream, that&apos;s plenty.
+        QR code, not a fibre line, but it's enough to get things done.
       </>
     ),
   },
