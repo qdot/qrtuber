@@ -98,17 +98,32 @@ The sequence number is not a security boundary and does not need to be contiguou
 
 Emitters should keep producing fresh sequence numbers while a non-zero state is intended to remain active. Duplicate frames are deliberately ignored by viewers and do not refresh stale-frame watchdogs, so a held haptic value still needs periodic keepalive frames.
 
+## Extension Security
+
+QT1's extension tail is for additional data fields, not for executable payloads.
+Clients should ignore unknown frame types and unknown extension fields unless
+they explicitly implement those fields.
+
+Future frame types and extensions that can trigger privileged local actions,
+load remote code, run scripts, open files, launch programs, or change local
+configuration are not routine data extensions. They create a new security
+surface and should be designed, reviewed, and documented as separate opt-in
+features.
+
 ## Safety Model
 
 QT1 frames are public, untrusted video data. Viewer-side safety remains local and authoritative.
 
 Viewer clients should:
 
-- require explicit viewer opt-in before connecting to devices;
+- require explicit viewer opt-in before connecting to local output targets;
 - clamp and scale output to local preferences;
 - stop output when frames become stale;
-- expose a local emergency stop or haptics disable control;
+- expose a local emergency stop or output disable control;
 - treat malformed frames as no-op;
 - avoid putting secrets or privileged operations in protocol payloads.
 
 QRTuber synchronizes lightweight local effects with the video timeline. It is not a secure control channel.
+
+For the broader project stance on hostile stream input, third-party clients, and
+malware concerns, see [QRTuber Security](./security.md).

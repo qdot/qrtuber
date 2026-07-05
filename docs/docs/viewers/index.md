@@ -14,4 +14,7 @@ QRTuber has two usable viewer paths today: the browser extension and the web vie
 
 All current viewers consume the same [QT1 protocol](../developers/protocol.md): a stream-embedded state frame, not an out-of-band command channel.
 
+For trust boundaries, third-party client concerns, and malware-risk framing, see
+the [QRTuber security notes](../developers/security.md).
+
 For a first test, use the web viewer at https://qrtuber.com/app/ with the generator at https://qrtuber.com/app/generator/.
