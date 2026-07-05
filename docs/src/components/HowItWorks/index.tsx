@@ -78,7 +78,7 @@ function ExplainerVideo(): ReactElement {
         </button>
       )}
       <figcaption className={styles.videoCaption}>
-        Two minutes. One potato.
+        For those who hate reading, here's a video intro.
       </figcaption>
     </figure>
   );
