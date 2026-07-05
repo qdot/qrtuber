@@ -8,45 +8,39 @@ const EXPLAINER_VIDEO_ID = 'vGbTqno3HEY';
 type Step = {
   title: string;
   description: string;
+  detail: string;
 };
 
 const Steps: Step[] = [
   {
     title: 'Something happens',
     description:
-      'A game event, a tip, a chat command, whatever your source program ' +
-      'wants viewers to experience.',
+      'A game event, a tip, a chat command — anything a program on your ' +
+      'computer can watch.',
+    detail:
+      'The event is packed into a tiny payload (an identifier plus a few ' +
+      'bytes of data) and rendered as a QR code.',
   },
   {
-    title: 'Bytes become a QR code',
+    title: 'A code appears on your stream',
     description:
-      'The event is packed into a tiny payload (an identifier ' +
-      'plus a few bytes of data) and rendered as a QR code.',
+      'A small QR code rides in the corner of your video, updating as ' +
+      'events happen.',
+    detail:
+      'A single OBS browser source overlays it — that is the entire ' +
+      'transport layer. The code is part of the video itself, so viewers ' +
+      'watching VODs still get all the effects.',
   },
   {
-    title: 'The code rides your stream',
+    title: "Your viewers' stuff reacts",
     description:
-      'A single OBS browser source overlays it on your stream. That is the ' +
-      'entire transport layer.',
+      'Haptics buzz, lights flash, gamepads rumble — in sync with your ' +
+      'stream, on their desks.',
+    detail:
+      'The browser extension or web viewer reads the code straight off the ' +
+      'pixels, 5-20 times a second, and relays events to programs like ' +
+      'Intiface Central.',
   },
-  {
-    title: 'Viewers decode it off the video',
-    description:
-      'A browser extension (coming soon), userscript (also coming soon), or WebRTC screen capture reads the ' +
-      'code straight off the pixels, between 5-20 times a second (customizable).',
-  },
-  {
-    title: 'Devices react',
-    description:
-      'Decoded events relay to programs like Intiface Central. Haptics ' +
-      'buzz, lights flash, gamepads rumble, in sync with the stream.',
-  },
-  {
-    title: 'Stored with the video',
-    description:
-      'The QRCode is composited into the video stream at broadcast, meaning ' +
-      'viewers watching VODs still get all the effects.',
-  },  
 ];
 
 function ExplainerVideo(): ReactElement {
@@ -103,6 +97,7 @@ export default function HowItWorks(): ReactElement {
                     {step.title}
                   </Heading>
                   <p className={styles.stepBody}>{step.description}</p>
+                  <p className={styles.stepDetail}>{step.detail}</p>
                 </div>
               </li>
             ))}

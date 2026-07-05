@@ -71,6 +71,13 @@
   line-height: 1.6;
 }
 
+.stepDetail {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.85rem;
+  margin: 0.4rem 0 0;
+  line-height: 1.55;
+}
+
 .video {
   grid-area: video;
   margin: 0;
