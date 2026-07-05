@@ -208,23 +208,19 @@ deciduous link <goal_id> <action_id> -r "Implementation"
 
 The `--commit HEAD` flag captures the commit hash and links it to the node. The web viewer will show commit messages, authors, and dates.
 
-### Git History & Deployment
+### Git History & Export
 
 ```bash
 # Export graph AND git history for web viewer
 deciduous sync
 
-# This creates:
-# - docs/graph-data.json (decision graph)
-# - docs/git-history.json (commit info for linked nodes)
+# This creates (gitignored, local only):
+# - .deciduous/web/graph-data.json (decision graph)
+# - .deciduous/web/git-history.json (commit info for linked nodes)
 ```
 
-To deploy to GitHub Pages:
-1. `deciduous sync` to export
-2. Push to GitHub
-3. Settings > Pages > Deploy from branch > /docs folder
-
-Your graph will be live at `https://<user>.github.io/<repo>/`
+Do NOT export graph data into docs/ — that directory is the Docusaurus
+site source. Use `deciduous serve` for local viewing.
 
 ### Branch-Based Grouping
 

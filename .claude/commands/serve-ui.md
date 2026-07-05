@@ -27,13 +27,12 @@ Launch the deciduous web server for viewing and navigating the decision graph.
   - Connected nodes (incoming/outgoing edges)
   - Timestamps and status
 
-## Alternative: Static Hosting
+## Alternative: Static Export
 
-For GitHub Pages or other static hosting:
 ```bash
-deciduous sync  # Exports to docs/graph-data.json
+deciduous sync  # Exports to .deciduous/web/graph-data.json (gitignored)
 ```
 
-Then push to GitHub - the graph is viewable at your GitHub Pages URL.
+Do NOT export into docs/ - that directory is the Docusaurus site source.
 
 $ARGUMENTS
