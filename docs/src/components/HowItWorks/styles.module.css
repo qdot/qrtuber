@@ -24,7 +24,16 @@
   background-clip: content-box;
 }
 
+.layout {
+  display: grid;
+  grid-template-areas: 'steps video';
+  grid-template-columns: minmax(0, 46rem) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: center;
+}
+
 .steps {
+  grid-area: steps;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -60,4 +69,92 @@
   color: var(--ifm-color-emphasis-700);
   margin: 0;
   line-height: 1.6;
+}
+
+.video {
+  grid-area: video;
+  margin: 0;
+}
+
+.videoPoster {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 2px solid var(--ifm-color-primary);
+  background: none;
+  cursor: pointer;
+}
+
+.videoPoster img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.videoPlayIcon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* Play triangle inside a finder-pattern-style square. */
+.videoPlayIcon::before,
+.videoPlayIcon::after {
+  content: '';
+  grid-area: 1 / 1;
+  transition: transform 0.15s ease;
+}
+
+.videoPlayIcon::after {
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 3px solid #fff;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.videoPlayIcon::before {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.8rem 0 0.8rem 1.3rem;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 0.2rem;
+  z-index: 1;
+}
+
+.videoPoster:hover .videoPlayIcon::before,
+.videoPoster:hover .videoPlayIcon::after,
+.videoPoster:focus-visible .videoPlayIcon::before,
+.videoPoster:focus-visible .videoPlayIcon::after {
+  transform: scale(1.08);
+}
+
+.videoFrame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px solid var(--ifm-color-primary);
+}
+
+.videoCaption {
+  font-family: var(--qrt-font-display);
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+  margin-top: 0.75rem;
+}
+
+@media screen and (max-width: 996px) {
+  .layout {
+    grid-template-areas: 'video' 'steps';
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .video {
+    max-width: 34rem;
+  }
 }
