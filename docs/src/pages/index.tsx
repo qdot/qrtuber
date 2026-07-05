@@ -67,7 +67,9 @@ function StatusBand(): ReactElement {
           today relays events to{' '}
           <Link to="https://intiface.com/central">Intiface Central</Link> for
           haptics sync. Expect rough edges, breaking changes, and the
-          occasional missed frame. It&apos;s a potato.
+          occasional missed frame. It&apos;s a potato. Stuck, broken, or
+          curious?{' '}
+          <Link to="https://discord.gg/TZKRQDxkcV">Come ask in the Discord</Link>.
         </p>
       </div>
     </section>

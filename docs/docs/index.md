@@ -70,6 +70,10 @@ The choice of QR Codes for QRTuber came out of experimentation. The original pla
 
 Bandwidth is definitely a limitation of QRTuber. For instance, in the How It Works In Practice section above, the viewer will only feel a similar rumble experience to what the streamer does. This is because gamepad rumble can update much faster than the ~20hz we can expect from QRTuber. That said, we do not expect QRTuber to be a 1:1 relay of experience. Rather, the best outcome will be **enough to make things basically work** but no more. QRTuber is not made to be a system to carry large amounts of information in any sort of high bandwidth or reliable fashion, nor is it expected to be used as such. **Long story short: don't try anything that requires guarenteed timing or delivery of updates with QRTuber.**
 
+## Getting Help
+
+QRTuber is pre-alpha software, so questions and bug reports are expected and welcome. The best place for support is the [Nonpolynomial Discord server](https://discord.gg/TZKRQDxkcV), where you can get help with setup, report problems, or show off what you're building. Bugs and feature requests can also be filed on the [GitHub issue tracker](https://github.com/qdot/qrtuber/issues).
+
 ## Inspirations for creating QRTuber
 
 QRTuber was created based on various ideas I've run into over the years. They're included here to give users and develoeprs a better idea of how this project came about.

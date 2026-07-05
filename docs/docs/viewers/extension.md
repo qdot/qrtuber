@@ -1,8 +1,14 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Browser Extension
+
+:::warn Browser Extension not yet finished
+
+Browser extension is not yet available. We recommend using the [WebRTC Client](webrtc.md) until we announce that the extension is ready and up on stores.
+
+:::
 
 The QRTuber browser extension watches a page's video element, decodes QRTuber QR frames, and sends haptic state to Intiface Central. It is the most integrated viewer path because it can run from the page you are already watching.
 

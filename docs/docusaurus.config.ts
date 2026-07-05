@@ -144,11 +144,28 @@ const config: Config = {
           items: [
             {
               label: 'Discord',
-              href: 'https://discord.gg/NsCeMNxk',
+              href: 'https://discord.gg/TZKRQDxkcV',
             },
             {
               label: 'Twitch',
               href: 'https://twitch.tv/qdotfm',
+            },
+          ],
+        },
+        {
+          title: 'Support Us',
+          items: [
+            {
+              label: 'Patreon',
+              href: 'https://patreon.com/qdot',
+            },
+            {
+              label: 'GitHub Sponsors',
+              href: 'https://github.com/sponsors/qdot',
+            },
+            {
+              label: 'Ko-fi',
+              href: 'https://ko-fi.com/qdot76367',
             },
           ],
         },
