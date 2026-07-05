@@ -6,7 +6,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/qdot/qrtuber/master/docs/static/img/logo-social-card.png">
+    <img src="https://raw.githubusercontent.com/qdot/qrtuber/master/marketing/thumbnail-youtube.png">
   </picture>
 </p>
 
