@@ -3,7 +3,7 @@ import Heading from '@theme/Heading';
 import type {ReactElement} from 'react';
 import styles from './styles.module.css';
 
-const EXPLAINER_VIDEO_ID = 'ieyKIXYZcOE';
+const EXPLAINER_VIDEO_ID = 'vGbTqno3HEY';
 
 type Step = {
   title: string;
