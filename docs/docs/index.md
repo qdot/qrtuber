@@ -14,7 +14,7 @@ Some potential uses include:
 - Sending game controls from a streamer to a viewer, for synchronizing gameplay
   - For instance, a streamer could speedrun a game and the controls can be relayed to a local emulator of a viewer ([thanks to Jaku of Crowd Control for this idea](https://crowdcontrol.live))
 
-At the moment, QRTuber is considered at the pre-alpha proof-of-concept stage, and only supports communication with [Intiface Central](https://intiface.com/central) for relaying haptics commands to various devices. Support for different hardware and setups will hopefully expand as the system matures.
+At the moment, QRTuber is considered at the pre-alpha proof-of-concept stage, and focuses on relaying haptics state. The web viewer can use browser gamepad haptics for quick controller tests, or [Intiface Central](https://intiface.com/central) for broader haptics device support. Support for different hardware and setups will hopefully expand as the system matures.
 
 ## How it works, in theory
 

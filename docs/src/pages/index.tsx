@@ -63,12 +63,12 @@ function StatusBand(): ReactElement {
     <section className={styles.statusBand}>
       <div className="container">
         <p className={styles.statusText}>
-          <strong>Pre-alpha proof of concept.</strong> The only integration
-          today relays events to{' '}
+          <strong>Pre-alpha proof of concept.</strong> The web viewer can use
+          browser gamepad haptics for quick tests, or{' '}
           <Link to="https://intiface.com/central">Intiface Central</Link> for
-          haptics sync. Expect rough edges, breaking changes, and the
-          occasional missed frame. It&apos;s a potato. Stuck, broken, or
-          curious?{' '}
+          broader haptics device support. Expect rough edges, breaking changes,
+          and the occasional missed frame. It&apos;s a potato. Stuck, broken,
+          or curious?{' '}
           <Link to="https://discord.gg/TZKRQDxkcV">Come ask in the Discord</Link>.
         </p>
       </div>

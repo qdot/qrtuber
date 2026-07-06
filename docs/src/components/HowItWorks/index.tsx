@@ -38,8 +38,8 @@ const Steps: Step[] = [
       'stream, on their desks (or elsewhere, depending).',
     detail:
       'The browser extension or web viewer reads the code straight off the ' +
-      'pixels, 5-20 times a second, and relays events to programs like ' +
-      'Intiface Central.',
+      'pixels, 5-20 times a second, then relays events to local outputs like ' +
+      'gamepads or Intiface Central.',
   },
 ];
 

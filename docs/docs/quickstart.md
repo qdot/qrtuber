@@ -20,14 +20,16 @@ To drive QR output from Intiface commands instead, use Device mode at https://qr
 
 ## For Viewers
 
-The fastest test path is the web viewer:
+The fastest test path is the web viewer with a rumble-capable gamepad:
 
-1. Start Intiface Central and connect your devices.
+1. Connect a controller and press a button so the browser can see it.
 2. Open the stream in one tab or window.
 3. Open https://qrtuber.com/app/.
-4. Connect to Intiface.
+4. In the Gamepad section, select **Refresh** if needed, then **Enable**.
 5. Start capture and select the stream source.
 
 Chrome users should capture the stream tab. Firefox users should detach the stream into its own window and capture that window.
+
+For Intiface-compatible devices, start Intiface Central, connect your devices, then select **Connect** in the viewer's Intiface section instead of using Gamepad output.
 
 For a more integrated browser flow, use the [browser extension](./viewers/extension.md). The extension adds popup controls, enable-on-page tracking, Intiface settings, and channel mapping.

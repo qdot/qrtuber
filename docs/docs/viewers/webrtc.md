@@ -4,7 +4,9 @@ sidebar_position: 2
 
 # Web Viewer and Device Mode
 
-The web viewer runs in your browser at https://qrtuber.com/app/. It captures the stream video, decodes the QRTuber QR overlay, and sends haptic state to Intiface Central on your machine.
+The web viewer runs in your browser at https://qrtuber.com/app/. It captures the stream video, decodes the QRTuber QR overlay, and sends haptic state to a local output target.
+
+For quick tests, the viewer can use the browser Gamepad API to rumble a compatible controller. For broader device support, it can also send haptic state to Intiface Central on your machine.
 
 The same app also has Device mode at https://qrtuber.com/app/device/. It acts as a Lovense-compatible Intiface Central websocket device and turns Intiface commands into QT1 QR codes that can be used as a stream source.
 
@@ -12,19 +14,21 @@ Use this when you want to try QRTuber without installing the browser extension.
 
 ## Requirements
 
-- [Intiface Central](https://intiface.com/central), with the server running.
 - A browser that supports screen or tab capture.
 - A stream that includes a QRTuber generator overlay, such as https://qrtuber.com/app/generator/.
+- For gamepad rumble: a connected controller and browser support for Gamepad API haptics.
+- For Intiface output: [Intiface Central](https://intiface.com/central), with the server running.
 
 The default viewer Intiface address is `ws://127.0.0.1:12345`.
 
 ## Setup
 
-1. Start Intiface Central and connect your devices.
-2. Open the stream you want to watch.
-3. Open https://qrtuber.com/app/ in another tab.
-4. Confirm the Intiface address, then select **Connect**.
-5. Select **Start capture** and choose the stream source from the browser picker.
+1. Open the stream you want to watch.
+2. Open https://qrtuber.com/app/ in another tab.
+3. Choose an output:
+   - For gamepad rumble, connect a compatible controller, select **Refresh** in the Gamepad section if needed, then select **Enable**.
+   - For Intiface output, start Intiface Central, connect your devices, confirm the Intiface address, then select **Connect**.
+4. Select **Start capture** and choose the stream source from the browser picker.
 
 Browser capture differs by browser:
 
@@ -43,11 +47,13 @@ The nine channel meters show the current haptic vector:
 - grey meters mean the haptics state is stale;
 - stale haptics are zeroed after the viewer timeout.
 
-Stopping capture also zeros connected devices.
+Stopping capture also zeros connected outputs.
+
+Gamepad output folds the nine QT1 haptics channels into the controller's dual-rumble motors. Channel 1 drives both motors so simple single-channel generators work as expected; the remaining channels are split across the weak and strong motors.
 
 ## Emergency Stop
 
-The **STOP** button is local and authoritative. It immediately zeros devices and latches the viewer into a stopped state. While stopped, newly decoded frames are ignored for haptic output.
+The **STOP** button is local and authoritative. It immediately zeros outputs and latches the viewer into a stopped state. While stopped, newly decoded frames are ignored for haptic output.
 
 Use **Resume** to allow haptic output again. Resume does not reconnect devices or restart capture by itself; it only clears the local stop latch.
 

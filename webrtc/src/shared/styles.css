@@ -517,7 +517,8 @@ select:disabled {
   opacity: 0.55;
 }
 
-.intiface-panel {
+.intiface-panel,
+.gamepad-panel {
   display: grid;
   grid-template-columns: minmax(260px, 1fr) auto auto;
   gap: 10px;
@@ -529,7 +530,8 @@ select:disabled {
   padding: 12px;
 }
 
-.intiface-address-field {
+.intiface-address-field,
+.gamepad-select-field {
   display: grid;
   gap: 5px;
   min-width: 0;
@@ -538,7 +540,8 @@ select:disabled {
   font-weight: 650;
 }
 
-.intiface-address-field input {
+.intiface-address-field input,
+.gamepad-select-field select {
   min-width: 0;
   width: 100%;
   border: 1px solid var(--color-field-border);
@@ -550,6 +553,8 @@ select:disabled {
 
 .intiface-actions,
 .intiface-status,
+.gamepad-actions,
+.gamepad-status,
 .emergency-stop {
   display: flex;
   flex-wrap: wrap;
@@ -557,12 +562,14 @@ select:disabled {
   align-items: center;
 }
 
-.intiface-status {
+.intiface-status,
+.gamepad-status {
   justify-content: flex-end;
   min-width: 150px;
 }
 
-.intiface-error {
+.intiface-error,
+.gamepad-error {
   display: flex;
   grid-column: 1 / -1;
   gap: 8px;
@@ -573,7 +580,8 @@ select:disabled {
   font-size: 13px;
 }
 
-.intiface-error span {
+.intiface-error span,
+.gamepad-error span {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -798,11 +806,13 @@ select:disabled {
   }
 
   .viewer-output-controls,
-  .intiface-panel {
+  .intiface-panel,
+  .gamepad-panel {
     grid-template-columns: 1fr;
   }
 
   .intiface-status,
+  .gamepad-status,
   .emergency-stop {
     justify-content: flex-start;
   }

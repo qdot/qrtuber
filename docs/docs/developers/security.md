@@ -131,10 +131,11 @@ browser extension; the userscript path is a spike, not a supported viewer.
 
 ## Output Safety
 
-QRTuber's current implementation focuses on haptics through Intiface Central,
-but the protocol is meant to be more general. The same safety rule applies to
-lights, game input, haptics, or any other local effect: output should remain
-local, explicit, bounded, and reversible.
+QRTuber's current implementation focuses on haptics, with browser gamepad
+haptics and Intiface Central as current output paths, but the protocol is meant
+to be more general. The same safety rule applies to lights, game input,
+haptics, or any other local effect: output should remain local, explicit,
+bounded, and reversible.
 
 - viewers explicitly connect a client to any local output target;
 - viewers control mapping and scaling;

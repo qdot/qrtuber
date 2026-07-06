@@ -10,10 +10,12 @@ import { ThemeControl } from "../shared/ThemeControl.js";
 import { CapturePreview } from "./CapturePreview.js";
 import { ChannelMeters } from "./ChannelMeters.js";
 import { EmergencyStop } from "./EmergencyStop.js";
+import { GamepadPanel } from "./GamepadPanel.js";
 import { IntifacePanel } from "./IntifacePanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { DEFAULT_DECODE_RATE_HZ, useDecodeLoop } from "./useDecodeLoop.js";
 import { useDisplayCapture } from "./useDisplayCapture.js";
+import { useGamepadHaptics } from "./useGamepadHaptics.js";
 import { useIntiface } from "./useIntiface.js";
 
 const HAPTICS_TIMEOUT_MS = 2000;
@@ -37,7 +39,7 @@ function ViewerApp() {
   const decodeState = useDecodeLoop(videoElement, stream, decodeRateHz);
   const {
     address,
-    applyState,
+    applyState: applyIntifaceState,
     clearError,
     connect,
     connectionState,
@@ -49,6 +51,21 @@ function ViewerApp() {
     setAddress,
     stopAll
   } = useIntiface();
+  const {
+    applyState: applyGamepadState,
+    clearError: clearGamepadError,
+    disable: disableGamepad,
+    enable: enableGamepad,
+    error: gamepadError,
+    gamepads,
+    isEnabled: isGamepadEnabled,
+    isSupported: isGamepadSupported,
+    refreshGamepads,
+    selectGamepad,
+    selectedIndex: selectedGamepadIndex,
+    stopAll: stopAllGamepads,
+    testPulse: testGamepadPulse
+  } = useGamepadHaptics();
   const isHapticsStale =
     decodeState.stats.lastDecodeAt === null ||
     now - decodeState.stats.lastDecodeAt > HAPTICS_TIMEOUT_MS;
@@ -67,12 +84,14 @@ function ViewerApp() {
   const handleStopCapture = useCallback(() => {
     stopCapture();
     void stopAll();
-  }, [stopAll, stopCapture]);
+    void stopAllGamepads();
+  }, [stopAll, stopAllGamepads, stopCapture]);
 
   const handleEmergencyStop = useCallback(() => {
     setIsEmergencyStopped(true);
     void stopAll();
-  }, [stopAll]);
+    void stopAllGamepads();
+  }, [stopAll, stopAllGamepads]);
 
   const handleResume = useCallback(() => {
     setIsEmergencyStopped(false);
@@ -89,14 +108,16 @@ function ViewerApp() {
   useEffect(() => {
     if (!isCapturing) {
       void stopAll();
+      void stopAllGamepads();
     }
-  }, [isCapturing, stopAll]);
+  }, [isCapturing, stopAll, stopAllGamepads]);
 
   useEffect(() => {
     if (isEmergencyStopped || isHapticsStale) {
-      void applyState(ZERO_STATE);
+      void applyIntifaceState(ZERO_STATE);
+      void applyGamepadState(ZERO_STATE);
     }
-  }, [applyState, isEmergencyStopped, isHapticsStale]);
+  }, [applyGamepadState, applyIntifaceState, isEmergencyStopped, isHapticsStale]);
 
   useEffect(() => {
     if (
@@ -107,9 +128,11 @@ function ViewerApp() {
       return;
     }
 
-    void applyState(decodeState.hapticsState);
+    void applyIntifaceState(decodeState.hapticsState);
+    void applyGamepadState(decodeState.hapticsState);
   }, [
-    applyState,
+    applyGamepadState,
+    applyIntifaceState,
     decodeState.hapticsState,
     decodeState.stats.acceptedFrames,
     isEmergencyStopped,
@@ -176,6 +199,20 @@ function ViewerApp() {
           onRefreshDevices={refreshDevices}
           onResetAddress={resetAddress}
           onStopAll={() => void stopAll()}
+        />
+        <GamepadPanel
+          error={gamepadError}
+          gamepads={gamepads}
+          isEnabled={isGamepadEnabled}
+          isSupported={isGamepadSupported}
+          onClearError={clearGamepadError}
+          onDisable={() => void disableGamepad()}
+          onEnable={enableGamepad}
+          onRefreshGamepads={refreshGamepads}
+          onSelectGamepad={selectGamepad}
+          onStopAll={() => void stopAllGamepads()}
+          onTestPulse={() => void testGamepadPulse()}
+          selectedIndex={selectedGamepadIndex}
         />
         <EmergencyStop
           isStopped={isEmergencyStopped}
