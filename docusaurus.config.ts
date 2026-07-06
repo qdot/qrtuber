@@ -1,0 +1,197 @@
+import {themes as prismThemes} from 'prism-react-renderer';
+import type {Config} from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic';
+
+// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+const config: Config = {
+  title: 'QRTuber',
+  tagline: 'Transferring data through video, a few bytes at a time.',
+  favicon: 'img/favicon.png',
+
+  // Set the production url of your site here
+  url: 'https://qrtuber.com',
+  // Set the /<baseUrl>/ pathname under which your site is served
+  // For GitHub pages deployment, it is often '/<projectName>/'
+  baseUrl: '/',
+
+  // GitHub pages deployment config.
+  // If you aren't using GitHub pages, you don't need these.
+  organizationName: 'qdot', // Usually your GitHub org/user name.
+  projectName: 'qrtuber', // Usually your repo name.
+
+  onBrokenLinks: 'throw',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
+
+  // Even if you don't use internationalization, you can use this field to set
+  // useful metadata like html lang. For example, if your site is Chinese, you
+  // may want to replace "en" with "zh-Hans".
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
+
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          sidebarPath: './sidebars.ts',
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
+  plugins: [
+    require.resolve("./docusaurusResolvePlugin.js"),
+    "docusaurus-plugin-matomo",
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        docsDir: 'docs',
+        title: 'QRTuber',
+        description:
+          'Documentation for QRTuber, a system for synchronizing viewer ' +
+          'devices with video streams via QR code overlays',
+        excludeImports: true,
+        generateMarkdownFiles: true,
+        includeOrder: [
+          'index.md',
+          'quickstart.md',
+          'streamers/*',
+          'viewers/*',
+          'developers/*',
+        ],
+        includeUnmatchedLast: true,
+      },
+    ],
+  ],
+
+  themeConfig: {
+    image: 'img/qtato-social-card.png',
+    matomo: {
+      matomoUrl: 'https://metrics.nonpolynomial.com/',
+      siteId: '13',
+      phpLoader: 'matomo.php',
+      jsLoader: 'matomo.js',
+    },
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+    navbar: {
+      title: 'QRTuber',
+      logo: {
+        alt: 'QRTuber',
+        src: 'img/qtato-navbar.png',
+      },
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'left',
+          label: 'Documentation',
+        },
+        {
+          href: '/demo/',
+          position: 'left',
+          label: 'Demo',
+        },
+        {
+          href: '/docs/viewers/extension',
+          position: 'left',
+          label: 'Browser Extension',
+        },
+        {
+          href: 'https://qrtuber.com/app/',
+          position: 'left',
+          label: 'Web Viewer',
+        },
+        /*
+        {to: '/blog', label: 'Blog', position: 'left'},
+        */
+        {
+          href: 'https://github.com/qdot/qrtuber',
+          label: 'GitHub',
+          position: 'right',
+        },
+
+      ],
+    },
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Documentation',
+              to: '/docs/',
+            },
+          ],
+        },
+        {
+          title: 'Community',
+          items: [
+            {
+              label: 'Discord',
+              href: 'https://discord.gg/TZKRQDxkcV',
+            },
+            {
+              label: 'Twitch',
+              href: 'https://twitch.tv/qdotfm',
+            },
+          ],
+        },
+        {
+          title: 'Support Us',
+          items: [
+            {
+              label: 'Patreon',
+              href: 'https://patreon.com/qdot',
+            },
+            {
+              label: 'GitHub Sponsors',
+              href: 'https://github.com/sponsors/qdot',
+            },
+            {
+              label: 'Ko-fi',
+              href: 'https://ko-fi.com/qdot76367',
+            },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            /*
+            {
+              label: 'Blog',
+              to: '/blog',
+            },
+            */
+            {
+              label: 'GitHub',
+              href: 'https://github.com/qdot/qrtuber',
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} Nonpolynomial Labs, LLC. Logo by <a href="https://about.me/jonasdrawsstuff" target="_blank" rel="noopener noreferrer">Jonas</a>. Built with Docusaurus.`,
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+    },
+  } satisfies Preset.ThemeConfig,
+};
+
+export default config;

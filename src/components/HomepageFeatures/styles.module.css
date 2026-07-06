@@ -1,0 +1,35 @@
+.features {
+  padding: 2rem 0 4rem;
+}
+
+.feature {
+  height: 100%;
+  padding: 1.75rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+  margin-bottom: 1rem;
+}
+
+.featureIcon {
+  color: var(--ifm-color-primary);
+  margin-bottom: 1.25rem;
+}
+
+.featureGlyph {
+  width: 44px;
+  height: 44px;
+  display: block;
+}
+
+.featureTitle {
+  font-family: var(--qrt-font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+
+.featureBody {
+  color: var(--ifm-color-emphasis-700);
+  margin: 0;
+  line-height: 1.6;
+}

@@ -1,0 +1,55 @@
+/**
+ * Global styles: qtato brand palette and display font.
+ * Landing-page-specific styles live in CSS modules under src/pages
+ * and src/components.
+ */
+
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('/fonts/DepartureMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ifm-color-primary: #96481b;
+  --ifm-color-primary-dark: #874118;
+  --ifm-color-primary-darker: #803d17;
+  --ifm-color-primary-darkest: #693213;
+  --ifm-color-primary-light: #a54f1e;
+  --ifm-color-primary-lighter: #ad531f;
+  --ifm-color-primary-lightest: #c35e23;
+  --ifm-background-color: #f6f7f8;
+  --ifm-font-color-base: #292524;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --qrt-font-display: 'Departure Mono', ui-monospace, monospace;
+  --qrt-scan-green: #59d95d;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #e0a374;
+  --ifm-color-primary-dark: #ca9368;
+  --ifm-color-primary-darker: #be8b63;
+  --ifm-color-primary-darkest: #9d7251;
+  --ifm-color-primary-light: #e3ac82;
+  --ifm-color-primary-lighter: #e5b189;
+  --ifm-color-primary-lightest: #e9bf9e;
+  --ifm-background-color: #1c1613;
+  --ifm-background-surface-color: #251e18;
+  --ifm-font-color-base: #e7e0d8;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #14100d;
+}
+
+.navbar__title {
+  font-family: var(--qrt-font-display);
+}
+
+#ssp-img img {
+  max-width: 400px;
+}

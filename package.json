@@ -1,0 +1,55 @@
+{
+  "name": "qrtuber-docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "npm run compile -w qrtuber && npm run build -w qrtuber-webrtc-viewer -- --outDir ../docs/static/app --emptyOutDir && docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "generate-demo-video": "node scripts/generate-demo-video.mjs",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.10.1",
+    "@docusaurus/preset-classic": "^3.10.1",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "docusaurus-plugin-llms": "^0.4.0",
+    "docusaurus-plugin-matomo": "^0.0.8",
+    "path-browserify": "^1.0.1",
+    "prism-react-renderer": "^2.3.0",
+    "qrtuber": "file:../core",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-player": "^2.16.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^3.10.1",
+    "@docusaurus/tsconfig": "^3.10.1",
+    "@docusaurus/types": "^3.10.1",
+    "pngjs": "^5.0.0",
+    "qrcode": "^1.5.4",
+    "typescript": "~5.6.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 5 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
