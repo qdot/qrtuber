@@ -4,11 +4,13 @@ interface GamepadPanelProps {
   error: string | null;
   gamepads: readonly GamepadOutputInfo[];
   isEnabled: boolean;
+  isScanning: boolean;
   isSupported: boolean;
   onClearError: () => void;
   onDisable: () => void;
   onEnable: () => void;
   onRefreshGamepads: () => void;
+  onScanGamepads: () => void;
   onSelectGamepad: (index: number | null) => void;
   onStopAll: () => void;
   onTestPulse: () => void;
@@ -19,11 +21,13 @@ export function GamepadPanel({
   error,
   gamepads,
   isEnabled,
+  isScanning,
   isSupported,
   onClearError,
   onDisable,
   onEnable,
   onRefreshGamepads,
+  onScanGamepads,
   onSelectGamepad,
   onStopAll,
   onTestPulse,
@@ -78,7 +82,15 @@ export function GamepadPanel({
         )}
         <button
           className="secondary-button"
-          disabled={!isSupported}
+          disabled={!isSupported || isScanning}
+          onClick={onScanGamepads}
+          type="button"
+        >
+          {isScanning ? "Scanning" : "Scan"}
+        </button>
+        <button
+          className="secondary-button"
+          disabled={!isSupported || isScanning}
           onClick={onRefreshGamepads}
           type="button"
         >
@@ -104,7 +116,13 @@ export function GamepadPanel({
 
       <div className="gamepad-status">
         <span className={isEnabled ? "status-value live" : "status-value"}>
-          {isSupported ? (isEnabled ? "enabled" : "disabled") : "unsupported"}
+          {isSupported
+            ? isScanning
+              ? "scanning"
+              : isEnabled
+                ? "enabled"
+                : "disabled"
+            : "unsupported"}
         </span>
         <span className="status-value">
           {hapticGamepadCount}/{gamepads.length} haptic

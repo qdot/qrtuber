@@ -59,8 +59,10 @@ function ViewerApp() {
     error: gamepadError,
     gamepads,
     isEnabled: isGamepadEnabled,
+    isScanning: isGamepadScanning,
     isSupported: isGamepadSupported,
     refreshGamepads,
+    scanGamepads,
     selectGamepad,
     selectedIndex: selectedGamepadIndex,
     stopAll: stopAllGamepads,
@@ -204,11 +206,13 @@ function ViewerApp() {
           error={gamepadError}
           gamepads={gamepads}
           isEnabled={isGamepadEnabled}
+          isScanning={isGamepadScanning}
           isSupported={isGamepadSupported}
           onClearError={clearGamepadError}
           onDisable={() => void disableGamepad()}
           onEnable={enableGamepad}
           onRefreshGamepads={refreshGamepads}
+          onScanGamepads={scanGamepads}
           onSelectGamepad={selectGamepad}
           onStopAll={() => void stopAllGamepads()}
           onTestPulse={() => void testGamepadPulse()}

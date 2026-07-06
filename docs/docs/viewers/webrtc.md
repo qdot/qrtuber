@@ -26,7 +26,7 @@ The default viewer Intiface address is `ws://127.0.0.1:12345`.
 1. Open the stream you want to watch.
 2. Open https://qrtuber.com/app/ in another tab.
 3. Choose an output:
-   - For gamepad rumble, connect a compatible controller, select **Refresh** in the Gamepad section if needed, then select **Enable**.
+   - For gamepad rumble, connect a compatible controller, select **Scan** in the Gamepad section, press a controller button while the scan is active, then select **Enable**.
    - For Intiface output, start Intiface Central, connect your devices, confirm the Intiface address, then select **Connect**.
 4. Select **Start capture** and choose the stream source from the browser picker.
 

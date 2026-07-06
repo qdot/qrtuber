@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { HapticsState } from "../shared/coreBridge.js";
 
 const GAMEPAD_EFFECT_DURATION_MS = 500;
+const GAMEPAD_SCAN_DURATION_MS = 10000;
+const GAMEPAD_SCAN_INTERVAL_MS = 250;
 const TEST_PULSE_DURATION_MS = 220;
 
 export interface GamepadOutputInfo {
@@ -97,10 +99,13 @@ function dualRumbleFromState(state: HapticsState): {
 
 export function useGamepadHaptics() {
   const enabledRef = useRef(false);
+  const scanIntervalRef = useRef<number | null>(null);
+  const scanTimeoutRef = useRef<number | null>(null);
   const selectedIndexRef = useRef<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [gamepads, setGamepads] = useState<GamepadOutputInfo[]>([]);
   const [isEnabled, setIsEnabledState] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   const [selectedIndex, setSelectedIndexState] = useState<number | null>(null);
 
   const isSupported = isGamepadApiSupported();
@@ -113,6 +118,20 @@ export function useGamepadHaptics() {
   const setSelectedIndex = useCallback((nextIndex: number | null) => {
     selectedIndexRef.current = nextIndex;
     setSelectedIndexState(nextIndex);
+  }, []);
+
+  const stopScan = useCallback(() => {
+    if (scanIntervalRef.current !== null) {
+      window.clearInterval(scanIntervalRef.current);
+      scanIntervalRef.current = null;
+    }
+
+    if (scanTimeoutRef.current !== null) {
+      window.clearTimeout(scanTimeoutRef.current);
+      scanTimeoutRef.current = null;
+    }
+
+    setIsScanning(false);
   }, []);
 
   const refreshGamepads = useCallback(() => {
@@ -139,6 +158,42 @@ export function useGamepadHaptics() {
 
     return nextGamepads;
   }, [setEnabled, setSelectedIndex]);
+
+  const scanGamepads = useCallback(() => {
+    setError(null);
+
+    if (!isGamepadApiSupported()) {
+      setGamepads([]);
+      setSelectedIndex(null);
+      setEnabled(false);
+      setError("Gamepad API is not available in this browser.");
+      return;
+    }
+
+    const initialGamepads = refreshGamepads();
+    if (initialGamepads.length > 0) {
+      stopScan();
+      return;
+    }
+
+    if (scanIntervalRef.current !== null) {
+      return;
+    }
+
+    setIsScanning(true);
+    scanIntervalRef.current = window.setInterval(() => {
+      const nextGamepads = refreshGamepads();
+      if (nextGamepads.length > 0) {
+        stopScan();
+      }
+    }, GAMEPAD_SCAN_INTERVAL_MS);
+    scanTimeoutRef.current = window.setTimeout(() => {
+      stopScan();
+      if (readConnectedGamepads().length === 0) {
+        setError("No gamepad detected. Press a controller button and scan again.");
+      }
+    }, GAMEPAD_SCAN_DURATION_MS);
+  }, [refreshGamepads, setEnabled, setSelectedIndex, stopScan]);
 
   const selectedGamepad = useCallback((): Gamepad | null => {
     const index = selectedIndexRef.current;
@@ -179,7 +234,7 @@ export function useGamepadHaptics() {
 
     if (selectedInfo === null) {
       setEnabled(false);
-      setError("No connected gamepad found.");
+      scanGamepads();
       return;
     }
 
@@ -192,7 +247,7 @@ export function useGamepadHaptics() {
     }
 
     setEnabled(true);
-  }, [refreshGamepads, setEnabled, setSelectedIndex]);
+  }, [refreshGamepads, scanGamepads, setEnabled, setSelectedIndex]);
 
   const disable = useCallback(async () => {
     setEnabled(false);
@@ -245,7 +300,7 @@ export function useGamepadHaptics() {
     const actuator = actuatorForGamepad(selectedGamepad());
     if (actuator === null) {
       setError("Selected gamepad is not available for haptics.");
-      refreshGamepads();
+      scanGamepads();
       return;
     }
 
@@ -259,7 +314,7 @@ export function useGamepadHaptics() {
     } catch (nextError) {
       setError(errorMessage(nextError));
     }
-  }, [refreshGamepads, selectedGamepad]);
+  }, [scanGamepads, selectedGamepad]);
 
   useEffect(() => {
     if (!isSupported) {
@@ -269,7 +324,10 @@ export function useGamepadHaptics() {
     refreshGamepads();
 
     const handleGamepadChange = () => {
-      refreshGamepads();
+      const nextGamepads = refreshGamepads();
+      if (nextGamepads.length > 0) {
+        stopScan();
+      }
     };
 
     window.addEventListener("gamepadconnected", handleGamepadChange);
@@ -279,14 +337,15 @@ export function useGamepadHaptics() {
       window.removeEventListener("gamepadconnected", handleGamepadChange);
       window.removeEventListener("gamepaddisconnected", handleGamepadChange);
     };
-  }, [isSupported, refreshGamepads]);
+  }, [isSupported, refreshGamepads, stopScan]);
 
   useEffect(() => {
     return () => {
       enabledRef.current = false;
+      stopScan();
       void stopAll();
     };
-  }, [stopAll]);
+  }, [stopAll, stopScan]);
 
   return {
     applyState,
@@ -296,8 +355,10 @@ export function useGamepadHaptics() {
     error,
     gamepads,
     isEnabled,
+    isScanning,
     isSupported,
     refreshGamepads,
+    scanGamepads,
     selectGamepad,
     selectedIndex,
     stopAll,

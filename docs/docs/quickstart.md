@@ -25,7 +25,7 @@ The fastest test path is the web viewer with a rumble-capable gamepad:
 1. Connect a controller and press a button so the browser can see it.
 2. Open the stream in one tab or window.
 3. Open https://qrtuber.com/app/.
-4. In the Gamepad section, select **Refresh** if needed, then **Enable**.
+4. In the Gamepad section, select **Scan**, press a controller button while the scan is active, then select **Enable**.
 5. Start capture and select the stream source.
 
 Chrome users should capture the stream tab. Firefox users should detach the stream into its own window and capture that window.
